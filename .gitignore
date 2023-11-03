@@ -1,0 +1,7 @@
+ner/__pycache__/*
+llm/__pycache__/*
+__pycache__/*
+
+ner/saves/*
+
+llm/models/*
