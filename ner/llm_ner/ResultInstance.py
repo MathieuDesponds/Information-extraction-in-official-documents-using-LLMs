@@ -5,7 +5,7 @@ from ner.process_results import get_metrics_all, show_cm_multi
 from ner.utils import get_student_conf_interval, load, dump
 
 class ResultInstance():
-    def __init__(self, model, nb_few_shots, prompt_technique, few_shot_tecnique, verifier, results, gold, data_train, data_test, elapsed_time) -> None:
+    def __init__(self, model, nb_few_shots, prompt_technique, few_shot_tecnique, verifier, results, gold, data_train, data_test, elapsed_time= -1) -> None:
         self.model = model
         self.nb_few_shots = nb_few_shots
         self.prompt_technique = prompt_technique
@@ -20,19 +20,19 @@ class ResultInstance():
         self.cm, self.f1, self.precision, self.recall = None, None, None,None
         
     def get_scores(self):
-        if not self.cm :
+        if not self.f1 :
             self.cm, self.f1, self.precision, self.recall, y_true, y_pred, nes = get_metrics_all(self.results, self.gold)
         return self.cm, self.f1, self.precision, self.recall
     
     def show_cm(self) :
-        show_cm_multi(self.model, **self.get_scores())
+        show_cm_multi(*self.get_scores(), self.model )
 
     def get_dict(self) -> dict:
         self.get_scores()
         return {
             'model' : self.model,
-'prompt_technique' : self.prompt_technique,
-'few_shot_tecnique' : self.few_shot_tecnique,
+'prompt_technique' : str(self.prompt_technique),
+'few_shot_tecnique' : str(self.few_shot_tecnique),
 'nb_few_shots' : self.nb_few_shots,
 'verifier' : self.verifier,
 'len_data_train' : self.len_data_train,
@@ -40,8 +40,15 @@ class ResultInstance():
 'f1' : self.f1,
 'precision' : self.precision,
 'recall' : self.recall,
-'elapsed_time' : self.elapsed_time
+'elapsed_time' : self.elapsed_time if hasattr(self, 'elapsed_time') else -1  
        }
+
+    def analyse_results(self):
+        for i in range(len(self.results)):
+            print(i)
+            print(self.gold[i])
+            print(self.results[i])
+            print("--------------------------------------------")
 
 
 class ResultInstanceWithConfidenceInterval():
@@ -106,4 +113,4 @@ def load_all_results():
                 res_inst = load(file_path)
                 if isinstance(res_inst ,ResultInstanceWithConfidenceInterval) :
                     results.append(res_inst.get_dict())
-    return pd.DataFrame(results)
+    return pd.DataFrame(results).sort_values('f1_mean', ascending = False)
