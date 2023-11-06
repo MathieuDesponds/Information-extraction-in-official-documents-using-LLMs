@@ -5,7 +5,7 @@ from ner.process_results import get_metrics_all, show_cm_multi
 from ner.utils import get_student_conf_interval, load, dump
 
 class ResultInstance():
-    def __init__(self, model, nb_few_shots, prompt_technique, few_shot_tecnique, verifier, results, gold, data_train, data_test) -> None:
+    def __init__(self, model, nb_few_shots, prompt_technique, few_shot_tecnique, verifier, results, gold, data_train, data_test, elapsed_time) -> None:
         self.model = model
         self.nb_few_shots = nb_few_shots
         self.prompt_technique = prompt_technique
@@ -15,6 +15,7 @@ class ResultInstance():
         self.gold = gold
         self.len_data_train = len(data_train)
         self.len_data_test = len(data_test)
+        self.elapsed_time = elapsed_time
 
         self.cm, self.f1, self.precision, self.recall = None, None, None,None
         
@@ -38,7 +39,8 @@ class ResultInstance():
 'len_data_test' : self.len_data_test,
 'f1' : self.f1,
 'precision' : self.precision,
-'recall' : self.recall
+'recall' : self.recall,
+'elapsed_time' : self.elapsed_time
        }
 
 

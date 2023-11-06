@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 import logging
+import time
 from typing import Any
 
 from tqdm import tqdm
@@ -107,9 +108,12 @@ class LLMModel(ABC):
                     print(f"      and {pt}")
                     res_insts = []
                     for run in range(nb_run_by_test) :
+                        start_time = time.time()
                         data_train, data_test = get_test_cleaned_split()
                         fst.set_dataset(data_train)
                         predictions = self.invoke_mulitple(data_test['text'], pt, verifier)
+                        # Calculate the elapsed time
+                        elapsed_time = time.time() - start_time
                         res_insts.append(ResultInstance(
                             model= str(self),
                             nb_few_shots = n,
@@ -119,7 +123,8 @@ class LLMModel(ABC):
                             results = predictions,
                             gold = data_test['spans'],
                             data_test = data_test,
-                            data_train = data_train
+                            data_train = data_train,
+                            elapsed_time = elapsed_time
                         ))
                         del data_test, data_train
                     results.append(ResultInstanceWithConfidenceInterval(res_insts))
