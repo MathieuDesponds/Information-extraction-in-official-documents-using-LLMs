@@ -1,4 +1,5 @@
-import pickle
+import os
+import pandas as pd
 
 from ner.process_results import get_metrics_all, show_cm_multi
 from ner.utils import get_student_conf_interval, load, dump
@@ -85,3 +86,22 @@ def save_result_instance(res_inst : ResultInstance):
 def save_result_instance_with_CI(res_inst : ResultInstanceWithConfidenceInterval):
     file_path = f"./ner/saves/results/conll2003_cleaned/{res_inst.res_insts[0].model}/{res_inst.res_insts[0].prompt_technique}/{res_inst.res_insts[0].few_shot_tecnique}_{res_inst.res_insts[0].nb_few_shots}_{res_inst.res_insts[0].verifier}_{res_inst.res_insts[0].len_data_train}_{res_inst.res_insts[0].len_data_test}.pkl"
     dump(res_inst, file_path)
+
+def load_all_results():
+    root_directory = "ner/saves/results/conll2003_cleaned"
+
+    # Initialize a list to store the loaded data
+    results = []
+
+    # Walk through the directory and its subdirectories
+    for foldername, subfolders, filenames in os.walk(root_directory):
+        for filename in filenames:
+            # Construct the full path of the file
+            file_path = os.path.join(foldername, filename)
+
+            # Check if the file has a .pkl extension (assuming you are looking for pickle files)
+            if file_path.endswith(".pkl"):
+                res_inst = load(file_path)
+                if isinstance(res_inst ,ResultInstanceWithConfidenceInterval) :
+                    results.append(res_inst.get_dict())
+    return pd.DataFrame(results)
