@@ -151,9 +151,9 @@ class LLMModel(ABC):
                 optim="paged_adamw_8bit",
                 logging_dir="./logs",        # Directory for storing logs
                 save_strategy="steps",       # Save the model checkpoint every logging step
-                save_steps=train_size/4//4,                # Save checkpoints every 50 steps
+                save_steps=runs/4//5,                # Save checkpoints every 50 steps
                 evaluation_strategy="steps", # Evaluate the model every logging step
-                eval_steps=train_size/4//4,               # Evaluate and save checkpoints every 50 steps
+                eval_steps=runs/4//10,               # Evaluate and save checkpoints every 50 steps
                 do_eval=True,                # Perform evaluation at the end of training
                 report_to="wandb",           # Comment this out if you don't want to use weights & baises
                 run_name=f"finetuned-{pt.type}-{nb_samples}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}"          # Name of the W&B run (optional)
@@ -165,7 +165,7 @@ class LLMModel(ABC):
         trainer.train()
         trainer.save_model()
 
-    def load_finetuned_model(self, prompt_type, nb_samples, quantization):
+    def load_finetuned_model(self, prompt_type, nb_samples = 2000, quantization = "Q5_0"):
         path_to_lora = f"./llm/models/{self.base_model_name}/finetuned-{prompt_type}-{nb_samples}"
         model_out = f"{path_to_lora}/model-{quantization}.gguf"
         if not os.path.exists(model_out):
