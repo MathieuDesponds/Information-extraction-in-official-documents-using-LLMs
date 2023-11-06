@@ -32,6 +32,7 @@ class LLMModel(ABC):
     def __init__(self, base_model_id, base_model_name, check_nb_tokens = True, max_tokens = 256) -> None:
         self.base_model_id = base_model_id
         self.base_model_name = base_model_name.lower()
+        self.name = self.base_model_name
 
         self.max_tokens = max_tokens
         
@@ -50,7 +51,7 @@ class LLMModel(ABC):
         return self.model
     
     def __str__(self) -> str:
-        return self.base_model_name
+        return self.name
     
     def __call__(self, prompt, stop = ["<end_output>", "\n\n\n"] ) -> Any:
         return self.model(prompt, stop = ["<end_output>", "\n\n\n"], max_tokens = self.max_tokens)
@@ -100,15 +101,17 @@ class LLMModel(ABC):
         for n in nb_few_shots :
             fsts_i = [fst(None, n) for fst in fsts]
             for fst in fsts_i :
+                print(f"Testing with {fst}")
                 pts_i = [pt(fst) for pt in pts]
                 for pt in pts_i :
+                    print(f"      and {pt}")
+                    res_insts = []
                     for run in range(nb_run_by_test) :
-                        res_insts = []
                         data_train, data_test = get_test_cleaned_split()
                         fst.set_dataset(data_train)
                         predictions = self.invoke_mulitple(data_test['text'], pt, verifier)
                         res_insts.append(ResultInstance(
-                            model= self,
+                            model= str(self),
                             nb_few_shots = n,
                             prompt_technique = pt,
                             few_shot_tecnique = fst,
@@ -118,6 +121,7 @@ class LLMModel(ABC):
                             data_test = data_test,
                             data_train = data_train
                         ))
+                        del data_test, data_train
                     results.append(ResultInstanceWithConfidenceInterval(res_insts))
                     if save :
                         save_result_instance_with_CI(results[-1])
@@ -170,7 +174,7 @@ class LLMModel(ABC):
         model_out = f"{path_to_lora}/model-{quantization}.gguf"
         if not os.path.exists(model_out):
             model_type = 'llama' #llama, starcoder, falcon, baichuan, or gptneox
-            command = f"python3 ./llama.cpp/convert-lora-to-ggml.py {path_to_lora}"
+            command = f"python3 ../llama.cpp/convert-lora-to-ggml.py {path_to_lora}"
             run_command(command)
 
 
@@ -180,9 +184,11 @@ class LLMModel(ABC):
             # model_out = f"{path_to_lora}/llama-13b-finetuned-2000-v0.gguf"
             # lora_scaled = f"{path_to_lora}/ggml-adapter-model.bin"
 
-            command = f"./llama.cpp/export-lora --model-base {model_base} --model-out {model_out} --lora-scaled {lora_scaled} 1.0"
+            command = f"../llama.cpp/export-lora --model-base {model_base} --model-out {model_out} --lora-scaled {lora_scaled} 1.0"
 
             run_command(command)
+
+        self.name = f"{self.name}-ft-{prompt_type}-{nb_samples}-{quantization}"
         return self.get_model(gguf_model_path =  model_out)
 
 

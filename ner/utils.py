@@ -141,5 +141,9 @@ def dump(obj, file_path):
         pickle.dump(obj, f) 
 
 def load(file_path):
-    with open(file_path, 'rb') as f :
-        return pickle.load(f) 
+    try:
+        with open(file_path, 'rb') as f :
+            return pickle.load(f) 
+    except Exception as e:
+        # Handle any exceptions that may occur during loading
+        print(f"Error loading file {file_path}: {str(e)}")
