@@ -111,7 +111,7 @@ def get_student_conf_interval(scores):
     lower_bound = sample_mean - margin_of_error
     upper_bound = sample_mean + margin_of_error
 
-    return "Mean : {: .3f}, 95% Confidence Interval: ({:.3f}, {:.3f})".format(sample_mean, lower_bound, upper_bound)
+    return round(sample_mean, 3), "({:.3f}, {:.3f})".format(lower_bound, upper_bound)
 
 import subprocess
 def run_command(command):
@@ -127,3 +127,19 @@ def run_command(command):
         print("Command failed")
         print("Error:")
         print(result.stderr)
+
+import pickle 
+def dump(obj, file_path):
+    file_splitted = file_path.split('/')
+    directory_path = '/'.join(file_splitted[:-1])+'/'
+    file_name = file_splitted[-1]
+    # Ensure that the directory exists; create it if it doesn't
+    if not os.path.exists(directory_path):
+        os.makedirs(directory_path)
+
+    with open(file_path, 'wb') as f :
+        pickle.dump(obj, f) 
+
+def load(file_path):
+    with open(file_path, 'rb') as f :
+        return pickle.load(f) 

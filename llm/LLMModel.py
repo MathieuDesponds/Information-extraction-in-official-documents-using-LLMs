@@ -11,10 +11,10 @@ import transformers
 
 from ner.Datasets.Conll2003Dataset import get_test_cleaned_split
 
-from ner.llm_ner.ResultInstance import ResultInstance, save_result_instance
+from ner.llm_ner.ResultInstance import ResultInstance, ResultInstanceWithConfidenceInterval, save_result_instance_with_CI
 from ner.llm_ner.verifier import Verifier
 from ner.llm_ner.few_shots_techniques import *
-from ner.llm_ner.prompt_techniques import PromptTechnique, PT_GPT_NER, PT_OutputList
+from ner.llm_ner.prompt_techniques import *
 from ner.llm_ner.llm_finetune import load_model_tokenizer_for_training, split_train_test, tokenize_prompt
 
 from ner.utils import run_command
@@ -83,9 +83,11 @@ class LLMModel(ABC):
             all_entities.extend(processed_response)
         return all_entities
     
-    def classical_test(self, nb_few_shots = [5], verifier = False, save = True) :
+    def classical_test(self, fsts : list[FewShotsTechnique]= [FST_Random, FST_Sentence, FST_Entity], 
+                       pts : list[PromptTechnique] = [PT_GPT_NER, PT_OutputList, PT_Wrapper],
+                       nb_few_shots = [5], verifier = False, save = True, nb_run_by_test = 3) :
 
-        data_train, data_test = get_test_cleaned_split()
+        
         # data_test.select([0,1])
 
         if verifier :
@@ -93,31 +95,34 @@ class LLMModel(ABC):
         else : 
             verifier = None
 
-        results : list[ResultInstance] = []
+        results : list[ResultInstanceWithConfidenceInterval] = []
 
         for n in nb_few_shots :
-            fsts = [FST_Random(data_train, n), FST_Sentence(data_train, n), FST_Entity(data_train, n)] # 
-            for fst in fsts :
-                self.fst = fst
-                pts : list[PromptTechnique] = [ PT_GPT_NER(fst)] #PT_GPT_NER(fst),
-                for pt in pts :
-                    predictions = self.invoke_mulitple(data_test['text'], pt, verifier)
-                    results.append(ResultInstance(
-                        model= self,
-                        nb_few_shots = n,
-                        prompt_technique = pt,
-                        few_shot_tecnique = fst,
-                        verifier = verifier,
-                        results = predictions,
-                        gold = data_test['spans'],
-                        data_test = data_test,
-                        data_train = data_train
-                    ))
+            fsts_i = [fst(None, n) for fst in fsts]
+            for fst in fsts_i :
+                pts_i = [pt(fst) for pt in pts]
+                for pt in pts_i :
+                    for run in range(nb_run_by_test) :
+                        res_insts = []
+                        data_train, data_test = get_test_cleaned_split()
+                        fst.set_dataset(data_train)
+                        predictions = self.invoke_mulitple(data_test['text'], pt, verifier)
+                        res_insts.append(ResultInstance(
+                            model= self,
+                            nb_few_shots = n,
+                            prompt_technique = pt,
+                            few_shot_tecnique = fst,
+                            verifier = verifier,
+                            results = predictions,
+                            gold = data_test['spans'],
+                            data_test = data_test,
+                            data_train = data_train
+                        ))
+                    results.append(ResultInstanceWithConfidenceInterval(res_insts))
                     if save :
-                        save_result_instance(results[-1])
+                        save_result_instance_with_CI(results[-1])
         results_df = pd.DataFrame([result.get_dict() for result in results])
         return results, results_df
-
 
 
     def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = True):

@@ -1,4 +1,5 @@
 import pickle
+import random
 from datasets import load_dataset
 from ner.Datasets.MyDataset import MyDataset
 from ner.Datasets.utils import *
@@ -102,6 +103,8 @@ def save_conll_dataset(dataset : Conll2003Dataset):
     with open(f"./ner/saves/datasets/conll2003_{dataset.split}_{'cleaned_' if dataset.cleaned else ''}{len(dataset)}.pkl", 'wb')as f:
         pickle.dump(dataset,f)
 
-def get_test_cleaned_split():
+def get_test_cleaned_split(seed = None):
     dataset_test = load_conll_dataset(split = 'test', cleaned = True)
-    return dataset_test.train_test_split(test_size = 50)
+    if not seed :
+        seed = random.randint(0, 1535468)
+    return dataset_test.train_test_split(test_size = 50, seed = seed)
