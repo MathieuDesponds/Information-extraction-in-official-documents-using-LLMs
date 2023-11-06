@@ -157,4 +157,27 @@ class PT_OutputList(PromptTechnique):
     def get_gold(self, dataset : MyDataset) -> list[str]:
         return dataset['spans']
 
+class PT_Wrapper(PromptTechnique):
+    def __init__(self, fst : FewShotsTechnique):
+        super().__init__(fst, type = '<>')
+
+    def process_nearest_neighbors(self, nearest_neighbors :list, tag):
+        nearest_neighbors = [{
+                "text" : row['text'],
+                "output_text" : row['llama_text_2']} for row in nearest_neighbors]
+        return nearest_neighbors
+    
+    def get_prompts_runnable(self, sentence):
+        nearest_neighbors = self.fst.get_nearest_neighbors(sentence)
+        prompt =  prompt_template[self.type].format(sentence = sentence,
+                                            few_shots = self.get_few_shots(sentence, [], nearest_neighbors))
+        return [(prompt, "None")]
+    
+    def process_output(self, response : str, tag : str):
+        pass
+        # ToDO : process output
+
+    
+    def get_gold(self, dataset : MyDataset) -> list[str]:
+        return dataset['llama_text_2']
         

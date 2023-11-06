@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-import datetime
+from datetime import datetime
+import logging
 from typing import Any
 
 from tqdm import tqdm
@@ -14,15 +15,23 @@ from ner.llm_ner.ResultInstance import ResultInstance, save_result_instance
 from ner.llm_ner.verifier import Verifier
 from ner.llm_ner.few_shots_techniques import *
 from ner.llm_ner.prompt_techniques import PromptTechnique, PT_GPT_NER, PT_OutputList
+from ner.llm_ner.llm_finetune import load_model_tokenizer_for_training, split_train_test, tokenize_prompt
 
 from ner.utils import run_command
-from ner.llama2_finetune import load_model_tokenizer_for_training, split_train_test, tokenize_prompt
+
+
+from langchain.llms import LlamaCpp
+from langchain.embeddings import LlamaCppEmbeddings
+from langchain.callbacks.manager import CallbackManager
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+
+from llama_cpp import Llama
 
 
 class LLMModel(ABC):
     def __init__(self, base_model_id, base_model_name, check_nb_tokens = True, max_tokens = 256) -> None:
         self.base_model_id = base_model_id
-        self.base_model_name = base_model_name 
+        self.base_model_name = base_model_name.lower()
 
         self.max_tokens = max_tokens
         
@@ -32,21 +41,25 @@ class LLMModel(ABC):
             self.nlp = spacy.load("en_core_web_sm")  # Load a spaCy language model
             
     
-    @abstractmethod
-    def get_model(self, gguf_model_path = ""):
-        return None
+    def get_model(self, quantization = 'Q5_0', gguf_model_path = ""):
+        if gguf_model_path :
+            model_path = gguf_model_path
+        else :
+            model_path = f"llm/models/{self.base_model_name}/{self.base_model_name}.{quantization}.gguf"
+        self.model = get_llm_llamaCpp(model_path)
+        return self.model
     
     def __str__(self) -> str:
-        return self.model_name
+        return self.base_model_name
     
     def __call__(self, prompt, stop = ["<end_output>", "\n\n\n"] ) -> Any:
-        # return self.model(prompt, stop = ["<end_output>", "\n\n\n"], max_tokens = self.max_tokens)
-        return prompt
+        return self.model(prompt, stop = ["<end_output>", "\n\n\n"], max_tokens = self.max_tokens)
+        # return prompt
     
     def invoke_mulitple(self, sentences : list[str], pt : PromptTechnique, verifier : Verifier):
         all_entities = []
         for sentence in tqdm(sentences) :
-            all_entities.append(self.invoke(sentence,pt, verifier))
+            all_entities.append(self.invoke(sentence, pt, verifier))
         return all_entities
     
     
@@ -70,10 +83,10 @@ class LLMModel(ABC):
             all_entities.extend(processed_response)
         return all_entities
     
-    def classical_test(self, nb_few_shots = [5], verifier = False, save = False) :
-        ## load les datasets ici
+    def classical_test(self, nb_few_shots = [5], verifier = False, save = True) :
+
         data_train, data_test = get_test_cleaned_split()
-        data_test.select([0,1])
+        # data_test.select([0,1])
 
         if verifier :
             verifier = Verifier(self, data_train)
@@ -83,10 +96,10 @@ class LLMModel(ABC):
         results : list[ResultInstance] = []
 
         for n in nb_few_shots :
-            fsts = [FST_Random(data_train, n), FST_Sentence(data_train, n), FST_Entity(data_train, n)]
+            fsts = [FST_Random(data_train, n), FST_Sentence(data_train, n), FST_Entity(data_train, n)] # 
             for fst in fsts :
                 self.fst = fst
-                pts : list[PromptTechnique] = [PT_GPT_NER(fst), PT_OutputList(fst)]
+                pts : list[PromptTechnique] = [ PT_GPT_NER(fst)] #PT_GPT_NER(fst),
                 for pt in pts :
                     predictions = self.invoke_mulitple(data_test['text'], pt, verifier)
                     results.append(ResultInstance(
@@ -96,7 +109,7 @@ class LLMModel(ABC):
                         few_shot_tecnique = fst,
                         verifier = verifier,
                         results = predictions,
-                        gold = pt.get_gold(data_test),
+                        gold = data_test['spans'],
                         data_test = data_test,
                         data_train = data_train
                     ))
@@ -156,7 +169,7 @@ class LLMModel(ABC):
             run_command(command)
 
 
-            model_base = f"./llm/models/{self.base_model_name}/{self.base_model_name}_{quantization}.gguf"
+            model_base = f"./llm/models/{self.base_model_name}/{self.base_model_name}.{quantization}.gguf"
             lora_scaled = f"{path_to_lora}/ggml-adapter-model.bin"
 
             # model_out = f"{path_to_lora}/llama-13b-finetuned-2000-v0.gguf"
@@ -172,19 +185,84 @@ class Llama13b(LLMModel):
     def __init__(self, base_model_id = "meta-llama/Llama-2-13b-hf", base_model_name = "Llama-2-13b") -> None:
         super().__init__(base_model_id, base_model_name)
 
-    def get_model(self, gguf_model_path = ""):
-        pass
 
 class Llama7b(LLMModel):
     def __init__(self, base_model_id = "meta-llama/Llama-2-7b-hf", base_model_name = "Llama-2-7b") -> None:
         super().__init__(base_model_id, base_model_name)
 
-    def get_model(self, gguf_model_path = ""):
-        pass
 
 class MistralAI(LLMModel):
     def __init__(self, base_model_id = "mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1") -> None:
         super().__init__(base_model_id, base_model_name)
 
+    
+class NoLLM(LLMModel):
+    def __init__(self, base_model_id = "None", base_model_name = "None") -> None:
+        super().__init__(base_model_id, base_model_name)
+    
+    def __call__(self, prompt, stop = ["<end_output>", "\n\n\n"] ) -> Any:
+        return prompt
+    
     def get_model(self, gguf_model_path = ""):
-        pass
+        return None
+
+
+
+
+def get_llm_llamaCpp(model_path = None):
+    if not model_path:
+        model_path = os.getenv("model_path")
+
+    if not model_path:
+        logging.error("MODEL_PATH environment variable not set")
+        exit(1)
+
+    # Callbacks support token-wise streaming
+    callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
+
+    # Make sure the model path is correct for your system!
+    llm = LlamaCpp(
+        model_path= model_path, #"./llama_ft/llama2-7b-llamma-ner-finetune/checkpoint-375/ggml-adapter-model.bin",#
+        temperature=0,
+        max_tokens=150,
+        n_ctx = 4096,
+        n_batch=512,
+        n_threads=12,
+        logits_all= True,
+        logprobs = 20,
+        top_p=1,
+        n_gpu_layers=100,
+        # callback_manager=callback_manager,
+        repeat_penalty=1.0,
+        verbose = False
+    )
+    return llm
+
+def get_llm_Llama(model_path = None):
+    if not model_path:
+        model_path = os.getenv("model_path")
+
+    if not model_path:
+        logging.error("MODEL_PATH environment variable not set")
+        exit(1)
+
+    # Callbacks support token-wise streaming
+    callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
+
+    # Make sure the model path is correct for your system!
+    llm = Llama(
+        model_path= model_path, #"./llama_ft/llama2-7b-llamma-ner-finetune/checkpoint-375/ggml-adapter-model.bin",#
+        temperature=0,
+        max_tokens=150,
+        n_ctx = 4096,
+        n_batch=512,
+        n_threads=12,
+        logits_all= True,
+        logprobs = 20,
+        top_p=1,
+        n_gpu_layers=35,
+        callback_manager=callback_manager,
+        repeat_penalty=1.0,
+        verbose = False
+    )
+    return llm
