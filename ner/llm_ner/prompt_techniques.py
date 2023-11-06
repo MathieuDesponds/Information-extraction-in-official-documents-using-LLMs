@@ -137,7 +137,7 @@ class PT_OutputList(PromptTechnique):
                                             few_shots = self.get_few_shots(sentence, [], nearest_neighbors))
         return [(prompt, "None")]
     
-    def process_output(self, response : str, tag : str):
+    def process_output(self, response : str, tag : str = None):
         start_index = response.find('[[')  # Find the opening curly brace
         end_index = response.rfind(']]')    # Find the closing curly brace
         
@@ -173,9 +173,15 @@ class PT_Wrapper(PromptTechnique):
                                             few_shots = self.get_few_shots(sentence, [], nearest_neighbors))
         return [(prompt, "None")]
     
-    def process_output(self, response : str, tag : str):
-        pass
-        # ToDO : process output
+    def process_output(self, response : str, tag : str = None):
+        pattern = r'<([^>]+)>([^<]+)</\1>'
+
+        # Find all matches of the pattern in the text
+        matches = re.findall(pattern, response)
+
+        # Create a list of tuples with the extracted named entities and tags
+        named_entities = [(entity, mapping_string_abbr[tag]) for tag, entity in matches if tag in mapping_string_abbr]
+        return named_entities
 
     
     def get_gold(self, dataset : MyDataset) -> list[str]:
