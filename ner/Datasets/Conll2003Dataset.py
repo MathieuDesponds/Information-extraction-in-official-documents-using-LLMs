@@ -13,11 +13,11 @@ class Conll2003Dataset(MyDataset):
             dataset = dataset.map(lambda ex : {'text' : " ".join(ex['tokens'])})
             if cleaned : 
                 dataset = clean_dataset(dataset)
-            dataset = dataset.map(self.get_spans)
-            dataset = dataset.map(self.add_llama_ner_tags)
-            dataset = dataset.map(self.add_llama_ner_tags_2)
-            dataset = dataset.map(self.add_sentence_embedding)
-            dataset = dataset.map(self.add_entity_embeddings, with_indices=True)
+            dataset = dataset.map(Conll2003Dataset.get_spans)
+            dataset = dataset.map(MyDataset.add_llama_ner_tags)
+            dataset = dataset.map(MyDataset.add_llama_ner_tags_2)
+            dataset = dataset.map(MyDataset.add_sentence_embedding)
+            dataset = dataset.map(MyDataset.add_entity_embeddings, with_indices=True)
             self.dataset = dataset
             self.all_entity_embeddings = self.get_all_embeddings()
 
@@ -26,7 +26,8 @@ class Conll2003Dataset(MyDataset):
             self.all_entity_embeddings = self.get_all_embeddings()
             self.dataset = dataset
 
-    def get_spans(self, data_point):
+    @staticmethod
+    def get_spans(data_point):
         tag_mapping = {
             0: 'O',
             1: 'B-PER',

@@ -19,6 +19,14 @@ prompt_template = {
 {few_shots}\n
 ### ASSISTANT : Ok now I understand I need to only output a list with the entities that are in the sentence and the tag along it. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
+### OUTPUT : <start_output> """),
+    "<>" : PromptTemplate(
+        input_variables=['sentence', 'few_shots'],
+        template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
+### USER : Your goal is to extract all the enities that have either tag person, organization, location or miscallaneous. In order to do this, you have to rewrite the sentence and wrap the named entity by <tag> and </tag>.
+{few_shots}\n
+### ASSISTANT : Ok now I understand I need to rewrite the sentence and wrap the named entity by <tag> and </tag>. Can you now provide me the sentence ? 
+### INPUT : <start_input> {sentence} <end_input>
 ### OUTPUT : <start_output> """)
 }
 
