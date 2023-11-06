@@ -23,7 +23,7 @@ class Conll2003Dataset(MyDataset):
             self.all_entity_embeddings = self.get_all_embeddings()
 
         else :
-            self.dataset = dataset.map(self.adjust_entity_embeddings_idx, with_indices=True, verbose = False)
+            self.dataset = dataset.map(self.adjust_entity_embeddings_idx, with_indices=True)
             self.all_entity_embeddings = self.get_all_embeddings()
             self.dataset = dataset
 
