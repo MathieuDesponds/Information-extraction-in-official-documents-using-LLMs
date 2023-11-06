@@ -13,6 +13,9 @@ class FewShotsTechnique(ABC) :
         self.training_dataset = training_dataset
         self.nb_few_shots = nb_few_shots
         
+    def set_dataset(self, dataset : MyDataset):
+        self.training_dataset = dataset
+
     @abstractmethod
     def get_nearest_neighbors(self, sentence : str)-> list[str]:
         pass
@@ -20,6 +23,7 @@ class FewShotsTechnique(ABC) :
     @abstractmethod
     def __str__(self):
         pass
+
 
     
 class FST_NoShots(FewShotsTechnique):        
@@ -29,7 +33,11 @@ class FST_NoShots(FewShotsTechnique):
     def __str__(self):
         return "no-shots"
     
-class FST_Random(FewShotsTechnique):    
+class FST_Random(FewShotsTechnique): 
+    def __init__(self, training_dataset: MyDataset, nb_few_shots=5):
+        super().__init__(training_dataset, nb_few_shots)   
+
+        
     def get_nearest_neighbors(self, sentence : str)-> list[str]:
         random_rows = [self.training_dataset[i] 
                        for i in random.sample(range(len(self.training_dataset)), self.nb_few_shots)]
