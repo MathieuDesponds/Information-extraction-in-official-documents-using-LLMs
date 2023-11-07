@@ -77,19 +77,19 @@ class ResultInstanceWithConfidenceInterval():
             self.get_scores()
             return {
             "f1_mean" : self.f1_mean, "f1_conf_inter" : self.f1_conf_inter, 
-            "precision_mean" : self.precision_mean, "precision_conf_inter" : self.precision_conf_inter, 
-            "recall_mean" : self.recall_mean, "recall_conf_inter" : self.recall_conf_inter,
             'model' : self.res_insts[0].model,
             'prompt_technique' : self.res_insts[0].prompt_technique,
             'few_shot_tecnique' : self.res_insts[0].few_shot_tecnique,
             'nb_few_shots' : self.res_insts[0].nb_few_shots,
+            'precision' :  self.precision if hasattr(self, 'precision') else "no-precision",
             'verifier' : self.res_insts[0].verifier,
             'len_data_train' : self.res_insts[0].len_data_train,
             'len_data_test' : self.res_insts[0].len_data_test,
             'nb_test_run' : len(self.res_insts),
             'confidence_interval' : 0.95,
             'distribution_used' : 'Student',
-            'precision' :  self.precision if hasattr(self, 'precision') else "no-precision" 
+            "precision_mean" : self.precision_mean, "precision_conf_inter" : self.precision_conf_inter, 
+            "recall_mean" : self.recall_mean, "recall_conf_inter" : self.recall_conf_inter
         }
 
 def save_result_instance(res_inst : ResultInstance):
