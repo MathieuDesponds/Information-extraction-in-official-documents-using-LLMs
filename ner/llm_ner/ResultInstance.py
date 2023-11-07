@@ -54,13 +54,14 @@ class ResultInstance():
 
 
 class ResultInstanceWithConfidenceInterval():
-    def __init__(self, res_insts : list[ResultInstance]):
+    def __init__(self, res_insts : list[ResultInstance], precision = 'yes'):
         self.res_insts = res_insts
+        self.precision = precision
 
     def get_scores(self):
         f1s, precisions, recalls = [], [], [] 
         for inst in self.res_insts :
-            if not inst.cm :
+            if not inst.f1 :
                 _, f1, precision, recall = inst.get_scores()
                 f1s.append(f1)
                 precisions.append(precision)
@@ -87,7 +88,8 @@ class ResultInstanceWithConfidenceInterval():
             'len_data_test' : self.res_insts[0].len_data_test,
             'nb_test_run' : len(self.res_insts),
             'confidence_interval' : 0.95,
-            'distribution_used' : 'Student'
+            'distribution_used' : 'Student',
+            'precision' :  self.precision if hasattr(self, 'precision') else "no-precision" 
         }
 
 def save_result_instance(res_inst : ResultInstance):
@@ -95,7 +97,7 @@ def save_result_instance(res_inst : ResultInstance):
     dump(res_inst, file_path)
 
 def save_result_instance_with_CI(res_inst : ResultInstanceWithConfidenceInterval):
-    file_path = f"./ner/saves/results/conll2003_cleaned/{res_inst.res_insts[0].model}/{res_inst.res_insts[0].prompt_technique}/{res_inst.res_insts[0].few_shot_tecnique}_{res_inst.res_insts[0].nb_few_shots}_{res_inst.res_insts[0].verifier}_{res_inst.res_insts[0].len_data_train}_{res_inst.res_insts[0].len_data_test}.pkl"
+    file_path = f"./ner/saves/results/conll2003_cleaned/{res_inst.res_insts[0].model}/{res_inst.res_insts[0].prompt_technique}/{res_inst.res_insts[0].few_shot_tecnique}_{res_inst.res_insts[0].nb_few_shots}_{res_inst.res_insts[0].verifier}_{res_inst.res_insts[0].len_data_train}_{res_inst.res_insts[0].len_data_test}_{res_inst.precision}.pkl"
     dump(res_inst, file_path)
 
 def load_all_results():
@@ -115,9 +117,10 @@ def load_all_results():
                 res_inst = load(file_path)
                 if isinstance(res_inst ,ResultInstanceWithConfidenceInterval) :
                     results.append(res_inst.get_dict())
+                    # save_result_instance_with_CI(res_inst)
     return pd.DataFrame(results).sort_values('f1_mean', ascending = False)
 
 def load_result(model : str, pt : str, fst : str, nb_few_shots = 5, 
-                verifier = None, len_data_train = 1538, len_data_test = 50):
-    file_path = f"./ner/saves/results/conll2003_cleaned/{model}/{pt}/{fst}_{nb_few_shots}_{verifier}_{len_data_train}_{len_data_test}.pkl"
+                verifier = None, len_data_train = 1538, len_data_test = 50, precision = 'no-precision'):
+    file_path = f"./ner/saves/results/conll2003_cleaned/{model}/{pt}/{fst}_{nb_few_shots}_{verifier}_{len_data_train}_{len_data_test}_{precision}.pkl"
     return load(file_path)

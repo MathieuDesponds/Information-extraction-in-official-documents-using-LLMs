@@ -142,7 +142,8 @@ class PT_OutputList(PromptTechnique):
     def get_prompts_runnable(self, sentence):
         nearest_neighbors = self.fst.get_nearest_neighbors(sentence)
         prompt =  prompt_template[self.type].format(sentence = sentence,
-                                            few_shots = self.get_few_shots(sentence, [], nearest_neighbors))
+                                            few_shots = self.get_few_shots(sentence, [], nearest_neighbors),
+                                            precisions = '\n'.join([val for key, val in precision_ner.items()]))
         return [(prompt, "None")]
     
     def process_output(self, response : str, tag : str = None):
@@ -182,7 +183,8 @@ class PT_Wrapper(PromptTechnique):
     def get_prompts_runnable(self, sentence):
         nearest_neighbors = self.fst.get_nearest_neighbors(sentence)
         prompt =  prompt_template[self.type].format(sentence = sentence,
-                                            few_shots = self.get_few_shots(sentence, [], nearest_neighbors))
+                                            few_shots = self.get_few_shots(sentence, [], nearest_neighbors),
+                                            precisions = '\n'.join([val for key, val in precision_ner.items()]))
         return [(prompt, "None")]
     
     def process_output(self, response : str, tag : str = None):
