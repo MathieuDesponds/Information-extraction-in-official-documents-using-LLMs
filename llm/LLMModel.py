@@ -117,14 +117,15 @@ class LLMModel(ABC):
                         res_insts.append(ResultInstance(
                             model= str(self),
                             nb_few_shots = n,
-                            prompt_technique = pt,
-                            few_shot_tecnique = fst,
-                            verifier = verifier,
+                            prompt_technique = str(pt),
+                            few_shot_tecnique = str(fst),
+                            verifier = str(verifier),
                             results = predictions,
                             gold = data_test['spans'],
                             data_test = data_test,
                             data_train = data_train,
-                            elapsed_time = elapsed_time
+                            elapsed_time = elapsed_time,
+                            precision = pt.with_precision
                         ))
                         del data_test, data_train
                     results.append(ResultInstanceWithConfidenceInterval(res_insts))
