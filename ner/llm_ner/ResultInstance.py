@@ -1,5 +1,7 @@
 import os
 import pandas as pd
+from ner.llm_ner.few_shots_techniques import FewShotsTechnique
+from ner.llm_ner.prompt_techniques import PromptTechnique
 
 from ner.process_results import get_metrics_all, show_cm_multi
 from ner.utils import get_student_conf_interval, load, dump
@@ -114,3 +116,8 @@ def load_all_results():
                 if isinstance(res_inst ,ResultInstanceWithConfidenceInterval) :
                     results.append(res_inst.get_dict())
     return pd.DataFrame(results).sort_values('f1_mean', ascending = False)
+
+def load_result(model : str, pt : str, fst : str, nb_few_shots = 5, 
+                verifier = None, len_data_train = 1538, len_data_test = 50):
+    file_path = f"./ner/saves/results/conll2003_cleaned/{model}/{pt}/{fst}_{nb_few_shots}_{verifier}_{len_data_train}_{len_data_test}.pkl"
+    return load(file_path)

@@ -200,16 +200,28 @@ class LLMModel(ABC):
 class Llama13b(LLMModel):
     def __init__(self, base_model_id = "meta-llama/Llama-2-13b-hf", base_model_name = "Llama-2-13b") -> None:
         super().__init__(base_model_id, base_model_name)
+    
+    @staticmethod
+    def name():
+        return "Llama-2-13b".lower()
 
 
 class Llama7b(LLMModel):
     def __init__(self, base_model_id = "meta-llama/Llama-2-7b-hf", base_model_name = "Llama-2-7b") -> None:
         super().__init__(base_model_id, base_model_name)
+    
+    @staticmethod
+    def name():
+        return "Llama-2-7b".lower()
 
 
 class MistralAI(LLMModel):
     def __init__(self, base_model_id = "mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1") -> None:
         super().__init__(base_model_id, base_model_name)
+    
+    @staticmethod
+    def name():
+        return "Mistral-7B-v0.1".lower()
 
     
 class NoLLM(LLMModel):
@@ -221,6 +233,10 @@ class NoLLM(LLMModel):
     
     def get_model(self, gguf_model_path = ""):
         return None
+    
+    @staticmethod
+    def name():
+        return "None".lower()
 
 
 
