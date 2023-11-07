@@ -21,9 +21,10 @@ nlp = spacy.load("en_core_web_sm")  # Load a spaCy language model
 
 
 class PromptTechnique(ABC):
-    def __init__(self,fst : FewShotsTechnique, type :str):
+    def __init__(self,fst : FewShotsTechnique, type :str, with_precision = False):
         self.fst = fst
         self.type = type
+        self.with_precision = with_precision
 
     def __str__(self) -> str:
         return self.type
@@ -44,11 +45,18 @@ class PromptTechnique(ABC):
     def process_output(self, response : str, tag : str):
         pass
 
+    def get_precision(self):
+        if self.with_precision :
+            return """### ASSISTANT : Can you give me clarification on the different type of entities ? 
+### USER : Yes. """+'\n'.join([val for key, val in precision_ner.items()])+'\n'
+        else :
+            return ""
+
     def get_few_shots(self, sentence : str, tag : str, nearest_neighbors : list)-> str:
         nearest_neighbors = self.process_nearest_neighbors(nearest_neighbors, tag)
         if nearest_neighbors :
             return """### ASSISTANT : Yes I can do that. Can you provide me examples ?  
-### USER : Yes of course, there are some examples : \n""" + few_shot_prompt(nearest_neighbors).format()
+### USER : Yes of course, there are some examples : \n""" + few_shot_prompt(nearest_neighbors).format()+'\n'
         else : 
             return ""
         
@@ -90,8 +98,8 @@ class PromptTechnique(ABC):
             return pickle.load(f)
 
 class PT_GPT_NER(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique):
-        super().__init__(fst, type = '@@##')
+    def __init__(self, fst : FewShotsTechnique, with_precision = False):
+        super().__init__(fst, type = '@@##', with_precision = with_precision)
 
     @staticmethod
     def name():
@@ -126,8 +134,8 @@ class PT_GPT_NER(PromptTechnique):
 
 
 class PT_OutputList(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique):
-        super().__init__(fst, type = 'discussion')
+    def __init__(self, fst : FewShotsTechnique, with_precision = False):
+        super().__init__(fst, type = 'discussion', with_precision = with_precision)
     
     @staticmethod
     def name():
@@ -143,7 +151,7 @@ class PT_OutputList(PromptTechnique):
         nearest_neighbors = self.fst.get_nearest_neighbors(sentence)
         prompt =  prompt_template[self.type].format(sentence = sentence,
                                             few_shots = self.get_few_shots(sentence, [], nearest_neighbors),
-                                            precisions = '\n'.join([val for key, val in precision_ner.items()]))
+                                            precisions = self.get_precision())
         return [(prompt, "None")]
     
     def process_output(self, response : str, tag : str = None):
@@ -167,8 +175,8 @@ class PT_OutputList(PromptTechnique):
         return dataset['spans']
 
 class PT_Wrapper(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique):
-        super().__init__(fst, type = '<>')
+    def __init__(self, fst : FewShotsTechnique, with_precision = False):
+        super().__init__(fst, type = '<>', with_precision = with_precision)
     
     @staticmethod
     def name():
@@ -184,7 +192,7 @@ class PT_Wrapper(PromptTechnique):
         nearest_neighbors = self.fst.get_nearest_neighbors(sentence)
         prompt =  prompt_template[self.type].format(sentence = sentence,
                                             few_shots = self.get_few_shots(sentence, [], nearest_neighbors),
-                                            precisions = '\n'.join([val for key, val in precision_ner.items()]))
+                                            precisions = self.get_precision())
         return [(prompt, "None")]
     
     def process_output(self, response : str, tag : str = None):

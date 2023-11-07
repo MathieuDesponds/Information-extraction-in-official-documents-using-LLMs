@@ -16,9 +16,7 @@ prompt_template = {
         input_variables=['sentence', 'few_shots', 'precisions'],
         template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
 ### USER : Your goal is to extract all the enities that are either person, organization, location or miscallaneous and output the entities in a list of tuples. In each tuple put the named entity and the tag alongside it.
-### ASSISTANT : Can you give me clarification on the different type of entities ? 
-### USER : Yes. {precisions} 
-{few_shots}\n
+{precisions}{few_shots}
 ### ASSISTANT : Ok now I understand I need to only output a list with the entities that are in the sentence and the tag along it. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
 ### OUTPUT : <start_output> """),
@@ -27,9 +25,7 @@ prompt_template = {
         template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
 ### USER : Your goal is to extract all the entities that have either tag person, organization, location or miscallaneous. 
 In order to do this, you have to rewrite the sentence and wrap the named entity by <tag> and </tag>.
-### ASSISTANT : Can you give me clarification on the different type of entities ? 
-### USER : Yes. {precisions} 
-{few_shots}\n
+{precisions}{few_shots}
 ### ASSISTANT : Ok now I understand I need to rewrite the sentence and wrap the named entity by <tag> and </tag>. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
 ### OUTPUT : <start_output> """)

@@ -7,7 +7,7 @@ from ner.process_results import get_metrics_all, show_cm_multi
 from ner.utils import get_student_conf_interval, load, dump
 
 class ResultInstance():
-    def __init__(self, model, nb_few_shots, prompt_technique, few_shot_tecnique, verifier, results, gold, data_train, data_test, elapsed_time= -1) -> None:
+    def __init__(self, model, nb_few_shots, prompt_technique, few_shot_tecnique, verifier, results, gold, data_train, data_test, elapsed_time= -1, with_precision = False) -> None:
         self.model = model
         self.nb_few_shots = nb_few_shots
         self.prompt_technique = prompt_technique
@@ -18,6 +18,7 @@ class ResultInstance():
         self.len_data_train = len(data_train)
         self.len_data_test = len(data_test)
         self.elapsed_time = elapsed_time
+        self.with_precision = with_precision
 
         self.cm, self.f1, self.precision, self.recall = None, None, None,None
         
@@ -37,6 +38,7 @@ class ResultInstance():
 'few_shot_tecnique' : str(self.few_shot_tecnique),
 'nb_few_shots' : self.nb_few_shots,
 'verifier' : self.verifier,
+'with_precision' : self.with_precision,
 'len_data_train' : self.len_data_train,
 'len_data_test' : self.len_data_test,
 'f1' : self.f1,
@@ -54,9 +56,8 @@ class ResultInstance():
 
 
 class ResultInstanceWithConfidenceInterval():
-    def __init__(self, res_insts : list[ResultInstance], precision = 'yes'):
+    def __init__(self, res_insts : list[ResultInstance]):
         self.res_insts = res_insts
-        self.precision = precision
 
     def get_scores(self):
         f1s, precisions, recalls = [], [], [] 
@@ -81,7 +82,7 @@ class ResultInstanceWithConfidenceInterval():
             'prompt_technique' : self.res_insts[0].prompt_technique,
             'few_shot_tecnique' : self.res_insts[0].few_shot_tecnique,
             'nb_few_shots' : self.res_insts[0].nb_few_shots,
-            'precision' :  self.precision if hasattr(self, 'precision') else "no-precision",
+            'precision' :  self.res_insts[0].precision if hasattr(self.res_insts[0], 'precision') else "no-precision",
             'verifier' : self.res_insts[0].verifier,
             'len_data_train' : self.res_insts[0].len_data_train,
             'len_data_test' : self.res_insts[0].len_data_test,
@@ -97,7 +98,7 @@ def save_result_instance(res_inst : ResultInstance):
     dump(res_inst, file_path)
 
 def save_result_instance_with_CI(res_inst : ResultInstanceWithConfidenceInterval):
-    file_path = f"./ner/saves/results/conll2003_cleaned/{res_inst.res_insts[0].model}/{res_inst.res_insts[0].prompt_technique}/{res_inst.res_insts[0].few_shot_tecnique}_{res_inst.res_insts[0].nb_few_shots}_{res_inst.res_insts[0].verifier}_{res_inst.res_insts[0].len_data_train}_{res_inst.res_insts[0].len_data_test}_{res_inst.precision}.pkl"
+    file_path = f"./ner/saves/results/conll2003_cleaned/{res_inst.res_insts[0].model}/{res_inst.res_insts[0].prompt_technique}/{res_inst.res_insts[0].few_shot_tecnique}_{res_inst.res_insts[0].nb_few_shots}_{res_inst.res_insts[0].verifier}_{res_inst.res_insts[0].len_data_train}_{res_inst.res_insts[0].len_data_test}_{res_inst.res_insts[0].with_precision}.pkl"
     dump(res_inst, file_path)
 
 def load_all_results():
@@ -116,11 +117,18 @@ def load_all_results():
             if file_path.endswith(".pkl"):
                 res_inst = load(file_path)
                 if isinstance(res_inst ,ResultInstanceWithConfidenceInterval) :
+                    precision = file_path.split('_')[-1][:-4]
+                    for r in res_inst.res_insts:
+                        r.model = str(r.model)
+                        r.few_shot_tecnique = str(r.few_shot_tecnique)
+                        r.prompt_technique = str(r.prompt_technique)
+                        r.with_precision = precision
+                    
                     results.append(res_inst.get_dict())
                     # save_result_instance_with_CI(res_inst)
     return pd.DataFrame(results).sort_values('f1_mean', ascending = False)
 
 def load_result(model : str, pt : str, fst : str, nb_few_shots = 5, 
-                verifier = None, len_data_train = 1538, len_data_test = 50, precision = 'no-precision'):
-    file_path = f"./ner/saves/results/conll2003_cleaned/{model}/{pt}/{fst}_{nb_few_shots}_{verifier}_{len_data_train}_{len_data_test}_{precision}.pkl"
+                verifier = None, len_data_train = 1538, len_data_test = 50, with_precision = 'no-precision'):
+    file_path = f"./ner/saves/results/conll2003_cleaned/{model}/{pt}/{fst}_{nb_few_shots}_{verifier}_{len_data_train}_{len_data_test}_{with_precision}.pkl"
     return load(file_path)
