@@ -82,7 +82,7 @@ class ResultInstanceWithConfidenceInterval():
             'prompt_technique' : self.res_insts[0].prompt_technique,
             'few_shot_tecnique' : self.res_insts[0].few_shot_tecnique,
             'nb_few_shots' : self.res_insts[0].nb_few_shots,
-            'precision' :  self.res_insts[0].precision if hasattr(self.res_insts[0], 'precision') else "no-precision",
+            'precision' :  self.res_insts[0].with_precision if hasattr(self.res_insts[0], 'with_precision') else "no-precision",
             'verifier' : self.res_insts[0].verifier,
             'len_data_train' : self.res_insts[0].len_data_train,
             'len_data_test' : self.res_insts[0].len_data_test,
@@ -123,7 +123,6 @@ def load_all_results():
                         r.few_shot_tecnique = str(r.few_shot_tecnique)
                         r.prompt_technique = str(r.prompt_technique)
                         r.with_precision = precision
-                    
                     results.append(res_inst.get_dict())
                     # save_result_instance_with_CI(res_inst)
     return pd.DataFrame(results).sort_values('f1_mean', ascending = False)

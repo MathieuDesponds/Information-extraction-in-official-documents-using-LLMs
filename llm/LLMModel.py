@@ -30,14 +30,14 @@ from llama_cpp import Llama
 
 
 class LLMModel(ABC):
-    def __init__(self, base_model_id, base_model_name, check_nb_tokens = True, max_tokens = 256) -> None:
+    def __init__(self, base_model_id, base_model_name, check_nb_tokens = True, max_tokens = 256, quantization = "Q5_0") -> None:
         self.base_model_id = base_model_id
         self.base_model_name = base_model_name.lower()
         self.name = self.base_model_name
 
         self.max_tokens = max_tokens
         
-        self.model = self.get_model()
+        self.model = self.get_model(quantization = quantization)
         self.check_nb_tokens = check_nb_tokens
         if check_nb_tokens :
             self.nlp = spacy.load("en_core_web_sm")  # Load a spaCy language model
