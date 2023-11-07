@@ -85,7 +85,7 @@ class LLMModel(ABC):
             all_entities.extend(processed_response)
         return all_entities
     
-    def classical_test(self, fsts : list[FewShotsTechnique]= [FST_Random, FST_Sentence, FST_Entity], 
+    def classical_test(self, fsts : list[FewShotsTechnique]= [FST_Sentence, FST_Entity, FST_Random], 
                        pts : list[PromptTechnique] = [PT_GPT_NER, PT_OutputList, PT_Wrapper],
                        nb_few_shots = [5], verifier = False, save = True, nb_run_by_test = 3) :
 
