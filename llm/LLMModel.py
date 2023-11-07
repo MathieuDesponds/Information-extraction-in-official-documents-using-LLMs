@@ -48,7 +48,7 @@ class LLMModel(ABC):
             model_path = gguf_model_path
         else :
             model_path = f"llm/models/{self.base_model_name}/{self.base_model_name}.{quantization}.gguf"
-        self.model = get_llm_llamaCpp(model_path)
+        self.model = get_llm_Llama(model_path)
         return self.model
     
     def __str__(self) -> str:
