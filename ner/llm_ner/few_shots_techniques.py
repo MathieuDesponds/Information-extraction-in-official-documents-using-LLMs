@@ -30,6 +30,10 @@ class FST_NoShots(FewShotsTechnique):
     def get_nearest_neighbors(self, sentence : str)-> list[str]:
         return []
     
+    @staticmethod
+    def name():
+        return "no-shots"
+    
     def __str__(self):
         return "no-shots"
     
@@ -43,6 +47,10 @@ class FST_Random(FewShotsTechnique):
                        for i in random.sample(range(len(self.training_dataset)), self.nb_few_shots)]
         return random_rows
     
+    @staticmethod
+    def name():
+        return "random"
+    
     def __str__(self):
         return "random"
     
@@ -54,10 +62,18 @@ class FST_Sentence(FewShotsTechnique):
         nearest_neighbors = [self.training_dataset[int(i)] for i in list(top_k_indices)]
         return nearest_neighbors
     
+    @staticmethod
+    def name():
+        return "sentence"
+    
     def __str__(self):
         return "sentence"
     
 class FST_Entity(FewShotsTechnique):
+    @staticmethod
+    def name():
+        return "entity"
+    
     def __str__(self):
         return "entity"
     

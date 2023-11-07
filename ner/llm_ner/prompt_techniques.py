@@ -93,6 +93,10 @@ class PT_GPT_NER(PromptTechnique):
     def __init__(self, fst : FewShotsTechnique):
         super().__init__(fst, type = '@@##')
 
+    @staticmethod
+    def name():
+        return '@@##'
+
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
         nearest_neighbors = [{
                 "text" : row['text'],
@@ -124,6 +128,10 @@ class PT_GPT_NER(PromptTechnique):
 class PT_OutputList(PromptTechnique):
     def __init__(self, fst : FewShotsTechnique):
         super().__init__(fst, type = 'discussion')
+    
+    @staticmethod
+    def name():
+        return 'discussion'
 
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
         nearest_neighbors = [{
@@ -160,6 +168,10 @@ class PT_OutputList(PromptTechnique):
 class PT_Wrapper(PromptTechnique):
     def __init__(self, fst : FewShotsTechnique):
         super().__init__(fst, type = '<>')
+    
+    @staticmethod
+    def name():
+        return '<>'
 
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
         nearest_neighbors = [{
