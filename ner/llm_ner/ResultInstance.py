@@ -7,7 +7,7 @@ from ner.process_results import get_metrics_all, show_cm_multi
 from ner.utils import get_student_conf_interval, load, dump
 
 class ResultInstance():
-    def __init__(self, model, nb_few_shots, prompt_technique, few_shot_tecnique, verifier, results, gold, data_train, data_test, elapsed_time= -1, with_precision = False) -> None:
+    def __init__(self, model, nb_few_shots, prompt_technique, few_shot_tecnique, verifier, results, gold, data_train, data_test, elapsed_time= -1, with_precision = False, seed = -1) -> None:
         self.model = model
         self.nb_few_shots = nb_few_shots
         self.prompt_technique = prompt_technique
@@ -19,6 +19,7 @@ class ResultInstance():
         self.len_data_test = len(data_test)
         self.elapsed_time = elapsed_time
         self.with_precision = with_precision
+        self.seed = seed
 
         self.cm, self.f1, self.precision, self.recall = None, None, None,None
         
@@ -44,7 +45,8 @@ class ResultInstance():
 'f1' : self.f1,
 'precision' : self.precision,
 'recall' : self.recall,
-'elapsed_time' : self.elapsed_time if hasattr(self, 'elapsed_time') else -1  
+'elapsed_time' : self.elapsed_time if hasattr(self, 'elapsed_time') else -1 ,
+'seed' : self.seed if hasattr(self, 'seed') else -1  
        }
 
     def analyse_results(self):

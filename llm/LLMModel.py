@@ -109,7 +109,8 @@ class LLMModel(ABC):
                     res_insts = []
                     for run in range(nb_run_by_test) :
                         start_time = time.time()
-                        data_train, data_test = get_test_cleaned_split()
+                        seed = random.randint(0, 1535468)
+                        data_train, data_test = get_test_cleaned_split(seed = seed)
                         fst.set_dataset(data_train)
                         predictions = self.invoke_mulitple(data_test['text'], pt, verifier)
                         # Calculate the elapsed time
@@ -125,7 +126,8 @@ class LLMModel(ABC):
                             data_test = data_test,
                             data_train = data_train,
                             elapsed_time = elapsed_time,
-                            precision = pt.with_precision
+                            precision = pt.with_precision,
+                            seed = seed,
                         ))
                         del data_test, data_train
                     results.append(ResultInstanceWithConfidenceInterval(res_insts))
