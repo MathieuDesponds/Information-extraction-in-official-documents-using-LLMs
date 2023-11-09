@@ -1,5 +1,8 @@
 from llm.LLMModel import *
-from ner.llm_ner.prompt_techniques import *
+from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
+from ner.llm_ner.prompt_techniques.pt_discussion import PT_OutputList
+from ner.llm_ner.prompt_techniques.pt_gpt_ner import PT_GPT_NER
+from ner.llm_ner.prompt_techniques.pt_wrapper import PT_Wrapper
 from ner.llm_ner.few_shots_techniques import *
 
 

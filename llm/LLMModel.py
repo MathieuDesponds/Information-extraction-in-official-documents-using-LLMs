@@ -15,7 +15,10 @@ from ner.Datasets.Conll2003Dataset import get_test_cleaned_split
 from ner.llm_ner.ResultInstance import ResultInstance, ResultInstanceWithConfidenceInterval, save_result_instance_with_CI
 from ner.llm_ner.verifier import Verifier
 from ner.llm_ner.few_shots_techniques import *
-from ner.llm_ner.prompt_techniques import *
+from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
+from ner.llm_ner.prompt_techniques.pt_discussion import PT_OutputList
+from ner.llm_ner.prompt_techniques.pt_gpt_ner import PT_GPT_NER
+from ner.llm_ner.prompt_techniques.pt_wrapper import PT_Wrapper
 from ner.llm_ner.llm_finetune import load_model_tokenizer_for_training, split_train_test, tokenize_prompt
 
 from ner.utils import run_command
