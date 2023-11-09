@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from ner.llm_ner.few_shots_techniques import FewShotsTechnique
-from ner.llm_ner.prompt_techniques import PromptTechnique
+from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
 
 from ner.process_results import get_metrics_all, show_cm_multi
 from ner.utils import get_student_conf_interval, load, dump
