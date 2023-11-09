@@ -8,7 +8,7 @@ import re
 
 class PT_GPT_NER(PromptTechnique):
     def __init__(self, fst : FewShotsTechnique, with_precision = False):
-        super().__init__(fst, type = '@@##', with_precision = with_precision)
+        super().__init__(fst, with_precision = with_precision)
 
     @staticmethod
     def name():

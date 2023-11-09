@@ -11,13 +11,12 @@ from ner.llm_ner.few_shots_techniques import FST_Sentence, FewShotsTechnique
 from ner.llm_ner.prompts import *
 
 class PromptTechnique(ABC):
-    def __init__(self,fst : FewShotsTechnique, type :str, with_precision = False):
+    def __init__(self,fst : FewShotsTechnique, with_precision = False):
         self.fst = fst
-        self.type = type
         self.with_precision = with_precision
 
     def __str__(self) -> str:
-        return self.type
+        return self.name()
 
     @abstractmethod
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
@@ -33,6 +32,11 @@ class PromptTechnique(ABC):
 
     @abstractmethod
     def process_output(self, response : str, tag : str):
+        pass
+
+    @abstractmethod
+    @staticmethod
+    def name(self) ->str :
         pass
 
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
