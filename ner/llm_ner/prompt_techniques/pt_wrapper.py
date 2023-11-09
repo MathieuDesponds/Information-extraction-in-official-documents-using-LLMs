@@ -25,7 +25,7 @@ class PT_Wrapper(PromptTechnique):
     
     def get_prompts_runnable(self, sentence):
         nearest_neighbors = self.fst.get_nearest_neighbors(sentence)
-        prompt =  prompt_template[self.type].format(sentence = sentence,
+        prompt =  prompt_template[self.__str__()].format(sentence = sentence,
                                             few_shots = self.get_few_shots(sentence, [], nearest_neighbors),
                                             precisions = self.get_precision())
         return [(prompt, "None")]
@@ -41,6 +41,6 @@ class PT_Wrapper(PromptTechnique):
         return named_entities
 
     
-    def get_gold(self, dataset : MyDataset) -> list[str]:
+    def get_gold(self, dataset : MyDataset, tag : str) -> list[str]:
         return dataset['llama_text_2']
         

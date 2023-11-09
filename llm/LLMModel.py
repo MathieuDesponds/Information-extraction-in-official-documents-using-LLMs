@@ -127,7 +127,7 @@ class LLMModel(ABC):
     def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = True):
         processed_dataset = pt.load_processed_dataset(runs, cleaned)
         nb_samples = len(processed_dataset)
-        output_dir = f"./llm/models/{self.base_model_name}/finetuned-{pt.type}-{nb_samples}"
+        output_dir = f"./llm/models/{self.base_model_name}/finetuned-{pt.__str__}-{nb_samples}"
 
         test_size = 50
         train_size = nb_samples-test_size
@@ -155,7 +155,7 @@ class LLMModel(ABC):
                 eval_steps=runs/4//10,               # Evaluate and save checkpoints every 50 steps
                 do_eval=True,                # Perform evaluation at the end of training
                 report_to="wandb",           # Comment this out if you don't want to use weights & baises
-                run_name=f"finetuned-{pt.type}-{nb_samples}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}"          # Name of the W&B run (optional)
+                run_name=f"finetuned-{pt.__str__}-{nb_samples}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}"          # Name of the W&B run (optional)
             ),
             data_collator=transformers.DataCollatorForLanguageModeling(tokenizer, mlm=False),
         )
@@ -221,7 +221,7 @@ class NoLLM(LLMModel):
     def __call__(self, prompt, stop = ["<end_output>", "\n\n\n"] ) -> Any:
         return prompt
     
-    def get_model(self, gguf_model_path = ""):
+    def get_model(self, gguf_model_path = "", quantization = ""):
         return None
     
     @staticmethod

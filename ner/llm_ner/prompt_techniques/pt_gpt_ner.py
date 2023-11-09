@@ -29,7 +29,7 @@ class PT_GPT_NER(PromptTechnique):
         prompts = []
         for tag in tags :
             few_shots = self.get_few_shots(sentence, tag, nearest_neighbors)
-            prompt = prompt_template[self.type].format(tag=mapping_abbr_string_ner[tag], 
+            prompt = prompt_template[self.__str__()].format(tag=mapping_abbr_string_ner[tag], 
                                         precision = precision_ner[tag],
                                         few_shots = few_shots,
                                         sentence = sentence)
@@ -41,5 +41,5 @@ class PT_GPT_NER(PromptTechnique):
         named_entities = re.findall(pattern, response, re.DOTALL)
         return [(ne, tag) for ne in named_entities]
         
-    def get_gold(self, dataset : MyDataset) -> list[str]:
-        return dataset['llama_text']
+    def get_gold(self, dataset : MyDataset, tag : str) -> list[str]:
+        return [row['llama_text'][tag] for row in dataset]

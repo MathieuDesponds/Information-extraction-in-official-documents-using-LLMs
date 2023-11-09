@@ -12,6 +12,7 @@ prompt_template = {
 ### ASSISTANT : Ok now I understand I need to rewrite the sentence and add '@@' at the begining and '##' at the end of all the enities that are {tag}. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
 ### OUTPUT : <start_output> """),
+
     "discussion" : PromptTemplate(
         input_variables=['sentence', 'few_shots', 'precisions'],
         template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
@@ -20,6 +21,7 @@ prompt_template = {
 ### ASSISTANT : Ok now I understand I need to only output a list with the entities that are in the sentence and the tag along it. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
 ### OUTPUT : <start_output> """),
+
     "<>" : PromptTemplate(
         input_variables=['sentence', 'few_shots', 'precisions'],
         template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
@@ -28,7 +30,32 @@ In order to do this, you have to rewrite the sentence and wrap the named entity 
 {precisions}{few_shots}
 ### ASSISTANT : Ok now I understand I need to rewrite the sentence and wrap the named entity by <tag> and </tag>. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
-### OUTPUT : <start_output> """)
+### OUTPUT : <start_output> """),
+
+    "get-entities" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
+### USER : Your goal is to extract all the enities that are either person, organization, location or miscallaneous and output the entities in a list. Output entities even if you are not completely sure it is an entitiy.
+{precisions}{few_shots}
+### ASSISTANT : Ok now I understand I need to only output a list with the entities. Can you now provide me the sentence ? 
+### INPUT : <start_input> {sentence} <end_input>
+### OUTPUT : <start_output> """),
+
+    "tagger" : PromptTemplate(
+        input_variables=['entities_sentence', 'few_shots', 'precisions'],
+        template = """### SYSTEM : The task is to to tag all the named entites that were extracted from a sentence.
+### USER : Your task is to to tag all the named entites that were extracted from a sentence with either 
+    'P' for person entities, 
+    'O' for organization entities, 
+    'L' for location entities,
+    'M' for miscallaneous entities or
+    'N' is it is none of the above.
+Output a json with the named entities as keys and the tag as values.
+{precisions}{few_shots}
+### ASSISTANT : Ok now I understand I need to only output json with the named entities as keys and the tag as values. Can you now provide me the list of extracted entities and the sentence ? 
+### INPUT : <start_input> {entities_sentence} <end_input>
+### OUTPUT : <start_output> """),
+
 }
 
 shot_prompt = PromptTemplate(
