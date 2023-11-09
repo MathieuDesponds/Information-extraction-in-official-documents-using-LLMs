@@ -6,16 +6,16 @@ from ner.llm_ner.prompts import *
 
 import re
 
-class PT_GPT_NER(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = False):
-        super().__init__(fst, with_precision = with_precision)
+class PT_Multi_PT(PromptTechnique):
+    def __init__(self, pts : list[PromptTechnique], with_precision = False):
+        super().__init__(None,  with_precision = with_precision)
 
     @staticmethod
     def name():
-        return '@@##'
-
+        return 'multi_prompt'
+    
     def __str__(self):
-        return '@@##'
+        return 'multi_prompt-'+'-'.join([pt.type for pt in self.pts])
 
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
         nearest_neighbors = [{
