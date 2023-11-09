@@ -13,6 +13,9 @@ class PT_Wrapper(PromptTechnique):
     @staticmethod
     def name():
         return '<>'
+    
+    def __str__(self):
+        return '<>'
 
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
         nearest_neighbors = [{

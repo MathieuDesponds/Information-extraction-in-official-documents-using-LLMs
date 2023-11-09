@@ -13,6 +13,9 @@ class PT_OutputList(PromptTechnique):
     @staticmethod
     def name():
         return 'discussion'
+    
+    def __str__(self):
+        return 'discussion'
 
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
         nearest_neighbors = [{

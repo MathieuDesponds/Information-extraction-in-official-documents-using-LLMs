@@ -15,8 +15,14 @@ class PromptTechnique(ABC):
         self.fst = fst
         self.with_precision = with_precision
 
-    def __str__(self) -> str:
-        return self.name()
+    @abstractmethod
+    @staticmethod
+    def name() -> str:
+        pass
+
+    @abstractmethod
+    def __str__(self) ->str :
+        pass
 
     @abstractmethod
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
@@ -34,10 +40,7 @@ class PromptTechnique(ABC):
     def process_output(self, response : str, tag : str):
         pass
 
-    @abstractmethod
-    @staticmethod
-    def name(self) ->str :
-        pass
+
 
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
         all_entities = []
