@@ -15,8 +15,8 @@ class PromptTechnique(ABC):
         self.fst = fst
         self.with_precision = with_precision
 
-    @abstractmethod
     @staticmethod
+    @abstractmethod
     def name() -> str:
         pass
 
@@ -33,20 +33,18 @@ class PromptTechnique(ABC):
         pass
 
     @abstractmethod
-    def get_gold(self, dataset : MyDataset) -> list[str]:
+    def get_gold(self, dataset : MyDataset, tag : str) -> list[str]:
         pass
 
     @abstractmethod
     def process_output(self, response : str, tag : str):
         pass
 
-
-
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
         all_entities = []
         prompts = self.get_prompts_runnable(sentence)
         for prompt,tag in prompts :
-
+            print(prompt)
             if llm.check_nb_tokens :
                 doc = llm.nlp(prompt)   
                 num_tokens = len(doc)
@@ -92,7 +90,7 @@ class PromptTechnique(ABC):
             all_datas.append(processed_data)
         
         merged_datasets = concatenate_datasets(all_datas)
-        with open(f"./ner/saves/datasets/conll2003_for-ft_{'cleaned_' if dataset.cleaned else ''}_{self.type}_{runs}.pkl", 'wb')as f:
+        with open(f"./ner/saves/datasets/conll2003_for-ft_{'cleaned_' if dataset.cleaned else ''}_{self.__str__()}_{runs}.pkl", 'wb')as f:
             pickle.dump(merged_datasets,f)
 
         self.fst = old_fst
@@ -101,15 +99,15 @@ class PromptTechnique(ABC):
 
     def process_dataset_for_finetuning_helper(self, dataset_test : MyDataset):
         output = []
-        gold = self.get_gold(dataset_test)
         for i, sample in tqdm(enumerate(dataset_test)) :
             self.fst.nb_few_shots = random.randint(1,4)
             for prompt, tag in self.get_prompts_runnable(sample['text']):
+                gold = self.get_gold(dataset_test, tag)
                 output.append({'text' : f"{prompt}{gold[i]} <end_output>"})
 
         processed_dataset = Dataset.from_list(output)  
         return processed_dataset
     
     def load_processed_dataset(self, runs, cleaned = True):
-        with open(f"./ner/saves/datasets/conll2003_for-ft_{'cleaned_' if cleaned else ''}_{self.type}_{runs}.pkl", 'rb')as f:
+        with open(f"./ner/saves/datasets/conll2003_for-ft_{'cleaned_' if cleaned else ''}_{self.__str__()}_{runs}.pkl", 'rb')as f:
             return pickle.load(f)
