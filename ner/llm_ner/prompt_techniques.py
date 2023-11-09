@@ -45,6 +45,26 @@ class PromptTechnique(ABC):
     def process_output(self, response : str, tag : str):
         pass
 
+    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
+        all_entities = []
+        prompts = self.get_prompts_runnable(sentence)
+        for prompt,tag in prompts :
+
+            if llm.check_nb_tokens :
+                doc = llm.nlp(prompt)   
+                num_tokens = len(doc)
+                # print(num_tokens, prompt)
+                if num_tokens > 4096 - llm.max_tokens :
+                    print("prompt is too big") 
+                    continue
+
+            response = llm(prompt)
+            processed_response = self.process_output(response, tag)
+            if verifier : 
+                processed_response = verifier.verify(sentence, processed_response)
+            all_entities.extend(processed_response)
+        return all_entities
+
     def get_precision(self):
         if self.with_precision :
             return """### ASSISTANT : Can you give me clarification on the different type of entities ? 
