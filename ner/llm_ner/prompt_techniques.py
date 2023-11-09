@@ -10,14 +10,9 @@ from ner.Datasets.MyDataset import MyDataset
 from datasets import Dataset, concatenate_datasets
 
 from ner.llm_ner.few_shots_techniques import FST_Sentence, FewShotsTechnique
-
 from ner.llm_ner.prompts import *
 
 import re
-
-import spacy
-
-nlp = spacy.load("en_core_web_sm")  # Load a spaCy language model
 
 
 class PromptTechnique(ABC):
