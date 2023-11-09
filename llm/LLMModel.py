@@ -66,23 +66,7 @@ class LLMModel(ABC):
     
     
     def invoke(self, sentence : str, pt : PromptTechnique, verifier : Verifier):
-        all_entities = []
-        prompts = pt.get_prompts_runnable(sentence)
-        for prompt,tag in prompts :
-
-            if self.check_nb_tokens :
-                doc = self.nlp(prompt)   
-                num_tokens = len(doc)
-                # print(num_tokens, prompt)
-                if num_tokens > 4096 -self.max_tokens :
-                    print("prompt is too big") 
-                    continue
-
-            response = self(prompt)
-            processed_response = pt.process_output(response, tag)
-            if verifier : 
-                processed_response = verifier.verify(sentence, processed_response)
-            all_entities.extend(processed_response)
+        all_entities = pt.run_prompt(self, sentence, verifier)
         return all_entities
     
     def classical_test(self, fsts : list[FewShotsTechnique]= [FST_NoShots, FST_Sentence, FST_Entity, FST_Random], 
