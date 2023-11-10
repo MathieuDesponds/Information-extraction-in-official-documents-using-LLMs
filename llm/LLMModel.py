@@ -124,6 +124,46 @@ class LLMModel(ABC):
         results_df = pd.DataFrame([result.get_dict() for result in results])
         return results, results_df
 
+    def classical_test_multiprompt(self, pt : PromptTechnique,
+                       nb_few_shots = [3], verifier = False, save = True, nb_run_by_test = 3) :
+        if verifier :
+            verifier = Verifier(self, data_train)
+        else : 
+            verifier = None
+
+        results : list[ResultInstanceWithConfidenceInterval] = []
+
+        res_insts = []
+        fst : FewShotsTechnique = pt.pts[0].fst
+        for run in range(nb_run_by_test) :
+            start_time = time.time()
+            seed = random.randint(0, 1535468)
+            data_train, data_test = get_test_cleaned_split(seed = seed)
+            fst.set_dataset(data_train)
+            predictions = self.invoke_mulitple(data_test['text'], pt, verifier)
+            # Calculate the elapsed time
+            elapsed_time = time.time() - start_time
+            res_insts.append(ResultInstance(
+                model= str(self),
+                nb_few_shots = fst.nb_few_shots,
+                prompt_technique = str(pt),
+                few_shot_tecnique = str(fst),
+                verifier = str(verifier),
+                results = predictions,
+                gold = data_test['spans'],
+                data_test = data_test,
+                data_train = data_train,
+                elapsed_time = elapsed_time,
+                with_precision = pt.with_precision,
+                seed = seed,
+            ))
+            del data_test, data_train
+        results.append(ResultInstanceWithConfidenceInterval(res_insts))
+        if save :
+            save_result_instance_with_CI(results[-1])
+        results_df = pd.DataFrame([result.get_dict() for result in results])
+        return results, results_df
+    
 
     def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = True, precision = None):
         processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision)
@@ -165,8 +205,8 @@ class LLMModel(ABC):
         trainer.train()
         trainer.save_model()
 
-    def load_finetuned_model(self, prompt_type, nb_samples = 2000, quantization = "Q5_0"):
-        path_to_lora = f"./llm/models/{self.base_model_name}/finetuned-{prompt_type}-{nb_samples}"
+    def load_finetuned_model(self, prompt_type, nb_samples = 2000, quantization = "Q5_0", precision = None):
+        path_to_lora = f"./llm/models/{self.base_model_name}/finetuned-{prompt_type}-{f'{precision}-' if precision else ''}{nb_samples}"
         model_out = f"{path_to_lora}/model-{quantization}.gguf"
         if not os.path.exists(model_out):
             model_type = 'llama' #llama, starcoder, falcon, baichuan, or gptneox
