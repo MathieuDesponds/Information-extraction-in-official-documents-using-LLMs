@@ -26,10 +26,9 @@ class PT_Multi_PT(PromptTechnique):
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
         
         output = self.pts[0].run_prompt(llm, sentence, None)
-        # To Remove 
-        print(output)
+        # print(f"Output after the first prompt : {output}")
         for pt in self.pts[1:]:
-            output = pt.run_prompt(llm, f"{output} in '{sentence}'", None)
+            output = pt.run_prompt(llm, f"{output} in the following sentence'{sentence}'", None)
         return output
 
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):

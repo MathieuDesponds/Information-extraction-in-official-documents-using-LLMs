@@ -7,8 +7,10 @@ from ner.llm_ner.prompts import *
 
 import re
 
+LETTER_TO_TAG_MAPPING = {"P" : "PER", "O": "ORG", "L" : "LOC", "M" : "MISC"}
+
 class PT_Tagger(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = False):
+    def __init__(self, fst : FewShotsTechnique, with_precision = True):
         super().__init__(fst, with_precision = with_precision)
 
     @staticmethod
@@ -22,21 +24,23 @@ class PT_Tagger(PromptTechnique):
         nearest_neighbors_out = []
         for row in nearest_neighbors :
             nes = [ne for ne, tag in row['spans']]
-            output_json = '{\n' + '\n   '.join([
-                f"{ne} : ONEOF['P', 'O', 'L', 'M', 'N']" 
-                for ne in nes
-            ])+'\n}'
+            tags = [tag for ne, tag in row['spans']]
+            output_json = '{{\n' + '\n   '.join([
+                f"'{ne}' : '{tags[i][0]}'," 
+                for i, ne in enumerate(nes)
+            ])+'}}'
             nearest_neighbors_out.append({
                 "text" : f"{nes} in '{row['text']}'",
                 "output_text" : output_json})
+            # print(output_json)
         return nearest_neighbors_out
     
     # ToDo 
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
         all_entities = []
         prompts = self.get_prompts_runnable(sentence)
-        print(prompts)
         for prompt,tag in prompts :
+            # print(prompt)
             if llm.check_nb_tokens :
                 doc = llm.nlp(prompt)   
                 num_tokens = len(doc)
@@ -45,7 +49,8 @@ class PT_Tagger(PromptTechnique):
                     print("prompt is too big") 
                     continue
 
-            response = llm(prompt)
+            response = '{'+ llm(prompt)
+            # print(f"Response of llm in tagger : {response}")
             processed_response = self.process_output(response, tag)
             if verifier : 
                 processed_response = verifier.verify(sentence, processed_response)
@@ -56,9 +61,8 @@ class PT_Tagger(PromptTechnique):
     def get_prompts_runnable(self, sentence):
         # sentence is in fact "{previous_output} in '{sentence}'"
         entities_sentence = sentence
-        real_sentence = sentence.split("'")[-2] 
+        real_sentence = sentence.split("'")[-2]
         nearest_neighbors = self.fst.get_nearest_neighbors(real_sentence)
-        print(real_sentence, nearest_neighbors)
         prompt =  prompt_template[self.__str__()].format(entities_sentence = entities_sentence,
                                             few_shots = self.get_few_shots(real_sentence, [], nearest_neighbors),
                                             precisions = self.get_precision())
@@ -73,12 +77,13 @@ class PT_Tagger(PromptTechnique):
         else:
             response ="{}"
     
+        print(f"response of tagger : {response}")
         try:
             named_entities = ast.literal_eval(response)
         except Exception as e:
             named_entities = {}
 
-        return [(ne,tag) for ne, tag in named_entities.items()]
+        return [(ne,LETTER_TO_TAG_MAPPING[tag]) for ne, tag in named_entities.items()]
         
     def get_gold(self, dataset : MyDataset, tag : str) -> list[str]:
         return [

@@ -207,8 +207,8 @@ class Llama7b(LLMModel):
 
 
 class MistralAI(LLMModel):
-    def __init__(self, base_model_id = "mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1") -> None:
-        super().__init__(base_model_id, base_model_name)
+    def __init__(self, base_model_id = "mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1", quantization = 'Q5_0') -> None:
+        super().__init__(base_model_id, base_model_name, quantization=quantization)
     
     @staticmethod
     def name():

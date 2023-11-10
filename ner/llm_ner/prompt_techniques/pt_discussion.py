@@ -7,7 +7,7 @@ from ner.llm_ner.prompts import *
 
 
 class PT_OutputList(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = False):
+    def __init__(self, fst : FewShotsTechnique, with_precision = True):
         super().__init__(fst, with_precision = with_precision)
     
     @staticmethod

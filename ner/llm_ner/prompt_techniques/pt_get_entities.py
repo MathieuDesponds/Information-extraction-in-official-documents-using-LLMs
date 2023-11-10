@@ -8,7 +8,7 @@ from ner.llm_ner.prompts import *
 import re
 
 class PT_GetEntities(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = False):
+    def __init__(self, fst : FewShotsTechnique, with_precision = True):
         super().__init__(fst, with_precision = with_precision)
 
     @staticmethod
@@ -21,7 +21,7 @@ class PT_GetEntities(PromptTechnique):
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
         nearest_neighbors = [{
                 "text" : row['text'],
-                "output_text" : [ne for ne, tag in row['spans']]} for row in nearest_neighbors]
+                "output_text" : f"{[ne for ne, tag in row['spans']]}"} for row in nearest_neighbors]
         return nearest_neighbors
 
 
