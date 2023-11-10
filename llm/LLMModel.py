@@ -120,7 +120,7 @@ class LLMModel(ABC):
                     results.append(ResultInstanceWithConfidenceInterval(res_insts))
                     if save :
                         save_result_instance_with_CI(results[-1])
-                fst.save_few_shots()
+                    fst.save_few_shots()
         results_df = pd.DataFrame([result.get_dict() for result in results])
         return results, results_df
 

@@ -59,7 +59,7 @@ class FST_Random(FewShotsTechnique):
 class FST_Sentence(FewShotsTechnique):    
     def __init__(self, training_dataset: MyDataset, nb_few_shots=5):
         super().__init__(training_dataset, nb_few_shots)
-        self.few_shots_save = load(SAVED_FEW_SHOTS_SENTENCE)
+        self.few_shots_save : dict = load(SAVED_FEW_SHOTS_SENTENCE)
 
     def get_nearest_neighbors(self, sentence : str)-> list[str]:
         if sentence in self.few_shots_save and len(self.few_shots_save[sentence]) >= self.nb_few_shots :
@@ -79,6 +79,8 @@ class FST_Sentence(FewShotsTechnique):
         return "sentence"
 
     def save_few_shots(self):
+        old_few_shot_save = load(SAVED_FEW_SHOTS_SENTENCE)
+        self.few_shots_save.update(old_few_shot_save)
         dump(self.few_shots_save , SAVED_FEW_SHOTS_SENTENCE)
     
 class FST_Entity(FewShotsTechnique):
@@ -115,4 +117,6 @@ class FST_Entity(FewShotsTechnique):
         return nearest_neighbors
     
     def save_few_shots(self):
+        old_few_shot_save = load(SAVED_FEW_SHOTS_ENTITY)
+        self.few_shots_save.update(old_few_shot_save)
         dump(self.few_shots_save , SAVED_FEW_SHOTS_ENTITY)
