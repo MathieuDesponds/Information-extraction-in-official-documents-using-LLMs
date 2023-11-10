@@ -35,6 +35,7 @@ class PT_Tagger(PromptTechnique):
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
         all_entities = []
         prompts = self.get_prompts_runnable(sentence)
+        print(prompts)
         for prompt,tag in prompts :
             if llm.check_nb_tokens :
                 doc = llm.nlp(prompt)   
@@ -57,6 +58,7 @@ class PT_Tagger(PromptTechnique):
         entities_sentence = sentence
         real_sentence = sentence.split("'")[-2] 
         nearest_neighbors = self.fst.get_nearest_neighbors(real_sentence)
+        print(real_sentence, nearest_neighbors)
         prompt =  prompt_template[self.__str__()].format(entities_sentence = entities_sentence,
                                             few_shots = self.get_few_shots(real_sentence, [], nearest_neighbors),
                                             precisions = self.get_precision())
