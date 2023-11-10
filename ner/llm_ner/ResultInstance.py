@@ -64,11 +64,10 @@ class ResultInstanceWithConfidenceInterval():
     def get_scores(self):
         f1s, precisions, recalls = [], [], [] 
         for inst in self.res_insts :
-            if not inst.f1 :
-                _, f1, precision, recall = inst.get_scores()
-                f1s.append(f1)
-                precisions.append(precision)
-                recalls.append(recall)
+            _, f1, precision, recall = inst.get_scores()
+            f1s.append(f1)
+            precisions.append(precision)
+            recalls.append(recall)
             self.f1_mean, self.f1_conf_inter = get_student_conf_interval(f1s)
             self.precision_mean, self.precision_conf_inter = get_student_conf_interval(precisions)
             self.recall_mean, self.recall_conf_inter = get_student_conf_interval(recalls)

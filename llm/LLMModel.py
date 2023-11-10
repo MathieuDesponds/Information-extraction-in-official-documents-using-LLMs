@@ -126,7 +126,7 @@ class LLMModel(ABC):
 
 
     def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = True, precision = None):
-        processed_dataset = pt.load_processed_dataset(runs, cleaned)
+        processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision)
         nb_samples = len(processed_dataset)
         output_dir = f"./llm/models/{self.base_model_name}/finetuned-{pt.__str__()}-{f'{precision}-' if precision else ''}{nb_samples}"
 

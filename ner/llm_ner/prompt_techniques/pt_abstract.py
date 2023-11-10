@@ -43,6 +43,7 @@ class PromptTechnique(ABC):
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
         all_entities = []
         prompts = self.get_prompts_runnable(sentence)
+        print(prompts)
         for prompt,tag in prompts :
             if llm.check_nb_tokens :
                 doc = llm.nlp(prompt)   
@@ -113,6 +114,6 @@ class PromptTechnique(ABC):
         processed_dataset = Dataset.from_list(output)  
         return processed_dataset
     
-    def load_processed_dataset(self, runs, cleaned = True):
-        with open(f"./ner/saves/datasets/conll2003_for-ft_{'cleaned_' if cleaned else ''}_{self.__str__()}_{runs}.pkl", 'rb')as f:
+    def load_processed_dataset(self, runs, cleaned = True, precision = None):
+        with open(f"./ner/saves/datasets/conll2003_for-ft_{'cleaned_' if cleaned else ''}_{self.__str__()}_{f'{precision}_' if precision else ''}{runs}.pkl", 'rb')as f:
             return pickle.load(f)

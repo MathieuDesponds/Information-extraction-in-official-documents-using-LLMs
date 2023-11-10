@@ -27,7 +27,7 @@ class PT_Multi_PT(PromptTechnique):
         
         output = self.pts[0].run_prompt(llm, sentence, None)
         # To Remove 
-        output = f"['Italy', 'Marcello Cuttitta']"
+        print(output)
         for pt in self.pts[1:]:
             output = pt.run_prompt(llm, f"{output} in '{sentence}'", None)
         return output
