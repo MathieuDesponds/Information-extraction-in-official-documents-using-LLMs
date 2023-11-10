@@ -36,7 +36,6 @@ class PT_Tagger(PromptTechnique):
         all_entities = []
         prompts = self.get_prompts_runnable(sentence)
         for prompt,tag in prompts :
-            print(prompt)
             if llm.check_nb_tokens :
                 doc = llm.nlp(prompt)   
                 num_tokens = len(doc)

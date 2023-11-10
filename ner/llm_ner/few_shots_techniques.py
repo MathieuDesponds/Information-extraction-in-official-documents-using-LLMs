@@ -11,9 +11,10 @@ SAVED_FEW_SHOTS_SENTENCE = "./ner/saves/few_shots_saved/sentence.pkl"
 SAVED_FEW_SHOTS_ENTITY   = "./ner/saves/few_shots_saved/entity.pkl"
 
 class FewShotsTechnique(ABC) :
-    def __init__(self, training_dataset : MyDataset, nb_few_shots = 5):
+    def __init__(self, training_dataset : MyDataset, nb_few_shots = 5, save_few_shot_path = None):
         self.training_dataset = training_dataset
         self.nb_few_shots = nb_few_shots
+        self.save_few_shot_path = save_few_shot_path
         
     def set_dataset(self, dataset : MyDataset):
         self.training_dataset = dataset
@@ -26,10 +27,11 @@ class FewShotsTechnique(ABC) :
     def __str__(self):
         pass
 
-    @abstractmethod
     def save_few_shots(self):
-        pass
-
+        if self.save_few_shot_path :
+            old_few_shot_save = load(self.save_few_shot_path)
+            self.few_shots_save.update(old_few_shot_save)
+            dump(self.few_shots_save , self.save_few_shot_path)
 
     
 class FST_NoShots(FewShotsTechnique):        
@@ -58,7 +60,7 @@ class FST_Random(FewShotsTechnique):
     
 class FST_Sentence(FewShotsTechnique):    
     def __init__(self, training_dataset: MyDataset, nb_few_shots=5):
-        super().__init__(training_dataset, nb_few_shots)
+        super().__init__(training_dataset, nb_few_shots, save_few_shot_path= SAVED_FEW_SHOTS_SENTENCE)
         self.few_shots_save : dict = load(SAVED_FEW_SHOTS_SENTENCE)
 
     def get_nearest_neighbors(self, sentence : str)-> list[str]:
@@ -78,14 +80,10 @@ class FST_Sentence(FewShotsTechnique):
     def __str__(self):
         return "sentence"
 
-    def save_few_shots(self):
-        old_few_shot_save = load(SAVED_FEW_SHOTS_SENTENCE)
-        self.few_shots_save.update(old_few_shot_save)
-        dump(self.few_shots_save , SAVED_FEW_SHOTS_SENTENCE)
     
 class FST_Entity(FewShotsTechnique):
     def __init__(self, training_dataset: MyDataset, nb_few_shots=5):
-        super().__init__(training_dataset, nb_few_shots)
+        super().__init__(training_dataset, nb_few_shots, save_few_shot_path=SAVED_FEW_SHOTS_ENTITY)
         self.few_shots_save = load(SAVED_FEW_SHOTS_ENTITY)
 
     @staticmethod
@@ -115,8 +113,3 @@ class FST_Entity(FewShotsTechnique):
         bests = list(dict.fromkeys(bests))[:self.nb_few_shots]
         nearest_neighbors = [self.training_dataset.dataset[best] for best in bests]
         return nearest_neighbors
-    
-    def save_few_shots(self):
-        old_few_shot_save = load(SAVED_FEW_SHOTS_ENTITY)
-        self.few_shots_save.update(old_few_shot_save)
-        dump(self.few_shots_save , SAVED_FEW_SHOTS_ENTITY)
