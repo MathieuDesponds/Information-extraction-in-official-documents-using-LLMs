@@ -21,7 +21,7 @@ class Verifier():
             prompt = verifier_prompt_template.format(tag=mapping_abbr_string_verifier[tag], 
                                                      precision = precision_ner[tag],
                                                      few_shots = few_shots)
-            print(prompt)
+
             response = self.model(prompt, stop = ["<end_answer>", '</start_answer>', '<end_output>', '</start_output>'])
 
             if "yes" in response.lower() :

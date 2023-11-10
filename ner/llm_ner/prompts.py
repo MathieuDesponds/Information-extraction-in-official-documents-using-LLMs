@@ -22,7 +22,7 @@ prompt_template = {
 ### INPUT : <start_input> {sentence} <end_input>
 ### OUTPUT : <start_output> """),
 
-    "<>" : PromptTemplate(
+    "wrapper" : PromptTemplate(
         input_variables=['sentence', 'few_shots', 'precisions'],
         template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
 ### USER : Your goal is to extract all the entities that have either tag person, organization, location or miscallaneous. 

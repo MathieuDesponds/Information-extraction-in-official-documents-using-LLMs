@@ -125,10 +125,10 @@ class LLMModel(ABC):
         return results, results_df
 
 
-    def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = True):
+    def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = True, precision = None):
         processed_dataset = pt.load_processed_dataset(runs, cleaned)
         nb_samples = len(processed_dataset)
-        output_dir = f"./llm/models/{self.base_model_name}/finetuned-{pt.__str__}-{nb_samples}"
+        output_dir = f"./llm/models/{self.base_model_name}/finetuned-{pt.__str__()}-{f'{precision}-' if precision else ''}{nb_samples}"
 
         test_size = 50
         train_size = nb_samples-test_size

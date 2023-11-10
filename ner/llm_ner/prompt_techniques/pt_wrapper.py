@@ -12,10 +12,10 @@ class PT_Wrapper(PromptTechnique):
     
     @staticmethod
     def name():
-        return '<>'
+        return 'wrapper'
     
     def __str__(self):
-        return '<>'
+        return 'wrapper'
 
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
         nearest_neighbors = [{
