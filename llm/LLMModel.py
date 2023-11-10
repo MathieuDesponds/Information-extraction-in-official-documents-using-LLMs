@@ -87,10 +87,10 @@ class LLMModel(ABC):
         results : list[ResultInstanceWithConfidenceInterval] = []
 
         for n in nb_few_shots :
-            fsts_i = [fst(None, n) for fst in fsts]
+            fsts_i : list[FewShotsTechnique]= [fst(None, n) for fst in fsts]
             for fst in fsts_i :
                 print(f"Testing with {fst}")
-                pts_i = [pt(fst) for pt in pts]
+                pts_i : list[PromptTechnique] = [pt(fst) for pt in pts]
                 for pt in pts_i :
                     print(f"      and {pt}")
                     res_insts = []
@@ -113,7 +113,7 @@ class LLMModel(ABC):
                             data_test = data_test,
                             data_train = data_train,
                             elapsed_time = elapsed_time,
-                            precision = pt.with_precision,
+                            with_precision = pt.with_precision,
                             seed = seed,
                         ))
                         del data_test, data_train
