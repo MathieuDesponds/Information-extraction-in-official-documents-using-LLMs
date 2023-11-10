@@ -11,7 +11,7 @@ from ner.llm_ner.few_shots_techniques import FST_Sentence, FewShotsTechnique
 from ner.llm_ner.prompts import *
 
 class PromptTechnique(ABC):
-    def __init__(self,fst : FewShotsTechnique, with_precision = False):
+    def __init__(self,fst : FewShotsTechnique, with_precision = True):
         self.fst = fst
         self.with_precision = with_precision
 
@@ -43,8 +43,8 @@ class PromptTechnique(ABC):
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
         all_entities = []
         prompts = self.get_prompts_runnable(sentence)
-        print(prompts)
         for prompt,tag in prompts :
+            # print(prompt)
             if llm.check_nb_tokens :
                 doc = llm.nlp(prompt)   
                 num_tokens = len(doc)
@@ -115,5 +115,5 @@ class PromptTechnique(ABC):
         return processed_dataset
     
     def load_processed_dataset(self, runs, cleaned = True, precision = None):
-        with open(f"./ner/saves/datasets/conll2003_for-ft_{'cleaned_' if cleaned else ''}_{self.__str__()}_{f'{precision}_' if precision else ''}{runs}.pkl", 'rb')as f:
+        with open(f"./ner/saves/datasets/conll2003_for-ft_{'cleaned_' if cleaned else ''}{self.__str__()}_{f'{precision}_' if precision else ''}{runs}.pkl", 'rb')as f:
             return pickle.load(f)

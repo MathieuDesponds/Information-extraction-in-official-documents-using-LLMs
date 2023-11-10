@@ -35,7 +35,7 @@ In order to do this, you have to rewrite the sentence and wrap the named entity 
     "get-entities" : PromptTemplate(
         input_variables=['sentence', 'few_shots', 'precisions'],
         template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
-### USER : Your goal is to extract all the enities that are either person, organization, location or miscallaneous and output the entities in a list. Output entities even if you are not completely sure it is an entitiy.
+### USER : Your goal is to extract all the entities that are either person, organization, location or miscallaneous and output the entities in a list. Output all entities even if you are not completely sure it is an entity.
 {precisions}{few_shots}
 ### ASSISTANT : Ok now I understand I need to only output a list with the entities. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
@@ -54,7 +54,7 @@ Output a json with the named entities as keys and the tag as values.
 {precisions}{few_shots}
 ### ASSISTANT : Ok now I understand I need to only output json with the named entities as keys and the tag as values. Can you now provide me the list of extracted entities and the sentence ? 
 ### INPUT : <start_input> {entities_sentence} <end_input>
-### OUTPUT : <start_output> """),
+### OUTPUT : <start_output> {{ """),
 
 }
 
