@@ -53,12 +53,13 @@ class PromptTechnique(ABC):
                     print("prompt is too big") 
                     continue
 
-            response = llm(prompt)
+            response_all = llm(prompt)
+            response = response_all['choices'][0]['text']
             processed_response = self.process_output(response, tag)
             if verifier : 
                 processed_response = verifier.verify(sentence, processed_response)
             all_entities.extend(processed_response)
-        return all_entities
+        return all_entities, response_all 
 
     def get_precision(self):
         if self.with_precision :

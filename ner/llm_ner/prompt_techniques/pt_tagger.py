@@ -26,7 +26,7 @@ class PT_Tagger(PromptTechnique):
             nes = [ne for ne, tag in row['spans']]
             tags = [tag for ne, tag in row['spans']]
             output_json = '{{\n' + '\n   '.join([
-                f"'{ne}' : '{tags[i][0]}'," 
+                f"'{ne}' : '{tags[i][0]}',"  #do not remove the comma !!!! It is used in the evaluation of confidence
                 for i, ne in enumerate(nes)
             ])+'}}'
             nearest_neighbors_out.append({
@@ -48,14 +48,14 @@ class PT_Tagger(PromptTechnique):
                 if num_tokens > 4096 - llm.max_tokens :
                     print("prompt is too big") 
                     continue
-
-            response = '{'+ llm(prompt)
+            response_all = llm(prompt)
+            response = '{'+ response_all['choices'][0]['text']
             # print(f"Response of llm in tagger : {response}")
             processed_response = self.process_output(response, tag)
             if verifier : 
                 processed_response = verifier.verify(sentence, processed_response)
             all_entities.extend(processed_response)
-        return all_entities
+        return all_entities, response_all
 
 
     def get_prompts_runnable(self, sentence):

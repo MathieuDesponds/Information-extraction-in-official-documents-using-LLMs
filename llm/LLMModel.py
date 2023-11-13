@@ -51,7 +51,8 @@ class LLMModel(ABC):
             model_path = gguf_model_path
         else :
             model_path = f"llm/models/{self.base_model_name}/{self.base_model_name}.{quantization}.gguf"
-        self.model = get_llm_llamaCpp(model_path)
+
+        self.model = get_llm_Llama(model_path)
         return self.model
     
     def __str__(self) -> str:
@@ -64,13 +65,13 @@ class LLMModel(ABC):
     def invoke_mulitple(self, sentences : list[str], pt : PromptTechnique, verifier : Verifier):
         all_entities = []
         for sentence in tqdm(sentences) :
-            all_entities.append(self.invoke(sentence, pt, verifier))
+            all_entities.append(self.invoke(sentence, pt, verifier)[0])
         return all_entities
     
     
     def invoke(self, sentence : str, pt : PromptTechnique, verifier : Verifier):
-        all_entities = pt.run_prompt(self, sentence, verifier)
-        return all_entities
+        all_entities, response_all= pt.run_prompt(self, sentence, verifier)
+        return all_entities, response_all
     
     def classical_test(self, fsts : list[FewShotsTechnique]= [FST_NoShots, FST_Sentence, FST_Entity, FST_Random], 
                        pts : list[PromptTechnique] = [PT_GPT_NER, PT_OutputList, PT_Wrapper],
