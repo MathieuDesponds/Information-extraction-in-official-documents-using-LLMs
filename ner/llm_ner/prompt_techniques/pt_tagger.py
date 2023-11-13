@@ -83,7 +83,7 @@ class PT_Tagger(PromptTechnique):
         except Exception as e:
             named_entities = {}
 
-        return [(ne,LETTER_TO_TAG_MAPPING[tag]) for ne, tag in named_entities.items()]
+        return [(ne,LETTER_TO_TAG_MAPPING[tag]) for ne, tag in named_entities.items() if tag in LETTER_TO_TAG_MAPPING]
         
     def get_gold(self, dataset : MyDataset, tag : str) -> list[str]:
         return [

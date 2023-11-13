@@ -15,6 +15,10 @@ class FewShotsTechnique(ABC) :
         self.training_dataset = training_dataset
         self.nb_few_shots = nb_few_shots
         self.save_few_shot_path = save_few_shot_path
+        if save_few_shot_path :
+            self.few_shots_save : dict = load(save_few_shot_path)
+        else :
+            self.few_shots_save = None
         
     def set_dataset(self, dataset : MyDataset):
         self.training_dataset = dataset
@@ -61,7 +65,6 @@ class FST_Random(FewShotsTechnique):
 class FST_Sentence(FewShotsTechnique):    
     def __init__(self, training_dataset: MyDataset, nb_few_shots=5):
         super().__init__(training_dataset, nb_few_shots, save_few_shot_path= SAVED_FEW_SHOTS_SENTENCE)
-        self.few_shots_save : dict = load(SAVED_FEW_SHOTS_SENTENCE)
 
     def get_nearest_neighbors(self, sentence : str)-> list[str]:
         if sentence in self.few_shots_save and len(self.few_shots_save[sentence]) >= self.nb_few_shots :
@@ -71,6 +74,7 @@ class FST_Sentence(FewShotsTechnique):
         top_k_indices = np.argsort(similarities[0])[-self.nb_few_shots:][::-1]
         nearest_neighbors = [self.training_dataset[int(i)] for i in list(top_k_indices)]
 
+        self.few_shots_save[sentence] = nearest_neighbors
         return nearest_neighbors
     
     @staticmethod
@@ -94,9 +98,11 @@ class FST_Entity(FewShotsTechnique):
         return "entity"
     
     def get_nearest_neighbors(self, sentence : str)-> list[str]:
-        return self.get_similar_sentence_by_entities(
+        nearest_neighbors = self.get_similar_sentence_by_entities(
             get_embbeding(sentence), 
             self.training_dataset.all_entity_embeddings)
+        self.few_shots_save[sentence] = nearest_neighbors
+        return nearest_neighbors
     
     def get_similar_sentence_by_entities(self, tokens_embedding, other_embeddings):
         nk_best = []

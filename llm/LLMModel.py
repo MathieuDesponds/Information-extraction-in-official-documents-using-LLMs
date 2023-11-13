@@ -19,6 +19,7 @@ from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
 from ner.llm_ner.prompt_techniques.pt_discussion import PT_OutputList
 from ner.llm_ner.prompt_techniques.pt_gpt_ner import PT_GPT_NER
 from ner.llm_ner.prompt_techniques.pt_wrapper import PT_Wrapper
+from ner.llm_ner.prompt_techniques.pt_multi_pt import PT_Multi_PT
 from ner.llm_ner.llm_finetune import load_model_tokenizer_for_training, split_train_test, tokenize_prompt
 
 from ner.utils import run_command
@@ -121,7 +122,7 @@ class LLMModel(ABC):
         results_df = pd.DataFrame([result.get_dict() for result in results])
         return results, results_df
 
-    def classical_test_multiprompt(self, pt : PromptTechnique,
+    def classical_test_multiprompt(self, pt : PT_Multi_PT,
                        nb_few_shots = [3], verifier = False, save = True, nb_run_by_test = 3) :
         if verifier :
             verifier = Verifier(self, data_train)
@@ -132,6 +133,7 @@ class LLMModel(ABC):
 
         res_insts = []
         fst : FewShotsTechnique = pt.pts[0].fst
+        print(fst)
         for run in range(nb_run_by_test) :
             start_time = time.time()
             seed = random.randint(0, 1535468)
@@ -165,7 +167,7 @@ class LLMModel(ABC):
     def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = True, precision = None):
         processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision)
         nb_samples = len(processed_dataset)
-        output_dir = f"./llm/models/{self.base_model_name}/finetuned-{pt.__str__()}-{f'{precision}-' if precision else ''}{nb_samples}"
+        output_dir = f"./llm/models/{self.base_model_name}{f'-{precision}' if precision else ''}/finetuned-{pt.__str__()}-{nb_samples}"
 
         test_size = 50
         train_size = nb_samples-test_size
@@ -265,5 +267,3 @@ class NoLLM(LLMModel):
     @staticmethod
     def name():
         return "None".lower()
-
-

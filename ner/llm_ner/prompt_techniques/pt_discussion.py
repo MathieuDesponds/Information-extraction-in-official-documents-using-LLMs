@@ -37,6 +37,9 @@ class PT_OutputList(PromptTechnique):
         if start_index != -1 and end_index != -1:
             response = response[start_index:end_index+2]
         else:
+            print("-----------------------------------------------")
+            print(f"response does not contain [[]]. Returned {response}")
+            print("-----------------------------------------------")
             response ="[]"
     
         try:

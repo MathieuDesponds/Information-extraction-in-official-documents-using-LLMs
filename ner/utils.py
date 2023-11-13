@@ -102,10 +102,14 @@ def get_student_conf_interval(scores):
     confidence_level = 0.95
 
     # Calculate the t-score for the desired confidence level and degrees of freedom
-    t_score = stats.t.ppf((1 + confidence_level) / 2, degrees_of_freedom)
+    if degrees_of_freedom : 
+        t_score = stats.t.ppf((1 + confidence_level) / 2, degrees_of_freedom)
 
-    # Calculate the margin of error
-    margin_of_error = t_score * (sem / (sample_size ** 0.5))
+        # Calculate the margin of error
+        margin_of_error = t_score * (sem / (sample_size ** 0.5))
+
+    else :
+        margin_of_error = np.nan
 
     # Calculate the confidence interval
     lower_bound = sample_mean - margin_of_error
