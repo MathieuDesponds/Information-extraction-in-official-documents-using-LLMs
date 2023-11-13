@@ -19,6 +19,7 @@ from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
 from ner.llm_ner.prompt_techniques.pt_discussion import PT_OutputList
 from ner.llm_ner.prompt_techniques.pt_gpt_ner import PT_GPT_NER
 from ner.llm_ner.prompt_techniques.pt_wrapper import PT_Wrapper
+from ner.llm_ner.prompt_techniques.pt_multi_pt import PT_Multi_PT
 from ner.llm_ner.llm_finetune import load_model_tokenizer_for_training, split_train_test, tokenize_prompt
 
 from ner.utils import run_command
@@ -124,7 +125,7 @@ class LLMModel(ABC):
         results_df = pd.DataFrame([result.get_dict() for result in results])
         return results, results_df
 
-    def classical_test_multiprompt(self, pt : PromptTechnique,
+    def classical_test_multiprompt(self, pt : PT_Multi_PT,
                        nb_few_shots = [3], verifier = False, save = True, nb_run_by_test = 3) :
         if verifier :
             verifier = Verifier(self, data_train)
@@ -135,6 +136,7 @@ class LLMModel(ABC):
 
         res_insts = []
         fst : FewShotsTechnique = pt.pts[0].fst
+        print(fst)
         for run in range(nb_run_by_test) :
             start_time = time.time()
             seed = random.randint(0, 1535468)
@@ -168,7 +170,7 @@ class LLMModel(ABC):
     def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = True, precision = None):
         processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision)
         nb_samples = len(processed_dataset)
-        output_dir = f"./llm/models/{self.base_model_name}/finetuned-{pt.__str__()}-{f'{precision}-' if precision else ''}{nb_samples}"
+        output_dir = f"./llm/models/{self.base_model_name}{f'-{precision}' if precision else ''}/finetuned-{pt.__str__()}-{nb_samples}"
 
         test_size = 50
         train_size = nb_samples-test_size
@@ -287,13 +289,13 @@ def get_llm_llamaCpp(model_path = None):
     llm = LlamaCpp(
         model_path= model_path, #"./llama_ft/llama2-7b-llamma-ner-finetune/checkpoint-375/ggml-adapter-model.bin",#
         temperature=0,
-        max_tokens=150,
-        n_ctx = 4096,
+        max_tokens=200,
+        n_ctx = 2048,
         n_batch=512,
         n_threads=12,
         logits_all= True,
         logprobs = 20,
-        top_p=1,
+        top_k=1,
         n_gpu_layers=100,
         # callback_manager=callback_manager,
         repeat_penalty=1.0,
@@ -316,8 +318,8 @@ def get_llm_Llama(model_path = None):
     llm = Llama(
         model_path= model_path, #"./llama_ft/llama2-7b-llamma-ner-finetune/checkpoint-375/ggml-adapter-model.bin",#
         temperature=0,
-        max_tokens=150,
-        n_ctx = 4096,
+        max_tokens=200,
+        n_ctx = 2048,
         n_batch=512,
         n_threads=12,
         logits_all= True,

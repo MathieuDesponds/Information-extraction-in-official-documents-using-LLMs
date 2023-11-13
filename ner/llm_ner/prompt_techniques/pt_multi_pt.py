@@ -2,7 +2,6 @@ from abc import abstractmethod
 from ner.Datasets.MyDataset import MyDataset
 from ner.llm_ner.prompt_techniques.pt_get_entities import PT_GetEntities
 from ner.llm_ner.prompt_techniques.pt_tagger import PT_Tagger
-from llm.LLMModel import *
 
 from ner.llm_ner.few_shots_techniques import *
 
@@ -25,7 +24,7 @@ class PT_Multi_PT(PromptTechnique):
         return 'multi_prompt'
     
     def __str__(self):
-        return 'multi_prompt-'+'-'.join([pt.__str__ for pt in self.pts])
+        return 'multi_prompt-'+'-'.join([pt.__str__() for pt in self.pts])
     
     @abstractmethod
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
