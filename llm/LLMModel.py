@@ -23,24 +23,20 @@ from ner.llm_ner.llm_finetune import load_model_tokenizer_for_training, split_tr
 
 from ner.utils import run_command
 
-
-from langchain.llms import LlamaCpp
-from langchain.embeddings import LlamaCppEmbeddings
-from langchain.callbacks.manager import CallbackManager
-from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
-
-from llama_cpp import Llama
-
+from llm.LlamaLoader import LlamaLoader, Llama_LlamaCpp, Llama_Langchain
 
 class LLMModel(ABC):
-    def __init__(self, base_model_id, base_model_name, check_nb_tokens = True, max_tokens = 256, quantization = "Q5_0") -> None:
+    def __init__(self, base_model_id, base_model_name, check_nb_tokens = True, max_tokens = 256, quantization = "Q5_0", llm_loader : LlamaLoader = None) -> None:
         self.base_model_id = base_model_id
         self.base_model_name = base_model_name.lower()
         self.name = self.base_model_name
 
         self.max_tokens = max_tokens
         
-        self.model = self.get_model(quantization = quantization)
+        if not llm_loader :
+            llm_loader = Llama_Langchain()
+        self.llm_loader = llm_loader
+        self.model : LlamaLoader = self.get_model(quantization = quantization)
         self.check_nb_tokens = check_nb_tokens
         if check_nb_tokens :
             self.nlp = spacy.load("en_core_web_sm")  # Load a spaCy language model
@@ -52,14 +48,14 @@ class LLMModel(ABC):
         else :
             model_path = f"llm/models/{self.base_model_name}/{self.base_model_name}.{quantization}.gguf"
 
-        self.model = get_llm_Llama(model_path)
-        return self.model
+        return self.llm_loader.get_llm_instance(model_path)
+        
     
     def __str__(self) -> str:
         return self.name
-    
-    def __call__(self, prompt, stop = ["<end_output>", "\n\n\n"] ) -> Any:
-        return self.model(prompt, stop = ["<end_output>", "\n\n\n"], max_tokens = self.max_tokens)
+    8.562812
+    def __call__(self, prompt, with_full_message) -> Any:
+        return self.model(prompt, with_full_message)
         # return prompt
     
     def invoke_mulitple(self, sentences : list[str], pt : PromptTechnique, verifier : Verifier):
@@ -230,8 +226,8 @@ class LLMModel(ABC):
 
 
 class Llama13b(LLMModel):
-    def __init__(self, base_model_id = "meta-llama/Llama-2-13b-hf", base_model_name = "Llama-2-13b") -> None:
-        super().__init__(base_model_id, base_model_name)
+    def __init__(self, base_model_id = "meta-llama/Llama-2-13b-hf", base_model_name = "Llama-2-13b", llm_loader = None) -> None:
+        super().__init__(base_model_id, base_model_name, llm_loader=llm_loader)
     
     @staticmethod
     def name():
@@ -239,8 +235,8 @@ class Llama13b(LLMModel):
 
 
 class Llama7b(LLMModel):
-    def __init__(self, base_model_id = "meta-llama/Llama-2-7b-hf", base_model_name = "Llama-2-7b") -> None:
-        super().__init__(base_model_id, base_model_name)
+    def __init__(self, base_model_id = "meta-llama/Llama-2-7b-hf", base_model_name = "Llama-2-7b", llm_loader = None) -> None:
+        super().__init__(base_model_id, base_model_name, llm_loader=llm_loader)
     
     @staticmethod
     def name():
@@ -248,8 +244,8 @@ class Llama7b(LLMModel):
 
 
 class MistralAI(LLMModel):
-    def __init__(self, base_model_id = "mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1", quantization = 'Q5_0') -> None:
-        super().__init__(base_model_id, base_model_name, quantization=quantization)
+    def __init__(self, base_model_id = "mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1", quantization = 'Q5_0', llm_loader = None) -> None:
+        super().__init__(base_model_id, base_model_name, quantization=quantization, llm_loader=llm_loader)
     
     @staticmethod
     def name():
@@ -257,8 +253,8 @@ class MistralAI(LLMModel):
 
     
 class NoLLM(LLMModel):
-    def __init__(self, base_model_id = "None", base_model_name = "None") -> None:
-        super().__init__(base_model_id, base_model_name)
+    def __init__(self, base_model_id = "None", base_model_name = "None", llm_loader = None) -> None:
+        super().__init__(base_model_id, base_model_name, llm_loader=llm_loader)
     
     def __call__(self, prompt, stop = ["<end_output>", "\n\n\n"] ) -> Any:
         return prompt
@@ -271,62 +267,3 @@ class NoLLM(LLMModel):
         return "None".lower()
 
 
-
-
-def get_llm_llamaCpp(model_path = None):
-    if not model_path:
-        model_path = os.getenv("model_path")
-
-    if not model_path:
-        logging.error("MODEL_PATH environment variable not set")
-        exit(1)
-
-    # Callbacks support token-wise streaming
-    callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
-
-    # Make sure the model path is correct for your system!
-    llm = LlamaCpp(
-        model_path= model_path, #"./llama_ft/llama2-7b-llamma-ner-finetune/checkpoint-375/ggml-adapter-model.bin",#
-        temperature=0,
-        max_tokens=150,
-        n_ctx = 4096,
-        n_batch=512,
-        n_threads=12,
-        logits_all= True,
-        logprobs = 20,
-        top_p=1,
-        n_gpu_layers=100,
-        # callback_manager=callback_manager,
-        repeat_penalty=1.0,
-        verbose = False
-    )
-    return llm
-
-def get_llm_Llama(model_path = None):
-    if not model_path:
-        model_path = os.getenv("model_path")
-
-    if not model_path:
-        logging.error("MODEL_PATH environment variable not set")
-        exit(1)
-
-    # Callbacks support token-wise streaming
-    callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
-
-    # Make sure the model path is correct for your system!
-    llm = Llama(
-        model_path= model_path, #"./llama_ft/llama2-7b-llamma-ner-finetune/checkpoint-375/ggml-adapter-model.bin",#
-        temperature=0,
-        max_tokens=150,
-        n_ctx = 4096,
-        n_batch=512,
-        n_threads=12,
-        logits_all= True,
-        logprobs = 20,
-        top_p=1,
-        n_gpu_layers=35,
-        callback_manager=callback_manager,
-        repeat_penalty=1.0,
-        verbose = False
-    )
-    return llm
