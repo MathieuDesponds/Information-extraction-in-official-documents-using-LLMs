@@ -130,5 +130,5 @@ def load_all_results():
 
 def load_result(model : str, pt : str, fst : str, nb_few_shots = 5, 
                 verifier = None, len_data_train = 1538, len_data_test = 50, with_precision = 'no-precision', nb_runs = None):
-    file_path = f"./ner/saves/results/conll2003_cleaned/{model}/{pt}/{fst}_{nb_few_shots}_{verifier}_{len_data_train}_{len_data_test}_{f'{nb_runs}_' if nb_runs else ''}{'yes' if with_precision else 'no-precision'}.pkl"
+    file_path = f"./ner/saves/results/conll2003_cleaned/{model}/{pt}/{fst}_{nb_few_shots}_{verifier}_{len_data_train}_{len_data_test}_{f'{nb_runs}_' if nb_runs else ''}{with_precision}.pkl"
     return load(file_path)
