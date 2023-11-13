@@ -54,8 +54,8 @@ class PT_2Time_Tagger(PT_Multi_PT) :
                           with_precision = with_precision)
         
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
-        output = self.pts[0].run_prompt(llm, sentence, None)
-        # print(f"Output after the first prompt : {output}")
+        output, response_all = self.pts[0].run_prompt(llm, sentence, None)
+        print(f"Output after the first prompt : {output}")
         for pt in self.pts[1:]:
-            output = pt.run_prompt(llm, f"{output} in the following sentence'{sentence}'", None)
-        return output
+            output, response_all = pt.run_prompt(llm, f"{output} in the following sentence'{sentence}'", None)
+        return output, response_all
