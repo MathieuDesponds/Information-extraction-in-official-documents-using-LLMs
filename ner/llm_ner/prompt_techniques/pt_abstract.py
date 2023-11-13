@@ -41,7 +41,7 @@ class PromptTechnique(ABC):
         pass
 
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
-        all_entities = []
+        all_entities, all_responses = [], []
         prompts = self.get_prompts_runnable(sentence)
         for prompt,tag in prompts :
             # print(prompt)
@@ -53,13 +53,13 @@ class PromptTechnique(ABC):
                     print("prompt is too big") 
                     continue
 
-            response_all = llm(prompt)
-            response = response_all['choices'][0]['text']
-            processed_response = self.process_output(response, tag)
+            reponse_text, response_all = llm(prompt, with_full_message =True)
+            processed_response = self.process_output(reponse_text, tag)
             if verifier : 
                 processed_response = verifier.verify(sentence, processed_response)
             all_entities.extend(processed_response)
-        return all_entities, response_all 
+            all_responses.append(response_all)
+        return all_entities, all_responses[0]
 
     def get_precision(self):
         if self.with_precision :

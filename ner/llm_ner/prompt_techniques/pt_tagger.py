@@ -48,15 +48,15 @@ class PT_Tagger(PromptTechnique):
                 if num_tokens > 4096 - llm.max_tokens :
                     print("prompt is too big") 
                     continue
-            response_all = llm(prompt)
-            response = '{'+ response_all['choices'][0]['text']
+            reponse_text, response_all = llm(prompt, with_full_message = True)
+            response = '{'+ reponse_text
             # print(f"Response of llm in tagger : {response}")
             processed_response = self.process_output(response, tag)
             if verifier : 
                 processed_response = verifier.verify(sentence, processed_response)
             all_entities.extend(processed_response)
-        return all_entities, response_all
-
+        # return all_entities, response_all
+        return processed_response, response_all
 
     def get_prompts_runnable(self, sentence):
         # sentence is in fact "{previous_output} in '{sentence}'"
