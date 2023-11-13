@@ -1,9 +1,13 @@
+from matplotlib import pyplot as plt
 from llm.LLMModel import *
 from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
-from ner.llm_ner.prompt_techniques.pt_discussion import PT_OutputList
-from ner.llm_ner.prompt_techniques.pt_gpt_ner import PT_GPT_NER
-from ner.llm_ner.prompt_techniques.pt_wrapper import PT_Wrapper
+from ner.llm_ner.prompt_techniques.pt_multi_pt import PT_2Time_Tagger
+from ner.llm_ner.prompt_techniques.pt_tagger import LETTER_TO_TAG_MAPPING
 from ner.llm_ner.few_shots_techniques import *
+from ner.Datasets.Conll2003Dataset import load_conll_dataset
+from ner.utils import dump, load
+from tqdm import tqdm
+import numpy as np
 
 
 mapping_tag_tokens = {
@@ -46,10 +50,80 @@ def _old_get_logits_for_tags(sentence : str, llm: LLMModel, pt : PromptTechnique
     logits_for_tags = [{tag: generated_logits[idx][mapping_tag_tokens[tag][0]] for tag in mapping_tag_tokens} for idx in idx_tags]
     return logits_for_tags, output
 
-def get_logits_for_tags(sentence : str, model: LLMModel, pt : PromptTechnique):
-    entities, output = model.invoke(sentence, pt, None)
+def get_logits_for_tags(data_point, model: LLMModel, pt : PromptTechnique):
+    entities, output = model.invoke(data_point['text'], pt, None)
+    gold_tags = dict(data_point['spans'])
     generated_tokens = list(model.model.model.eval_tokens)[-output['usage']['completion_tokens']:]
     generated_logits = list(model.model.model.eval_logits)[-output['usage']['completion_tokens']:]
     index, values = index_of_values_to_find(generated_tokens)
-    logits_for_tags = [{'entity' : entity , 'outputted_tag' : gold_tag, 'tags_logits': {tag: generated_logits[idx][mapping_letter_tokens[tag][1]] for tag in mapping_letter_tokens.keys()}} for entity, idx, gold_tag in zip(entities, index,values)]
-    return logits_for_tags, output, index, values
+    logits_for_tags = []
+    print(gold_tags)
+    print([entity[0] for entity in entities])
+    for entity, idx, tag_found in zip(entities, index, values) :
+            logits_for_tags.append({
+                'entity' : entity,
+                'gold tag' : gold_tags[entity[0]] if entity[0] in gold_tags else 'None',
+                'outputted_tag' : LETTER_TO_TAG_MAPPING[tag_found],
+                'tags_logits': {LETTER_TO_TAG_MAPPING[tag] : generated_logits[idx][mapping_letter_tokens[tag][1]] for tag in mapping_letter_tokens.keys()},
+                'confidence' : {tag : confidence for tag, confidence in zip(logits_for_tags['tags_logits'].keys(), softmax(logits_for_tags['tags_logits'].values()))}
+                })
+    return {
+            'data_point_idx' : data_point['id'],
+            'spans' : data_point['spans'],
+            'logits_for_tags' : logits_for_tags
+         }, output, index, values
+
+def generate_data_for_confidence():
+    data_train = load_conll_dataset(split = 'train', cleaned = True)
+    data_test =  load_conll_dataset(split = 'test',  cleaned = True)
+    data_test.select(range(100))
+    model = MistralAI(llm_loader = Llama_LlamaCpp())
+    fst = FST_Sentence(data_train, 3)
+    multi_pt = PT_2Time_Tagger(fst)
+    all_data = []
+    for data_point in tqdm(data_test) :
+        logits_for_tags, output, index, values = get_logits_for_tags(data_point, model, pt = multi_pt)
+        all_data.append(logits_for_tags)
+    
+    dump(all_data, './ner/saves/confidence/data_for_confidence.pkl')
+
+def load_generated_data_for_confidence():
+    return load('./ner/saves/confidence/data_for_confidence.pkl')
+
+def softmax(logits):
+    exp_logits = np.exp(logits - np.max(logits))  # Subtracting the maximum value for numerical stability
+    return exp_logits / np.sum(exp_logits)  # Assuming logits is a 2D array
+
+def add_confidence_to_results(logits_for_tags):
+    logits_for_tags['confidence'] = {tag : confidence for tag, confidence in zip(logits_for_tags['tags_logits'].keys(), softmax(list(logits_for_tags['tags_logits'].values())))}
+    return logits_for_tags
+
+def show_confidence(all_data = None):
+    if not all_data :
+        all_data = load_generated_data_for_confidence()
+    
+    points = [] # (right/false, confidence)
+    for data_point in all_data:
+        for entity_point in data_point['logits_for_tags'] :
+            points.append(
+                (entity_point['gold tag'] == entity_point['outputted_tag'],
+                entity_point['confidence'][entity_point['outputted_tag']])
+            )
+    true_values =  [pair[1] for pair in points if pair[0]]
+    false_values = [pair[1] for pair in points if not pair[0]]
+
+    # Create a figure and two subplots
+    fig, (ax1, ax2) = plt.subplots(2, 1)
+
+    # Plotting histograms for True and False values
+    ax1.hist(true_values, color='blue', edgecolor='black')
+    ax2.hist(false_values, color='red', edgecolor='black')
+
+    # Set titles and labels for each subplot
+    ax1.set_title('Histogram of True Values')
+    ax1.set_ylabel('Frequency')
+    ax2.set_title('Histogram of False Values')
+    ax2.set_ylabel('Frequency')
+
+    plt.tight_layout()
+    plt.show()

@@ -7,7 +7,7 @@ from ner.llm_ner.prompts import *
 
 import re
 
-LETTER_TO_TAG_MAPPING = {"P" : "PER", "O": "ORG", "L" : "LOC", "M" : "MISC"}
+LETTER_TO_TAG_MAPPING = {"P" : "PER", "O": "ORG", "L" : "LOC", "M" : "MISC", 'N' : 'None'}
 
 class PT_Tagger(PromptTechnique):
     def __init__(self, fst : FewShotsTechnique, with_precision = True):
