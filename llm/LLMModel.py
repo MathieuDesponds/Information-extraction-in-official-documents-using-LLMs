@@ -54,7 +54,7 @@ class LLMModel(ABC):
     
     def __str__(self) -> str:
         return self.name
-    8.562812
+
     def __call__(self, prompt, with_full_message) -> Any:
         return self.model(prompt, with_full_message)
         # return prompt
