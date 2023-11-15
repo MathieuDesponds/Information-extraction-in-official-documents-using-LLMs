@@ -96,7 +96,7 @@ def softmax(logits):
     return exp_logits / np.sum(exp_logits)  # Assuming logits is a 2D array
 
 confidence_functions = {
-    "softmax_direct" : lambda logits : softmax(logits),
+    "softmax" : lambda logits : softmax(logits),
     "softmax_min" : lambda logits : softmax(logits - np.min(logits)),
     "softmax_max" : lambda logits : softmax(logits - np.max(logits)),
     "proba_direct" : lambda logits : [log/np.sum(logits) for log in logits],
@@ -129,16 +129,16 @@ def show_confidence(all_data = None):
         false_values = [pair[1] for pair in points if not pair[0]]
 
         # Create a figure and two subplots
-        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 8) )#, sharex=True, sharey=True)
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 12) )#, sharex=True, sharey=True)
 
         # Plotting histograms for True and False values
         ax1.hist(true_values, color='blue', edgecolor='black')
-        ax2.hist(false_values, color='red', edgecolor='black')
+        ax2.hist(false_values, color='lightblue', edgecolor='black')
 
         # Set titles and labels for each subplot
-        ax1.set_title(f'Histogram of True Values with {key}')
+        ax1.set_title(f'Histogram of probabilities (genereted with {key}) when outputted tag was right.')
         ax1.set_ylabel('Frequency')
-        ax2.set_title(f'Histogram of False Values with {key}')
+        ax2.set_title(f'Histogram of probabilities (genereted with {key}) when outputted tag was false.')
         ax2.set_ylabel('Frequency')
 
         # Get the maximum count between the two histograms
