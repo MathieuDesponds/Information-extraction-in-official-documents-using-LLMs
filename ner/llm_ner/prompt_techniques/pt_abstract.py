@@ -58,7 +58,7 @@ class PromptTechnique(ABC):
             if verifier : 
                 processed_response = verifier.verify(sentence, processed_response, llm)
             if confidence_checker :
-                processed_response = confidence_checker.check(sentence, processed_response)
+                processed_response = confidence_checker.check(sentence, processed_response, llm)
             all_entities.extend(processed_response)
             all_responses.append(response_all)
         return all_entities, all_responses[0]
