@@ -38,7 +38,7 @@ class PT_Tagger(PromptTechnique):
     
     # ToDo 
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier" = None, confidence_checker : ConfidenceChecker= None) :
-        super(PT_Tagger, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '{')
+        return super(PT_Tagger, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '{')
 
     def get_prompts_runnable(self, sentence):
         # sentence is in fact "{previous_output} in '{sentence}'"

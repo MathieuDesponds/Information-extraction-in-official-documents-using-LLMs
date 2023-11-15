@@ -73,15 +73,13 @@ class LLMModel(ABC):
     
     def classical_test(self, fsts : list[FewShotsTechnique]= [FST_NoShots, FST_Sentence, FST_Entity, FST_Random], 
                        pts : list[PromptTechnique] = [PT_GPT_NER, PT_OutputList, PT_Wrapper],
-                       nb_few_shots = [5], verifier = False, save = True, nb_run_by_test = 3) :
+                       nb_few_shots = [5], verifier = False, confidence_checker = False, save = True, nb_run_by_test = 3) :
 
         
-        # data_test.select([0,1])
 
-        if verifier :
-            verifier = Verifier(self, data_train)
-        else : 
-            verifier = None
+
+        verifier = Verifier(self, data_train) if verifier else None
+        confidence_checker = ConfidenceChecker() if confidence_checker else None
 
         results : list[ResultInstanceWithConfidenceInterval] = []
 
@@ -98,7 +96,7 @@ class LLMModel(ABC):
                         seed = random.randint(0, 1535468)
                         data_train, data_test = get_test_cleaned_split(seed = seed)
                         fst.set_dataset(data_train)
-                        predictions = self.invoke_mulitple(data_test['text'], pt, verifier)
+                        predictions = self.invoke_mulitple(data_test['text'], pt, verifier, confidence_checker)
                         # Calculate the elapsed time
                         elapsed_time = time.time() - start_time
                         res_insts.append(ResultInstance(
@@ -124,7 +122,7 @@ class LLMModel(ABC):
         return results, results_df
 
     def classical_test_multiprompt(self, pt : PT_Multi_PT,
-                       nb_few_shots = [3], verifier = False, confidence_checker = False, save = True, nb_run_by_test = 3) :
+                       nb_few_shots = [3], verifier = False, confidence_checker = True, save = True, nb_run_by_test = 1) :
         
         verifier = Verifier(self, data_train) if verifier else None
         confidence_checker = ConfidenceChecker() if confidence_checker else None
