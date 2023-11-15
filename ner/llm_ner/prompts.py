@@ -43,7 +43,7 @@ In order to do this, you have to rewrite the sentence and wrap the named entity 
 
     "tagger" : PromptTemplate(
         input_variables=['entities_sentence', 'few_shots', 'precisions'],
-        template = """### SYSTEM : The task is to to tag all the named entites that were extracted from a sentence.
+        template = """### SYSTEM : The task is to tag all the named entites that were extracted from a sentence.
 ### USER : Your task is to to tag all the named entites that were extracted from a sentence with either 
     'P' for person entities, 
     'O' for organization entities, 
@@ -88,6 +88,20 @@ verifier_few_shot_prompt = lambda examples : FewShotPromptTemplate(
 ### ASSISTANT : <start_answer> """, 
         input_variables=["sentence", 'tag', 'named_entity']
     )    
+
+################## Confidence Checker ####################
+
+confidence_prompt_template = PromptTemplate(
+        input_variables=['entities_sentence', 'precisions'],
+        template = """### SYSTEM : The task is to give a confidence on the tag assigned to a named entity.
+### USER : You will recevie a sentence and a python list of the named entities that were extracted from this sentence with their tag. You task is to assign one of the following 5 confidence level on the fact that the named entity is in fact a named entity of this particular tag.
+The five confidence levels are "low", "medium-low", "medium", "medium-high", "high". 
+### ASSISTANT : How would you like me to output the confidences ? 
+### USER : Return a json with the name of the named entity as key and the confidence level as value
+{precisions}
+### ASSISTANT : Ok now I understand I need to only output json with the named entities as keys and one of the 5 confidence levels as values. Can you now provide me the sentence and the list of extracted entities? 
+### INPUT : <start_input> {entities_sentence} <end_input>
+### OUTPUT : <start_output> {{ """)
 
 ###################### Mappings ########################
 

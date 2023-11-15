@@ -86,5 +86,14 @@ class Llama_Langchain(LlamaLoader) :
         )
         self.model = llm
         return self
+    
     def __call__(self, prompt, with_full_message = False):
-        return self.model(prompt, stop = self.stop)
+        output = self.model(prompt, stop = self.stop)
+        if with_full_message :
+            return output, {
+                'choices': [
+                    {'text' :  output }
+                    ]
+                    }
+        else :
+            return output
