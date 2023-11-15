@@ -40,7 +40,7 @@ class PromptTechnique(ABC):
     def process_output(self, response : str, tag : str):
         pass
 
-    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
+    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier", confidence_checker : "ConfidenceChecker" = None, prefix : str = "") :
         all_entities, all_responses = [], []
         prompts = self.get_prompts_runnable(sentence)
         for prompt,tag in prompts :
@@ -54,9 +54,11 @@ class PromptTechnique(ABC):
                     continue
 
             reponse_text, response_all = llm(prompt, with_full_message =True)
-            processed_response = self.process_output(reponse_text, tag)
+            processed_response = self.process_output(prefix + reponse_text, tag)
             if verifier : 
-                processed_response = verifier.verify(sentence, processed_response)
+                processed_response = verifier.verify(sentence, processed_response, llm)
+            if confidence_checker :
+                processed_response = confidence_checker.check(sentence, processed_response)
             all_entities.extend(processed_response)
             all_responses.append(response_all)
         return all_entities, all_responses[0]

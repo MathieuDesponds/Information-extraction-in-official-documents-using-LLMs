@@ -1,5 +1,6 @@
 import ast
 from ner.Datasets.MyDataset import MyDataset
+from ner.llm_ner.confidence_checker import ConfidenceChecker
 from ner.llm_ner.few_shots_techniques import FewShotsTechnique
 
 from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
@@ -36,27 +37,8 @@ class PT_Tagger(PromptTechnique):
         return nearest_neighbors_out
     
     # ToDo 
-    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
-        all_entities = []
-        prompts = self.get_prompts_runnable(sentence)
-        for prompt,tag in prompts :
-            # print(prompt)
-            if llm.check_nb_tokens :
-                doc = llm.nlp(prompt)   
-                num_tokens = len(doc)
-                # print(num_tokens, prompt)
-                if num_tokens > 4096 - llm.max_tokens :
-                    print("prompt is too big") 
-                    continue
-            reponse_text, response_all = llm(prompt, with_full_message = True)
-            response = '{'+ reponse_text
-            # print(f"Response of llm in tagger : {response}")
-            processed_response = self.process_output(response, tag)
-            if verifier : 
-                processed_response = verifier.verify(sentence, processed_response)
-            all_entities.extend(processed_response)
-        # return all_entities, response_all
-        return processed_response, response_all
+    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier" = None, confidence_checker : ConfidenceChecker= None) :
+        super(PT_Tagger, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '{')
 
     def get_prompts_runnable(self, sentence):
         # sentence is in fact "{previous_output} in '{sentence}'"

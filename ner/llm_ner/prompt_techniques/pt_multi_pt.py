@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from ner.Datasets.MyDataset import MyDataset
+from ner.llm_ner.confidence_checker import ConfidenceChecker
 from ner.llm_ner.prompt_techniques.pt_get_entities import PT_GetEntities
 from ner.llm_ner.prompt_techniques.pt_tagger import PT_Tagger
 
@@ -27,7 +28,7 @@ class PT_Multi_PT(PromptTechnique):
         return 'multi_prompt-'+'-'.join([pt.__str__() for pt in self.pts])
     
     @abstractmethod
-    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
+    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier", confidence_checker : ConfidenceChecker) :
         pass
 
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
@@ -52,9 +53,9 @@ class PT_2Time_Tagger(PT_Multi_PT) :
         super().__init__(pts = [PT_GetEntities(fst), PT_Tagger(fst)],
                           with_precision = with_precision)
         
-    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier") :
-        output, response_all = self.pts[0].run_prompt(llm, sentence, None)
+    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier" = None, confidence_checker : ConfidenceChecker= None) :
+        output, response_all = self.pts[0].run_prompt(llm, sentence, verifier, confidence_checker)
         print(f"Output after the first prompt : {output}")
         for pt in self.pts[1:]:
-            output, response_all = pt.run_prompt(llm, f"{output} in the following sentence'{sentence}'", None)
+            output, response_all = pt.run_prompt(llm, f"{output} in the following sentence'{sentence}'", verifier, confidence_checker)
         return output, response_all

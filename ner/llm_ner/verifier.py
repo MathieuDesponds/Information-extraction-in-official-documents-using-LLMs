@@ -5,11 +5,10 @@ from ner.utils import get_embbeding
 import random
 
 class Verifier():
-    def __init__(self, model : 'LLMModel', data_train : MyDataset) -> None:
-        self.model = model
+    def __init__(self, data_train : MyDataset) -> None:
         self.fst = FST_Entity(data_train, nb_few_shots = 5)
         
-    def verify(self, sentence, processed_response):
+    def verify(self, sentence, processed_response, model):
         verified = []
         for ne in processed_response :
             named_entity, tag = ne[0], ne[1]
@@ -22,7 +21,7 @@ class Verifier():
                                                      precision = precision_ner[tag],
                                                      few_shots = few_shots)
 
-            response = self.model(prompt, stop = ["<end_answer>", '</start_answer>', '<end_output>', '</start_output>'])
+            response = model(prompt, stop = ["<end_answer>", '</start_answer>', '<end_output>', '</start_output>'])
 
             if "yes" in response.lower() :
                 verified.append(ne)

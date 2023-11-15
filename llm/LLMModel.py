@@ -13,6 +13,7 @@ import transformers
 from ner.Datasets.Conll2003Dataset import get_test_cleaned_split
 
 from ner.llm_ner.ResultInstance import ResultInstance, ResultInstanceWithConfidenceInterval, save_result_instance_with_CI
+from ner.llm_ner.confidence_checker import ConfidenceChecker
 from ner.llm_ner.verifier import Verifier
 from ner.llm_ner.few_shots_techniques import *
 from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
@@ -59,15 +60,15 @@ class LLMModel(ABC):
         return self.model(prompt, with_full_message)
         # return prompt
     
-    def invoke_mulitple(self, sentences : list[str], pt : PromptTechnique, verifier : Verifier):
+    def invoke_mulitple(self, sentences : list[str], pt : PromptTechnique, verifier : Verifier, confidence_checker : ConfidenceChecker):
         all_entities = []
         for sentence in tqdm(sentences) :
-            all_entities.append(self.invoke(sentence, pt, verifier)[0])
+            all_entities.append(self.invoke(sentence, pt, verifier, confidence_checker)[0])
         return all_entities
     
     
-    def invoke(self, sentence : str, pt : PromptTechnique, verifier : Verifier):
-        all_entities, response_all= pt.run_prompt(self, sentence, verifier)
+    def invoke(self, sentence : str, pt : PromptTechnique, verifier : Verifier, confidence_checker : ConfidenceChecker):
+        all_entities, response_all= pt.run_prompt(self, sentence, verifier, confidence_checker)
         return all_entities, response_all
     
     def classical_test(self, fsts : list[FewShotsTechnique]= [FST_NoShots, FST_Sentence, FST_Entity, FST_Random], 
@@ -123,23 +124,21 @@ class LLMModel(ABC):
         return results, results_df
 
     def classical_test_multiprompt(self, pt : PT_Multi_PT,
-                       nb_few_shots = [3], verifier = False, save = True, nb_run_by_test = 3) :
-        if verifier :
-            verifier = Verifier(self, data_train)
-        else : 
-            verifier = None
+                       nb_few_shots = [3], verifier = False, confidence_checker = False, save = True, nb_run_by_test = 3) :
+        
+        verifier = Verifier(self, data_train) if verifier else None
+        confidence_checker = ConfidenceChecker() if confidence_checker else None
 
         results : list[ResultInstanceWithConfidenceInterval] = []
 
         res_insts = []
         fst : FewShotsTechnique = pt.pts[0].fst
-        print(fst)
-        for run in range(nb_run_by_test) :
+        for _ in range(nb_run_by_test) :
             start_time = time.time()
             seed = random.randint(0, 1535468)
             data_train, data_test = get_test_cleaned_split(seed = seed)
             fst.set_dataset(data_train)
-            predictions = self.invoke_mulitple(data_test['text'], pt, verifier)
+            predictions = self.invoke_mulitple(data_test['text'], pt, verifier, confidence_checker)
             # Calculate the elapsed time
             elapsed_time = time.time() - start_time
             res_insts.append(ResultInstance(
