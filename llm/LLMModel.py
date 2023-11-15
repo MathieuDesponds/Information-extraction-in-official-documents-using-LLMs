@@ -203,6 +203,7 @@ class LLMModel(ABC):
 
     def load_finetuned_model(self, prompt_type, nb_samples = 2000, quantization = "Q5_0", precision = None):
         path_to_lora = f"./llm/models/{self.base_model_name}/finetuned-{prompt_type}-{f'{precision}-' if precision else ''}{nb_samples}"
+        print(path_to_lora)
         model_out = f"{path_to_lora}/model-{quantization}.gguf"
         if not os.path.exists(model_out):
             model_type = 'llama' #llama, starcoder, falcon, baichuan, or gptneox
@@ -220,7 +221,7 @@ class LLMModel(ABC):
 
             run_command(command)
 
-        self.name = f"{self.name}-ft-{prompt_type}-{nb_samples}-{quantization}"
+        self.name = f"{self.name}-ft-{prompt_type}-{nb_samples}-{quantization}{f'-{precision}' if precision else ''}"
         return self.get_model(gguf_model_path =  model_out)
 
 
