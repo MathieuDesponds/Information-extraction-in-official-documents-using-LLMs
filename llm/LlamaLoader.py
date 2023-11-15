@@ -11,7 +11,7 @@ from llama_cpp import Llama
 
 
 class LlamaLoader(ABC) :
-    def __init__(self, temperature = 0, top_p = 1, stop = ["<end_output>", "\n\n\n"], max_tokens = 216) -> None:
+    def __init__(self, temperature = 0, top_p = 1, stop = ["<end_output>", "\n\n\n", "<end_answer>", '</start_answer>', '</start_output>'], max_tokens = 216) -> None:
         self.temperature = temperature
         self.top_p = top_p
         self.max_tokens = max_tokens
