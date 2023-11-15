@@ -8,6 +8,7 @@ from ner.Datasets.Conll2003Dataset import load_conll_dataset
 from ner.utils import dump, load
 from tqdm import tqdm
 import numpy as np
+from sklearn.metrics import roc_curve, auc
 
 
 mapping_tag_tokens = {
@@ -128,7 +129,7 @@ def show_confidence(all_data = None):
         false_values = [pair[1] for pair in points if not pair[0]]
 
         # Create a figure and two subplots
-        fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, sharey=True)
+        fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 8) )#, sharex=True, sharey=True)
 
         # Plotting histograms for True and False values
         ax1.hist(true_values, color='blue', edgecolor='black')
@@ -142,10 +143,24 @@ def show_confidence(all_data = None):
 
         # Get the maximum count between the two histograms
         max_count = max(ax1.get_ylim()[1], ax2.get_ylim()[1])
-        print(max_count)
+
         # Set the same y-axis limits for both subplots
         ax1.set_ylim(0, max_count)
         ax2.set_ylim(0, max_count)
+
+        labels, scores = zip(*points)
+        fpr, tpr, thresholds = roc_curve(labels, scores)
+
+        # Calculate Area Under the Curve (AUC)
+        roc_auc = auc(fpr, tpr)
+
+        # Plot ROC curve
+        ax3.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
+        ax3.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+        ax3.set_xlabel('False Positive Rate (FPR)')
+        ax3.set_ylabel('True Positive Rate (TPR)')
+        ax3.set_title('Receiver Operating Characteristic (ROC) Curve')
+        # ax3.legend(loc='lower right')
 
         plt.tight_layout()
         plt.show()
