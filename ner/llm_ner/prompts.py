@@ -99,7 +99,7 @@ The five confidence levels are "low", "medium-low", "medium", "medium-high", "hi
 ### ASSISTANT : How would you like me to output the confidences ? 
 ### USER : Return a json with the name of the named entity as key and the confidence level as value
 {precisions}
-### ASSISTANT : Ok now I understand I need to only output json with the named entities as keys and one of the 5 confidence levels as values. Can you now provide me the sentence and the list of extracted entities? 
+### ASSISTANT : Ok now I understand I need to only output json with the named entities as keys and as values one of the 5 confidence levels that represents for each entry (named entity, tag) the confidence I have on the fact that I assigned this specific tag to this entity. Can you now provide me the sentence and the list of extracted entities? 
 ### INPUT : <start_input> {entities_sentence} <end_input>
 ### OUTPUT : <start_output> {{ """)
 

@@ -3,12 +3,11 @@ from ner.llm_ner.prompts import *
 
 class ConfidenceChecker() :
     def check(self, sentence, spans, model):
-        confidences = []
-        prompt = confidence_prompt_template.format(precision = self.get_precision(),
+        prompt = confidence_prompt_template.format(precisions = self.get_precision(),
                                                      entities_sentence = f"""In the sentence "{sentence}" the extracted entities were "{spans}" """)
         
-        model_response = model(prompt, stop = ["<end_answer>", '</start_answer>', '<end_output>', '</start_output>'])
-
+        model_response = model(prompt, with_full_message = False)
+        print(model_response)
         processed_model_response = self.process_output('{'+model_response, spans)
         return processed_model_response
     
