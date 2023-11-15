@@ -91,39 +91,61 @@ def load_generated_data_for_confidence():
     return load('./ner/saves/confidence/data_for_confidence.pkl')
 
 def softmax(logits):
-    exp_logits = np.exp(logits - np.max(logits))  # Subtracting the maximum value for numerical stability
+    exp_logits = np.exp(logits)  # Subtracting the maximum value for numerical stability
     return exp_logits / np.sum(exp_logits)  # Assuming logits is a 2D array
 
-def add_confidence_to_results(logits_for_tags):
-    logits_for_tags['confidence'] = {tag : confidence for tag, confidence in zip(logits_for_tags['tags_logits'].keys(), softmax(list(logits_for_tags['tags_logits'].values())))}
+confidence_functions = {
+    "softmax_direct" : lambda logits : softmax(logits),
+    "softmax_min" : lambda logits : softmax(logits - np.min(logits)),
+    "softmax_max" : lambda logits : softmax(logits - np.max(logits)),
+    "proba_direct" : lambda logits : [log/np.sum(logits) for log in logits],
+    "proba_centered" : lambda logits : [log-np.min(logits)/np.sum(logits-np.min(logits)) for log in logits],
+    "transparent" : lambda logits: logits
+}
+def add_confidence_to_results(logits_for_tags, confidence_fct = lambda l : softmax(l)):
+    logits_for_tags['confidence'] = {tag : confidence for tag, confidence in zip(logits_for_tags['tags_logits'].keys(), confidence_fct(list(logits_for_tags['tags_logits'].values())))}
+    
+
     return logits_for_tags
 
 def show_confidence(all_data = None):
     if not all_data :
         all_data = load_generated_data_for_confidence()
     
-    points = [] # (right/false, confidence)
-    for data_point in all_data:
-        for entity_point in data_point['logits_for_tags'] :
-            points.append(
-                (entity_point['gold tag'] == entity_point['outputted_tag'],
-                entity_point['confidence'][entity_point['outputted_tag']])
-            )
-    true_values =  [pair[1] for pair in points if pair[0]]
-    false_values = [pair[1] for pair in points if not pair[0]]
+    for key, func in confidence_functions.items() :
+        for dp in all_data:
+            for ent in dp['logits_for_tags'] :
+                ent = add_confidence_to_results(ent, func)
+        points = [] # (right/false, confidence)
+        for data_point in all_data:
+            for entity_point in data_point['logits_for_tags'] :
+                if entity_point['gold tag'] != 'None':
+                    points.append(
+                        (entity_point['gold tag'] == entity_point['outputted_tag'],
+                        entity_point['confidence'][entity_point['outputted_tag']])
+                    )
+        true_values =  [pair[1] for pair in points if pair[0]]
+        false_values = [pair[1] for pair in points if not pair[0]]
 
-    # Create a figure and two subplots
-    fig, (ax1, ax2) = plt.subplots(2, 1)
+        # Create a figure and two subplots
+        fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, sharey=True)
 
-    # Plotting histograms for True and False values
-    ax1.hist(true_values, color='blue', edgecolor='black')
-    ax2.hist(false_values, color='red', edgecolor='black')
+        # Plotting histograms for True and False values
+        ax1.hist(true_values, color='blue', edgecolor='black')
+        ax2.hist(false_values, color='red', edgecolor='black')
 
-    # Set titles and labels for each subplot
-    ax1.set_title('Histogram of True Values')
-    ax1.set_ylabel('Frequency')
-    ax2.set_title('Histogram of False Values')
-    ax2.set_ylabel('Frequency')
+        # Set titles and labels for each subplot
+        ax1.set_title(f'Histogram of True Values with {key}')
+        ax1.set_ylabel('Frequency')
+        ax2.set_title(f'Histogram of False Values with {key}')
+        ax2.set_ylabel('Frequency')
 
-    plt.tight_layout()
-    plt.show()
+        # Get the maximum count between the two histograms
+        max_count = max(ax1.get_ylim()[1], ax2.get_ylim()[1])
+        print(max_count)
+        # Set the same y-axis limits for both subplots
+        ax1.set_ylim(0, max_count)
+        ax2.set_ylim(0, max_count)
+
+        plt.tight_layout()
+        plt.show()
