@@ -71,7 +71,7 @@ class LLMModel(ABC):
         all_entities, response_all= pt.run_prompt(self, sentence, verifier, confidence_checker)
         return all_entities, response_all
     
-    @abstractmethod
+    @staticmethod
     def show_prompts(pts : list[PromptTechnique] = [PT_GPT_NER, PT_OutputList, PT_Wrapper],
                        nb_few_shots = [5], verifier = False) :
         
@@ -134,7 +134,7 @@ class LLMModel(ABC):
         return results, results_df
 
     def classical_test_multiprompt(self, pt : PT_Multi_PT,
-                       nb_few_shots = [3], verifier = False, confidence_checker = True, save = True, nb_run_by_test = 1) :
+                       nb_few_shots = [3], verifier = False, confidence_checker = True, save = True, nb_run_by_test = 10) :
         
         verifier = Verifier(self, data_train) if verifier else None
         confidence_checker = ConfidenceChecker() if confidence_checker else None
