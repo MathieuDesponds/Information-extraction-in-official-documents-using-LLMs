@@ -103,7 +103,7 @@ def get_metrics_all(results, gold, average = 'weighted'):
         y_pred.extend([results_nes[n[0]] if n[0] in results_nes.keys() else 'None' for n in nes])
         all_nes.extend(nes)
     cm = confusion_matrix(y_true, y_pred, labels = ['LOC', 'PER', 'ORG', 'MISC', 'None'])
-    precision, recall, f1, _= precision_recall_fscore_support(y_true, y_pred, average = average, zero_division=np.nan)
+    precision, recall, f1, _= precision_recall_fscore_support(y_true, y_pred, average = average, zero_division=0)
     return cm,f1, precision, recall, y_true, y_pred, [ne[0] for ne in all_nes]
 
 def get_metrics_all_extended(results, gold):
