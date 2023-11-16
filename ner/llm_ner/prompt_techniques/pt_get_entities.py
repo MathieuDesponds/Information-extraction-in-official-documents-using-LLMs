@@ -1,5 +1,6 @@
 import ast
 from ner.Datasets.MyDataset import MyDataset
+from ner.llm_ner.confidence_checker import ConfidenceChecker
 from ner.llm_ner.few_shots_techniques import FewShotsTechnique
 
 from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
@@ -31,6 +32,12 @@ class PT_GetEntities(PromptTechnique):
                                             few_shots = self.get_few_shots(sentence, [], nearest_neighbors),
                                             precisions = self.get_precision())
         return [(prompt, "None")]
+    
+    
+    
+    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier" = None, confidence_checker : ConfidenceChecker= None) :
+        return super(PT_GetEntities, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '[')
+    
     
     def process_output(self, response : str, tag : str):
         start_index = response.find('[')  # Find the opening curly brace

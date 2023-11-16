@@ -26,10 +26,11 @@ class PT_Tagger(PromptTechnique):
         for row in nearest_neighbors :
             nes = [ne for ne, tag in row['spans']]
             tags = [tag for ne, tag in row['spans']]
-            output_json = '{{\n' + '\n   '.join([
+            output_json = '{{ \n' + '\n   '.join([
                 f"'{ne}' : '{tags[i][0]}',"  #do not remove the comma !!!! It is used in the evaluation of confidence
                 for i, ne in enumerate(nes)
             ])+'}}'
+            print(output_json)
             nearest_neighbors_out.append({
                 "text" : f"{nes} in '{row['text']}'",
                 "output_text" : output_json})
