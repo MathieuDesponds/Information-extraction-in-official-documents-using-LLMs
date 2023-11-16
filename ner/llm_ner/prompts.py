@@ -26,9 +26,9 @@ prompt_template = {
         input_variables=['sentence', 'few_shots', 'precisions'],
         template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
 ### USER : Your goal is to extract all the entities that have either tag person, organization, location or miscallaneous. 
-In order to do this, you have to rewrite the sentence and wrap the named entity by <tag> and </tag>.
+In order to do this, you have to rewrite the sentence and wrap the named entity by <tag> and </tag> where tag is either "person", "organization", "location" or "miscellaneous".
 {precisions}{few_shots}
-### ASSISTANT : Ok now I understand I need to rewrite the sentence and wrap the named entity by <tag> and </tag>. Can you now provide me the sentence ? 
+### ASSISTANT : Ok now I understand I need to rewrite the sentence and wrap the named entity by  <tag> and </tag> where tag is either person, organization, location or miscellaneous.. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
 ### OUTPUT : <start_output> """),
 
@@ -105,10 +105,10 @@ The five confidence levels are "low", "medium-low", "medium", "medium-high", "hi
 
 ###################### Mappings ########################
 
-precision_ner = {'PER' : 'Person entities are all the names you can find in the text. That can be celebrities, historical figures, fictional characters or just names but not pronouns.', 
+precision_ner = {'PER' : 'Person entities are all the names you can find in the text. That can be celebrities, historical figures, fictional characters or just names but not pronouns like "he" or "she".', 
                  'ORG' : 'Organization entities all the organizations you can find in the text. That can be business, educational organisation, broadcaster, sports organisation, scientific organisation, political organisation, institute or government agency.',
                  'LOC' : 'Location entities are all countries, the human-geographic territorials, geographical regions, areas in a single country or natural geographic objects.', 
-                 'MISC': 'Miscellaneous entities are all events, languages, adjectives to describe thing particular to a country. It cannot be verbs, numbers or time related word like weekdays and months. '}
+                 'MISC': 'Miscellaneous entities are all events, languages, adjectives to describe things particular to a country. It cannot be verbs, numbers or time related word like weekdays and months. '}
 mapping_abbr_string_ner = {'PER' : 'person entities', 'ORG' : 'organization entities', 'LOC' : 'location entities', 'MISC': 'miscellaneous entities (i.e. entities that are not person, organization or location)'}
 mapping_abbr_string_verifier = {'PER' : 'person entity', 'ORG' : 'organization entity', 'LOC' : 'location entity', 'MISC': 'miscellaneous entity (i.e. en entity that is not a tperson, an organization or a location)'}
 mapping_string_abbr = {'person' : 'PER', 'organization' : 'ORG', 'location' : 'LOC', 'miscellaneous': "MISC"}
