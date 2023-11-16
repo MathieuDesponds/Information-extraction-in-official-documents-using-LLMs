@@ -23,7 +23,7 @@ from ner.llm_ner.prompt_techniques.pt_wrapper import PT_Wrapper
 from ner.llm_ner.prompt_techniques.pt_multi_pt import PT_Multi_PT
 from ner.llm_ner.llm_finetune import load_model_tokenizer_for_training, split_train_test, tokenize_prompt
 
-from ner.utils import run_command
+from ner.utils import run_command, latex_escape
 
 from llm.LlamaLoader import LlamaLoader, Llama_LlamaCpp, Llama_Langchain
 
@@ -71,6 +71,18 @@ class LLMModel(ABC):
         all_entities, response_all= pt.run_prompt(self, sentence, verifier, confidence_checker)
         return all_entities, response_all
     
+    @abstractmethod
+    def show_prompts(pts : list[PromptTechnique] = [PT_GPT_NER, PT_OutputList, PT_Wrapper],
+                       nb_few_shots = [5], verifier = False) :
+        
+        data_train, data_test = get_test_cleaned_split()
+        fst = FST_Random(data_train)
+        for pt in pts : 
+            pt = pt(fst)
+            print(f"------------{pt}--------------")
+            print(latex_escape(pt.get_prompts_runnable(data_test[0]['text'])[0][0]))
+            print("------------------------------")
+
     def classical_test(self, fsts : list[FewShotsTechnique]= [FST_NoShots, FST_Sentence, FST_Entity, FST_Random], 
                        pts : list[PromptTechnique] = [PT_GPT_NER, PT_OutputList, PT_Wrapper],
                        nb_few_shots = [5], verifier = False, confidence_checker = False, save = True, nb_run_by_test = 3) :
