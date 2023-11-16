@@ -91,19 +91,23 @@ def get_metrics(results, gold):
         f1_scores[tag] = f1_score(y_true, y_pred)
     return cm_tag,f1_scores
 
-def get_metrics_all(results, gold, average = 'weighted'):
-    y_true, y_pred, all_nes = [], [], []
+def get_metrics_all(results, gold, average = 'weighted', with_y_conf = False):
+    y_true, y_pred, y_conf, all_nes = [], [], [], []
     for i in range(len(results)):
         gold_nes = {ne[0] :ne[1] for ne in gold[i]}
         res_sanitized = [n for n in results[i] if n[1] != 'None']
         results_nes = {ne[0] : ne[1] for ne in [n for n in res_sanitized if n[1] != 'None']}
+        results_nes_conf= {ne[0] : ne[2] for ne in [n for n in res_sanitized if n[1] != 'None']}
         nes = list(res_sanitized)
         nes.extend([g for g in gold[i] if g[0] not in results_nes.keys()])
         y_true.extend([gold_nes[n[0]] if n[0] in gold_nes.keys() else 'None' for n in nes])
         y_pred.extend([results_nes[n[0]] if n[0] in results_nes.keys() else 'None' for n in nes])
+        y_conf.extend([results_nes_conf[n[0]] if n[0] in results_nes.keys() else 'None' for n in nes])
         all_nes.extend(nes)
     cm = confusion_matrix(y_true, y_pred, labels = ['LOC', 'PER', 'ORG', 'MISC', 'None'])
     precision, recall, f1, _= precision_recall_fscore_support(y_true, y_pred, average = average, zero_division=0)
+    if with_y_conf :
+        return cm,f1, precision, recall, y_true, y_pred, [ne[0] for ne in all_nes],y_conf
     return cm,f1, precision, recall, y_true, y_pred, [ne[0] for ne in all_nes]
 
 def get_metrics_all_extended(results, gold):
