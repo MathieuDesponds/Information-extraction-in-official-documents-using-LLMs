@@ -20,7 +20,10 @@ from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
 from ner.llm_ner.prompt_techniques.pt_discussion import PT_OutputList
 from ner.llm_ner.prompt_techniques.pt_gpt_ner import PT_GPT_NER
 from ner.llm_ner.prompt_techniques.pt_wrapper import PT_Wrapper
-from ner.llm_ner.prompt_techniques.pt_multi_pt import PT_Multi_PT
+from ner.llm_ner.prompt_techniques.pt_multi_pt import PT_Multi_PT, PT_2Time_Tagger
+from ner.llm_ner.prompt_techniques.pt_tagger import PT_Tagger
+from ner.llm_ner.prompt_techniques.pt_get_entities import PT_GetEntities
+
 from ner.llm_ner.llm_finetune import load_model_tokenizer_for_training, split_train_test, tokenize_prompt
 
 from ner.utils import run_command, latex_escape
@@ -72,7 +75,7 @@ class LLMModel(ABC):
         return all_entities, response_all
     
     @staticmethod
-    def show_prompts(pts : list[PromptTechnique] = [PT_GPT_NER, PT_OutputList, PT_Wrapper],
+    def show_prompts(pts : list[PromptTechnique] = [PT_Tagger], #[PT_GPT_NER, PT_OutputList, PT_Wrapper, PT_Tagger, PT_GetEntities],
                        nb_few_shots = [5], verifier = False) :
         
         data_train, data_test = get_test_cleaned_split()

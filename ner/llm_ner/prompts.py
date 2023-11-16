@@ -20,7 +20,7 @@ prompt_template = {
 {precisions}{few_shots}
 ### ASSISTANT : Ok now I understand I need to only output a list with the entities that are in the sentence and the tag along it. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
-### OUTPUT : <start_output> """),
+### OUTPUT : <start_output> ["""),
 
     "wrapper" : PromptTemplate(
         input_variables=['sentence', 'few_shots', 'precisions'],
@@ -39,7 +39,7 @@ In order to do this, you have to rewrite the sentence and wrap the named entity 
 {precisions}{few_shots}
 ### ASSISTANT : Ok now I understand I need to only output a list with the entities. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
-### OUTPUT : <start_output> """),
+### OUTPUT : <start_output> ["""),
 
     "tagger" : PromptTemplate(
         input_variables=['entities_sentence', 'few_shots', 'precisions'],
