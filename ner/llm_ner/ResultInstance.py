@@ -23,10 +23,13 @@ class ResultInstance():
 
         self.cm, self.f1, self.precision, self.recall = None, None, None,None
         
-    def get_scores(self):
+    def get_scores(self, with_y = False):
         if not self.f1 :
-            self.cm, self.f1, self.precision, self.recall, y_true, y_pred, nes = get_metrics_all(self.results, self.gold)
+            self.cm, self.f1, self.precision, self.recall, y_true, y_pred, nes, y_conf = get_metrics_all(self.results, self.gold)
+        if with_y :
+            return self.cm, self.f1, self.precision, self.recall, y_true, y_pred, y_conf
         return self.cm, self.f1, self.precision, self.recall
+        
     
     def show_cm(self) :
         show_cm_multi(*self.get_scores(), self.model )
