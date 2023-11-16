@@ -35,6 +35,7 @@ class ResultInstance():
         self.get_scores()
         return {
             'model' : self.model,
+            'noshots' : self.noshots,
 'prompt_technique' : str(self.prompt_technique),
 'few_shot_tecnique' : str(self.few_shot_tecnique),
 'nb_few_shots' : self.nb_few_shots,
@@ -80,6 +81,7 @@ class ResultInstanceWithConfidenceInterval():
             return {
             "f1_mean" : self.f1_mean, "f1_conf_inter" : self.f1_conf_inter, 
             'model' : self.res_insts[0].model,
+            'noshots' : self.noshots,
             'prompt_technique' : self.res_insts[0].prompt_technique,
             'few_shot_tecnique' : self.res_insts[0].few_shot_tecnique,
             'nb_few_shots' : self.res_insts[0].nb_few_shots,
@@ -119,11 +121,12 @@ def load_all_results():
                 res_inst = load(file_path)
                 if isinstance(res_inst ,ResultInstanceWithConfidenceInterval) :
                     precision = file_path.split('_')[-1][:-4]
+                    noshots = 'noshots' in foldername
                     for r in res_inst.res_insts:
-                        r.model = str(r.model)
-                        r.few_shot_tecnique = str(r.few_shot_tecnique)
-                        r.prompt_technique = str(r.prompt_technique)
+                        r.prompt_technique = r.prompt_technique if r.prompt_technique != '<>' else 'wrapper'
                         r.with_precision = precision
+                        r.noshots = noshots
+                    res_inst.noshots = noshots
                     results.append(res_inst.get_dict())
                     # save_result_instance_with_CI(res_inst)
     return pd.DataFrame(results).sort_values('f1_mean', ascending = False)
