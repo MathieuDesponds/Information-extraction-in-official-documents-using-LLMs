@@ -151,3 +151,36 @@ def load(file_path):
     except Exception as e:
         # Handle any exceptions that may occur during loading
         print(f"Error loading file {file_path}: {str(e)}")
+
+def latex_escape(str):
+    # Replace a \ with $\backslash$
+    # This is made more complicated because the dollars will be escaped
+    # by the subsequent replacement. Easiest to add \backslash
+    # now and then add the dollars
+    # Must be done after escape of \ since this command adds latex escapes
+    # Replace characters that can be escaped
+    # Replace ^ characters with \^{} so that $^F works okay
+    # Replace tilde (~) with \texttt{\~{}} # Replace tilde (~) with \texttt{\~{}}
+    list = ["\\", "^", "~", '&', '%', '$', '#', '_', '{', '}', '\n']
+    change_to = ["$\\backslash$", "\\^{}", "\\texttt{\\~{}}", '\\&', '\\%', '\\$', '\\#', '\\\_', '\\{', '\\}', '\\']
+
+    for i in list:
+        if i in str:
+            str = str.replace(i, change_to[list.index(i)])
+            break
+    return str
+
+def escape_for_latex(text):
+    """
+    Escape special characters for LaTeX.
+    """
+    special_chars = ['\\', '#', '_', '\n']
+    escaped_text = ''
+    
+    for char in text:
+        if char in special_chars:
+            escaped_text += '\\{}'.format(char)
+        else:
+            escaped_text += char
+    
+    return escaped_text

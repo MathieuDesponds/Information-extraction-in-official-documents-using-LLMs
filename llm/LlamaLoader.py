@@ -80,7 +80,7 @@ class Llama_Langchain(LlamaLoader) :
             n_threads=12,
             top_p=self.top_p,
             n_gpu_layers=100,
-            # callback_manager=callback_manager,
+            callback_manager=callback_manager,
             repeat_penalty=1.0,
             verbose = False
         )
