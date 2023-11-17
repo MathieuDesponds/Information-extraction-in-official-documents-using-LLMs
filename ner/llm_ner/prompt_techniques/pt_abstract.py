@@ -3,7 +3,7 @@ import pickle
 import random
 
 from tqdm import tqdm
-from ner.Datasets.Conll2003Dataset import load_conll_dataset
+from ner.Datasets.Conll2003Dataset import Conll2003Dataset
 from ner.Datasets.MyDataset import MyDataset
 from datasets import Dataset, concatenate_datasets
 
@@ -87,7 +87,7 @@ class PromptTechnique(ABC):
                                        test_size = 400, 
                                        nb_few_shots = [1,2,3,4]):
         if not dataset :
-            dataset = load_conll_dataset(split = 'train', cleaned = True)
+            dataset = MyDataset.my_load_dataset(dataset=Conll2003Dataset, split = 'train', cleaned= True)
         old_fst = self.fst
         all_datas = []
         for i in range(runs//test_size):
@@ -99,7 +99,7 @@ class PromptTechnique(ABC):
             all_datas.append(processed_data)
         
         merged_datasets = concatenate_datasets(all_datas)
-        with open(f"./ner/saves/datasets/conll2003_for-ft_{'cleaned_' if dataset.cleaned else ''}{self.__str__()}_{f'{precision}_' if precision else ''}{runs}.pkl", 'wb')as f:
+        with open(f"./ner/saves/datasets/{dataset.name()}_for-ft_{'cleaned_' if dataset.cleaned else ''}{self.__str__()}_{f'{precision}_' if precision else ''}{runs}.pkl", 'wb')as f:
             pickle.dump(merged_datasets,f)
 
         self.fst = old_fst

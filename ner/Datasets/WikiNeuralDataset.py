@@ -14,7 +14,7 @@ CONLL2003_TAG_MAPPING = {
             7: 'B-MISC',
             8: 'I-MISC'
         }
-class Conll2003Dataset(MyDataset):
+class WikiNeuralDataset(MyDataset):
     def __init__(self, dataset = None, split = "test", cleaned = False):
         self.split = split
         self.cleaned = cleaned
@@ -38,15 +38,15 @@ class Conll2003Dataset(MyDataset):
             self.dataset = dataset
     @staticmethod
     def name():
-        return 'conll2003'
+        return 'wikineural'
     
     def train_test_split(self, test_size=0.3, seed = 42):
         splitted_dataset = self.dataset.train_test_split(test_size=test_size, seed =seed)
-        return Conll2003Dataset(dataset = splitted_dataset['train']), Conll2003Dataset(dataset = splitted_dataset['test'])
+        return WikiNeuralDataset(dataset = splitted_dataset['train']), WikiNeuralDataset(dataset = splitted_dataset['test'])
 
 
 def get_test_cleaned_split(seed = None):
-    dataset_test : Conll2003Dataset = MyDataset.my_load_dataset(Conll2003Dataset, split = 'test')
+    dataset_test : MyDataset = MyDataset.my_load_dataset(WikiNeuralDataset, split = 'test', cleaned = True)
     if not seed :
         seed = random.randint(0, 1535468)
     return dataset_test.train_test_split(test_size = 50, seed = seed)
