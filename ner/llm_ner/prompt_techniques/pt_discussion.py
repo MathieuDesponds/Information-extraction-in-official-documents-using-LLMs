@@ -8,8 +8,8 @@ from ner.llm_ner.prompts import *
 
 
 class PT_OutputList(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = True):
-        super().__init__(fst, with_precision = with_precision)
+    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False ):
+        super().__init__(fst, with_precision, prompt_template, plus_plus)
     
     @staticmethod
     def name():
@@ -24,9 +24,9 @@ class PT_OutputList(PromptTechnique):
                 "output_text" : row['spans']} for row in nearest_neighbors]
         return nearest_neighbors
     
-    def get_prompts_runnable(self, sentence):
+    def get_prompts_runnable(self, sentence, tags = None):
         nearest_neighbors = self.fst.get_nearest_neighbors(sentence)
-        prompt =  prompt_template[self.__str__()].format(sentence = sentence,
+        prompt =  self.prompt_template[self.__str__()].format(sentence = sentence,
                                             few_shots = self.get_few_shots(sentence, [], nearest_neighbors),
                                             precisions = self.get_precision())
         return [(prompt, "None")]

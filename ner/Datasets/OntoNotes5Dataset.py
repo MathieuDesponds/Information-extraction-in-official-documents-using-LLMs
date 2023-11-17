@@ -17,8 +17,8 @@ class OntoNote5Dataset(MyDataset):
                                                     'nb_spans' : len(row['spans'])})
             dataset = dataset.filter(lambda row : row['nb_tokens'] >30 )
             dataset = dataset.remove_columns(['nb_tokens', 'nb_spans'])
-            dataset = dataset.map(MyDataset.add_llama_ner_tags)
-            dataset = dataset.map(MyDataset.add_llama_ner_tags_2)
+            dataset = dataset.map(lambda row : MyDataset.add_llama_ner_tags(row, self.get_tags(), ONTONOTE5_MAPPING_TAG))
+            dataset = dataset.map(lambda row : MyDataset.add_llama_ner_tags_2(row, self.get_tags()))
             dataset = dataset.map(MyDataset.add_sentence_embedding)
             # dataset = dataset.map(MyDataset.add_entity_embeddings, with_indices=True)
             self.dataset = dataset
@@ -28,6 +28,12 @@ class OntoNote5Dataset(MyDataset):
             # self.dataset = dataset.map(self.adjust_entity_embeddings_idx, with_indices=True)
             # self.all_entity_embeddings = self.get_all_embeddings()
             self.dataset = dataset
+
+    def get_tags(self):
+        return ['CARDINAL', 'ORDINAL', 'WORK_OF_ART', 'PERSON', 'LOC', 'DATE', 'PERCENT', 'PRODUCT', 'MONEY', 'FAC', 'TIME', 'ORG', 'QUANTITY', 'LANGUAGE', 'GPE', 'LAW', 'NORP', 'EVENT']
+    
+    def get_tags_mapping(self):
+        return ONTONOTE5_MAPPING_TAG
 
     @staticmethod
     def name():
@@ -40,7 +46,7 @@ class OntoNote5Dataset(MyDataset):
 
 
 def get_test_cleaned_split(seed = None):
-    dataset_test : OntoNote5Dataset = MyDataset.my_load_dataset(OntoNote5Dataset, split = 'test')
+    dataset_test : OntoNote5Dataset = MyDataset.my_load_dataset(OntoNote5Dataset, split = 'test', length=1403)
     if not seed :
         seed = random.randint(0, 1535468)
     return dataset_test.train_test_split(test_size = 50, seed = seed)

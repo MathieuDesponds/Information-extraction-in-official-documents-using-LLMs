@@ -10,7 +10,8 @@ import os
 import spacy
 import transformers
 
-from ner.Datasets.Conll2003Dataset import get_test_cleaned_split
+from ner.Datasets.Conll2003Dataset import get_test_cleaned_split as conll_get_test_cleaned_split
+from ner.Datasets.OntoNotes5Dataset import get_test_cleaned_split as ontonote_get_test_cleaned_split
 
 from ner.llm_ner.ResultInstance import ResultInstance, ResultInstanceWithConfidenceInterval, save_result_instance_with_CI
 from ner.llm_ner.confidence_checker import ConfidenceChecker
@@ -27,6 +28,7 @@ from ner.llm_ner.prompt_techniques.pt_get_entities import PT_GetEntities
 from ner.llm_ner.llm_finetune import load_model_tokenizer_for_training, split_train_test, tokenize_prompt
 
 from ner.utils import run_command, latex_escape
+from ner.llm_ner.prompts import prompt_template, prompt_template_ontonotes
 
 from llm.LlamaLoader import LlamaLoader, Llama_LlamaCpp, Llama_Langchain
 
@@ -63,35 +65,74 @@ class LLMModel(ABC):
         return self.model(prompt, with_full_message)
         # return prompt
     
-    def invoke_mulitple(self, sentences : list[str], pt : PromptTechnique, verifier : Verifier, confidence_checker : ConfidenceChecker):
+    def invoke_mulitple(self, sentences : list[str], pt : PromptTechnique, verifier : Verifier, confidence_checker : ConfidenceChecker, tags = ["PER", "ORG", "LOC", 'MISC']):
         all_entities = []
         for sentence in tqdm(sentences) :
-            all_entities.append(self.invoke(sentence, pt, verifier, confidence_checker)[0])
+            all_entities.append(self.invoke(sentence, pt, verifier, confidence_checker)[0], tags)
         return all_entities
     
     
-    def invoke(self, sentence : str, pt : PromptTechnique, verifier : Verifier, confidence_checker : ConfidenceChecker):
-        all_entities, response_all= pt.run_prompt(self, sentence, verifier, confidence_checker)
+    def invoke(self, sentence : str, pt : PromptTechnique, verifier : Verifier, confidence_checker : ConfidenceChecker, tags):
+        all_entities, response_all= pt.run_prompt(self, sentence, verifier, confidence_checker, tags)
         return all_entities, response_all
     
     @staticmethod
-    def show_prompts(pts : list[PromptTechnique] = [PT_Tagger], #[PT_GPT_NER, PT_OutputList, PT_Wrapper, PT_Tagger, PT_GetEntities],
-                       nb_few_shots = [5], verifier = False) :
+    def show_prompts(pts : list[PromptTechnique] = [PT_OutputList, PT_Wrapper, PT_Tagger, PT_GetEntities, PT_GPT_NER],
+                       nb_few_shots = [5], verifier = False, dataset_loader = ontonote_get_test_cleaned_split,
+                       tags = ['CARDINAL', 'ORDINAL', 'WORK_OF_ART', 'PERSON', 'LOC', 'DATE', 'PERCENT', 'PRODUCT', 'MONEY', 'FAC', 'TIME', 'ORG', 'QUANTITY', 'LANGUAGE', 'GPE', 'LAW', 'NORP', 'EVENT']) :
         
-        data_train, data_test = get_test_cleaned_split()
-        fst = FST_Random(data_train)
-        for pt in pts : 
-            pt = pt(fst)
-            print(f"------------{pt}--------------")
-            print(latex_escape(pt.get_prompts_runnable(data_test[0]['text'])[0][0]))
-            print("------------------------------")
+        data_train, data_test = dataset_loader()
+        fst = FST_Sentence(data_train)
+        for i_pt in pts : 
+            print()
+            print(f"------------{i_pt.name()}-------------------------")
+            for plus_plus in [False, True] :
+                print(f'---------------------{"prompt++" if plus_plus else "raw"}---------------------')
+                print()
+                pt = i_pt(fst, with_precision = False, prompt_template = prompt_template_ontonotes, plus_plus = plus_plus)
+                print(latex_escape(pt.get_prompts_runnable(data_test[0]['text'], tags)[0][0]))
+                print("----------------------------------------------------")
 
-    def classical_test(self, fsts : list[FewShotsTechnique]= [FST_NoShots, FST_Sentence, FST_Entity, FST_Random], 
+    def classical_test_ontonote5(self, 
+                       fsts : list[FewShotsTechnique]= [FST_NoShots, FST_Sentence], 
                        pts : list[PromptTechnique] = [PT_GPT_NER, PT_OutputList, PT_Wrapper],
-                       nb_few_shots = [5], verifier = False, confidence_checker = False, save = True, nb_run_by_test = 3) :
+                       nb_few_shots = [5], 
+                       verifier = False, 
+                       confidence_checker = False, 
+                       save = True, 
+                       nb_run_by_test = 3,
+                       with_precision = False,
+                       prompt_template = prompt_template_ontonotes,
+                       plus_plus = False,
+                       dataset_loader = ontonote_get_test_cleaned_split,
+                       tags = ['CARDINAL', 'ORDINAL', 'WORK_OF_ART', 'PERSON', 'LOC', 'DATE', 'PERCENT', 'PRODUCT', 'MONEY', 'FAC', 'TIME', 'ORG', 'QUANTITY', 'LANGUAGE', 'GPE', 'LAW', 'NORP', 'EVENT']) :
+        return self.classical_test(fsts , 
+                       pts,
+                       nb_few_shots, 
+                       verifier, 
+                       confidence_checker, 
+                       save, 
+                       nb_run_by_test ,
+                       with_precision ,
+                       prompt_template,
+                       plus_plus,
+                       dataset_loader = dataset_loader,
+                       tags = tags)
+    
 
-        
-
+    def classical_test(self, 
+                       fsts : list[FewShotsTechnique]= [FST_NoShots, FST_Sentence, FST_Entity, FST_Random], 
+                       pts : list[PromptTechnique] = [PT_GPT_NER, PT_OutputList, PT_Wrapper],
+                       nb_few_shots = [5], 
+                       verifier = False, 
+                       confidence_checker = False, 
+                       save = True, 
+                       nb_run_by_test = 3,
+                       with_precision = False,
+                       prompt_template = prompt_template,
+                       plus_plus = False,
+                       dataset_loader = conll_get_test_cleaned_split,
+                       tags = ["PER", "ORG", "LOC", 'MISC']) :
 
         verifier = Verifier(self, data_train) if verifier else None
         confidence_checker = ConfidenceChecker() if confidence_checker else None
@@ -102,16 +143,16 @@ class LLMModel(ABC):
             fsts_i : list[FewShotsTechnique]= [fst(None, n) for fst in fsts]
             for fst in fsts_i :
                 print(f"Testing with {fst}")
-                pts_i : list[PromptTechnique] = [pt(fst) for pt in pts]
+                pts_i : list[PromptTechnique] = [pt(fst, with_precision = with_precision, prompt_template=prompt_template, plus_plus=plus_plus) for pt in pts]
                 for pt in pts_i :
                     print(f"      and {pt}")
                     res_insts = []
                     for run in range(nb_run_by_test) :
                         start_time = time.time()
                         seed = random.randint(0, 1535468)
-                        data_train, data_test = get_test_cleaned_split(seed = seed)
+                        data_train, data_test = dataset_loader(seed = seed)
                         fst.set_dataset(data_train)
-                        predictions = self.invoke_mulitple(data_test['text'], pt, verifier, confidence_checker)
+                        predictions = self.invoke_mulitple(data_test['text'], pt, verifier, confidence_checker, tags)
                         # Calculate the elapsed time
                         elapsed_time = time.time() - start_time
                         res_insts.append(ResultInstance(
@@ -138,7 +179,7 @@ class LLMModel(ABC):
         return results, results_df
 
     def classical_test_multiprompt(self, pt : PT_Multi_PT,
-                       nb_few_shots = [3], verifier = False, confidence_checker = True, save = True, nb_run_by_test = 10) :
+                       nb_few_shots = [3], verifier = False, confidence_checker = True, save = True, nb_run_by_test = 10, dataset_loader = conll_get_test_cleaned_split) :
         
         verifier = Verifier(self, data_train) if verifier else None
         confidence_checker = ConfidenceChecker() if confidence_checker else None
@@ -150,7 +191,7 @@ class LLMModel(ABC):
         for _ in range(nb_run_by_test) :
             start_time = time.time()
             seed = random.randint(0, 1535468)
-            data_train, data_test = get_test_cleaned_split(seed = seed)
+            data_train, data_test = dataset_loader(seed = seed)
             fst.set_dataset(data_train)
             predictions = self.invoke_mulitple(data_test['text'], pt, verifier, confidence_checker)
             # Calculate the elapsed time
@@ -275,6 +316,7 @@ class NoLLM(LLMModel):
     def __call__(self, prompt, stop = ["<end_output>", "\n\n\n"], with_full_message = False) -> Any:
         if with_full_message :
             return prompt, None
+        print(prompt)
         return prompt
     
     def get_model(self, gguf_model_path = "", quantization = ""):

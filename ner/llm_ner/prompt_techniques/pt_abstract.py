@@ -11,9 +11,10 @@ from ner.llm_ner.few_shots_techniques import FST_Sentence, FewShotsTechnique
 from ner.llm_ner.prompts import *
 
 class PromptTechnique(ABC):
-    def __init__(self,fst : FewShotsTechnique, with_precision = True):
+    def __init__(self,fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False ):
         self.fst = fst
         self.with_precision = with_precision
+        self.prompt_template = prompt_template(plus_plus)
 
     @staticmethod
     @abstractmethod
@@ -29,7 +30,7 @@ class PromptTechnique(ABC):
         pass
     
     @abstractmethod
-    def get_prompts_runnable(self, sentence):
+    def get_prompts_runnable(self, sentence, tags):
         pass
 
     @abstractmethod
@@ -40,11 +41,16 @@ class PromptTechnique(ABC):
     def process_output(self, response : str, tag : str):
         pass
 
-    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier", confidence_checker : "ConfidenceChecker" = None, prefix : str = "") :
+    def run_prompt(self, llm : "LLMModel", 
+                   sentence : str, 
+                   verifier : "Verifier", 
+                   confidence_checker : "ConfidenceChecker" = None, 
+                   prefix : str = "",
+                   tags = ["PER", "ORG", "LOC", 'MISC']) :
         all_entities, all_responses = [], []
-        prompts = self.get_prompts_runnable(sentence)
+        prompts = self.get_prompts_runnable(sentence, tags)
         for prompt,tag in prompts :
-            # print(prompt)
+            print(prompt)
             if llm.check_nb_tokens :
                 doc = llm.nlp(prompt)   
                 num_tokens = len(doc)
@@ -73,8 +79,8 @@ class PromptTechnique(ABC):
     def get_few_shots(self, sentence : str, tag : str, nearest_neighbors : list)-> str:
         nearest_neighbors = self.process_nearest_neighbors(nearest_neighbors, tag)
         if nearest_neighbors :
-            return """### ASSISTANT : Yes I can do that. Can you provide me examples ?  
-### USER : Yes of course, there are some examples : \n""" + few_shot_prompt(nearest_neighbors).format()+'\n'
+            return """### ASSISTANT : Can you provide me examples ?  
+### USER : There are examples : \n""" + few_shot_prompt(nearest_neighbors).format()+'\n'
         else : 
             return ""
         

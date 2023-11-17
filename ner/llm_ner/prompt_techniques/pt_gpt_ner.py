@@ -2,13 +2,14 @@ from ner.Datasets.MyDataset import MyDataset
 from ner.llm_ner.few_shots_techniques import FewShotsTechnique
 
 from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
+from ner.Datasets.OntoNotes5Dataset import ONTONOTE5_TAGS_PRECISION
 from ner.llm_ner.prompts import *
 
 import re
 
 class PT_GPT_NER(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = True):
-        super().__init__(fst, with_precision = with_precision)
+    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False ):
+        super().__init__(fst, with_precision, prompt_template, plus_plus)
 
     @staticmethod
     def name():
@@ -29,8 +30,8 @@ class PT_GPT_NER(PromptTechnique):
         prompts = []
         for tag in tags :
             few_shots = self.get_few_shots(sentence, tag, nearest_neighbors)
-            prompt = prompt_template[self.__str__()].format(tag=mapping_abbr_string_ner[tag], 
-                                        precision = precision_ner[tag],
+            prompt = self.prompt_template[self.__str__()].format(tag=mapping_abbr_string_ner[tag], 
+                                        precision = precision_ner[tag]if len(tags) == 4 else ONTONOTE5_TAGS_PRECISION[tag],
                                         few_shots = few_shots,
                                         sentence = sentence)
             prompts.append(prompt)

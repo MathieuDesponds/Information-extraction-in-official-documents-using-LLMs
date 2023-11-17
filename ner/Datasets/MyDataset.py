@@ -15,6 +15,15 @@ class MyDataset():
     def __len__(self):
         return len(self.dataset)
     
+    @abstractmethod
+    def get_tags(self):
+        pass
+
+    @abstractmethod
+    def get_tags_mapping(self):
+        pass
+    
+    
     @staticmethod
     @abstractmethod
     def name():
@@ -56,21 +65,21 @@ class MyDataset():
         return data_point
     
     @staticmethod
-    def add_llama_ner_tags(data_point, tags = ['PER', 'ORG', 'LOC', 'MISC']):
-        mapping_BMES = {'PER' : 1, 'ORG' : 3, 'LOC' : 5, "MISC": 7}
+    def add_llama_ner_tags(data_point, tags, mapping_n_to_tag):
         llamas_tokens = {}
         current_entity = []
         for tag in tags :
             llamas_tokens[tag] = []
             current_entity = []
             for token, ent_tag in zip(data_point['tokens'], data_point['ner_tags']):
-                if ent_tag == mapping_BMES[tag] :  # Beginning of a named entity
+                ent_tag_name :str = mapping_n_to_tag[ent_tag]
+                if ent_tag_name.startswith('B') and ent_tag_name[2:] == tag:  # Beginning of a named entity
                     if current_entity:
                         current_entity[0] = "@@"+current_entity[0]
                         current_entity[-1] = current_entity[-1] + "##"
                         llamas_tokens[tag].extend(current_entity)
                     current_entity = [token]
-                elif ent_tag == mapping_BMES[tag]+1 and current_entity:  # Inside a named entity
+                elif ent_tag_name.startswith('I') and ent_tag_name[2:] == tag and current_entity:  # Inside a named entity
                     current_entity.append(token)
                 elif current_entity: #we finish to retrieve the entity
                     current_entity[0] = "@@"+current_entity[0]
