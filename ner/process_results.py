@@ -97,12 +97,14 @@ def get_metrics_all(results, gold, average = 'weighted', with_y_conf = False):
         gold_nes = {ne[0] :ne[1] for ne in gold[i]}
         res_sanitized = [n for n in results[i] if n[1] != 'None']
         results_nes = {ne[0] : ne[1] for ne in [n for n in res_sanitized if n[1] != 'None']}
-        results_nes_conf= {ne[0] : ne[2] for ne in [n for n in res_sanitized if n[1] != 'None']}
         nes = list(res_sanitized)
         nes.extend([g for g in gold[i] if g[0] not in results_nes.keys()])
         y_true.extend([gold_nes[n[0]] if n[0] in gold_nes.keys() else 'None' for n in nes])
         y_pred.extend([results_nes[n[0]] if n[0] in results_nes.keys() else 'None' for n in nes])
-        y_conf.extend([results_nes_conf[n[0]] if n[0] in results_nes.keys() else 'None' for n in nes])
+        if with_y_conf :
+            y_conf.extend([results_nes_conf[n[0]] if n[0] in results_nes.keys() else 'None' for n in nes])
+            results_nes_conf= {ne[0] : ne[2] for ne in [n for n in res_sanitized if n[1] != 'None']}
+
         all_nes.extend(nes)
     cm = confusion_matrix(y_true, y_pred, labels = ['LOC', 'PER', 'ORG', 'MISC', 'None'])
     precision, recall, f1, _= precision_recall_fscore_support(y_true, y_pred, average = average, zero_division=0)

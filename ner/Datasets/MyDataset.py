@@ -1,4 +1,5 @@
-from ner.utils import sentence_transformer, get_embbeding
+from abc import abstractmethod
+from ner.utils import dump, load, sentence_transformer, get_embbeding
 
 mapping_abbr_word =  {'PER' : 'person', 'ORG' : 'organisation', 'LOC' : 'location', 'MISC' : 'miscellaneous'}
 
@@ -8,6 +9,11 @@ class MyDataset():
     
     def __len__(self):
         return len(self.dataset)
+    
+    @staticmethod
+    @abstractmethod
+    def name():
+        pass
     
     @staticmethod
     def get_spans(data_point, tag_mapping):
@@ -112,3 +118,12 @@ class MyDataset():
     
     def select(self, iterable):
         self.dataset = self.dataset.select(iterable)
+
+    @staticmethod
+    def my_load_dataset(dataset : 'MyDataset', split = 'test', cleaned = None, length =1588):
+        path = f"./ner/saves/datasets/{dataset.name()}_{split}{'_cleaned' if cleaned else ''}_{length}.pkl"
+        return load(path)
+
+    def save_dataset(dataset : 'MyDataset'):
+        path = f"./ner/saves/datasets/{dataset.name()}_{dataset.split}_{len(dataset)}.pkl"
+        dump(dataset,path)

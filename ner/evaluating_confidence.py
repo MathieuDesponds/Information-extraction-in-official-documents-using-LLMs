@@ -4,7 +4,9 @@ from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
 from ner.llm_ner.prompt_techniques.pt_multi_pt import PT_2Time_Tagger
 from ner.llm_ner.prompt_techniques.pt_tagger import LETTER_TO_TAG_MAPPING
 from ner.llm_ner.few_shots_techniques import *
-from ner.Datasets.Conll2003Dataset import load_conll_dataset
+from ner.Datasets.Conll2003Dataset import Conll2003Dataset
+from ner.Datasets.MyDataset import MyDataset
+
 from ner.utils import dump, load
 from tqdm import tqdm
 import numpy as np
@@ -75,8 +77,8 @@ def get_logits_for_tags(data_point, model: LLMModel, pt : PromptTechnique):
          }, output, index, values
 
 def generate_data_for_confidence():
-    data_train = load_conll_dataset(split = 'train', cleaned = True)
-    data_test =  load_conll_dataset(split = 'test',  cleaned = True)
+    data_train = MyDataset.my_load_dataset(dataset=Conll2003Dataset, split = 'train', cleaned= True)
+    data_test =  MyDataset.my_load_dataset(dataset=Conll2003Dataset, split = 'test', cleaned= True)
     data_test.select(range(100))
     model = MistralAI(llm_loader = Llama_LlamaCpp())
     fst = FST_Sentence(data_train, 3)
