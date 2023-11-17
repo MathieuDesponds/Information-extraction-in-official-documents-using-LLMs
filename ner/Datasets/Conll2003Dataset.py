@@ -25,8 +25,8 @@ class Conll2003Dataset(MyDataset):
             if cleaned : 
                 dataset = clean_dataset(dataset)
             dataset = dataset.map(lambda row : MyDataset.get_spans(row, CONLL2003_TAG_MAPPING))
-            dataset = dataset.map(MyDataset.add_llama_ner_tags)
-            dataset = dataset.map(MyDataset.add_llama_ner_tags_2)
+            dataset = dataset.map(lambda row : MyDataset.add_llama_ner_tags(row, self.get_tags(), CONLL2003_TAG_MAPPING))
+            dataset = dataset.map(lambda row : MyDataset.add_llama_ner_tags_2(row, self.get_tags()))
             dataset = dataset.map(MyDataset.add_sentence_embedding)
             dataset = dataset.map(MyDataset.add_entity_embeddings, with_indices=True)
             self.dataset = dataset
@@ -36,6 +36,14 @@ class Conll2003Dataset(MyDataset):
             self.dataset = dataset.map(self.adjust_entity_embeddings_idx, with_indices=True)
             self.all_entity_embeddings = self.get_all_embeddings()
             self.dataset = dataset
+
+
+    def get_tags(self):
+        return ['PER', 'ORG', 'LOC', 'MISC']
+
+    def get_tags_mapping(self):
+        return CONLL2003_TAG_MAPPING
+    
     @staticmethod
     def name():
         return 'conll2003'

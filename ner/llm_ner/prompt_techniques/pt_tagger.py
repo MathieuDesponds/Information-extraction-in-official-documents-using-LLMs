@@ -11,8 +11,8 @@ import re
 LETTER_TO_TAG_MAPPING = {"P" : "PER", "O": "ORG", "L" : "LOC", "M" : "MISC", 'N' : 'None'}
 
 class PT_Tagger(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = True):
-        super().__init__(fst, with_precision = with_precision)
+    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False ):
+        super().__init__(fst, with_precision, prompt_template, plus_plus)
 
     @staticmethod
     def name():
@@ -30,7 +30,6 @@ class PT_Tagger(PromptTechnique):
                 f"'{ne}' : '{tags[i][0]}',"  #do not remove the comma !!!! It is used in the evaluation of confidence
                 for i, ne in enumerate(nes)
             ])+'}}'
-            print(output_json)
             nearest_neighbors_out.append({
                 "text" : f"{nes} in '{row['text']}'",
                 "output_text" : output_json})
@@ -41,12 +40,12 @@ class PT_Tagger(PromptTechnique):
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier" = None, confidence_checker : ConfidenceChecker= None) :
         return super(PT_Tagger, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '{')
 
-    def get_prompts_runnable(self, sentence):
+    def get_prompts_runnable(self, sentence, tags = None):
         # sentence is in fact "{previous_output} in '{sentence}'"
         entities_sentence = sentence
-        real_sentence = sentence.split("'")[-2]
+        real_sentence = sentence#.split("'")[-2]
         nearest_neighbors = self.fst.get_nearest_neighbors(real_sentence)
-        prompt =  prompt_template[self.__str__()].format(entities_sentence = entities_sentence,
+        prompt =  self.prompt_template[self.__str__()].format(entities_sentence = entities_sentence,
                                             few_shots = self.get_few_shots(real_sentence, [], nearest_neighbors),
                                             precisions = self.get_precision())
         return [(prompt, "None")]
