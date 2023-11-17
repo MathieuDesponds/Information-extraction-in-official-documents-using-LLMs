@@ -58,6 +58,61 @@ Output a json with the named entities as keys and the tag as values.
 
 }
 
+prompt_template_plus_plus = {
+    "@@##" : PromptTemplate(
+        input_variables=['tag','precision', 'sentence', 'few_shots'],
+        template = """### SYSTEM : The task is to extract all the named entites that are {tag} in the following sentence.
+### USER : Your goal is to add '@@' at the begining and '##' at the end of all the enities that are {tag}. {precision}.
+{few_shots}\n
+### ASSISTANT : Ok now I understand I need to rewrite the sentence and add '@@' at the begining and '##' at the end of all the enities that are {tag}. Can you now provide me the sentence ? 
+### INPUT : <start_input> {sentence} <end_input>
+### OUTPUT : <start_output> """),
+
+    "discussion" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
+### USER : Your goal is to extract all the enities that are either person, organization, location or miscallaneous and output the entities in a list of tuples. In each tuple put the named entity and the tag alongside it.
+{precisions}{few_shots}
+### ASSISTANT : Ok now I understand I need to only output a list with the entities that are in the sentence and the tag along it. Can you now provide me the sentence ? 
+### INPUT : <start_input> {sentence} <end_input>
+### OUTPUT : <start_output> ["""),
+
+    "wrapper" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
+### USER : Your goal is to extract all the entities that have either tag person, organization, location or miscallaneous. 
+In order to do this, you have to rewrite the sentence and wrap the named entity by <tag> and </tag> where tag is either "person", "organization", "location" or "miscellaneous".
+{precisions}{few_shots}
+### ASSISTANT : Ok now I understand I need to rewrite the sentence and wrap the named entity by  <tag> and </tag> where tag is either person, organization, location or miscellaneous.. Can you now provide me the sentence ? 
+### INPUT : <start_input> {sentence} <end_input>
+### OUTPUT : <start_output> """),
+
+    "get-entities" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
+### USER : Your goal is to extract all the entities that are either person, organization, location or miscallaneous and output the entities in a list. Output all entities even if you are not completely sure it is an entity.
+{precisions}{few_shots}
+### ASSISTANT : Ok now I understand I need to only output a list with the entities. Can you now provide me the sentence ? 
+### INPUT : <start_input> {sentence} <end_input>
+### OUTPUT : <start_output> ["""),
+
+    "tagger" : PromptTemplate(
+        input_variables=['entities_sentence', 'few_shots', 'precisions'],
+        template = """### SYSTEM : The task is to tag all the named entites that were extracted from a sentence.
+### USER : Your task is to to tag all the named entites that were extracted from a sentence with either 
+    'P' for person entities, 
+    'O' for organization entities, 
+    'L' for location entities,
+    'M' for miscallaneous entities or
+    'N' is it is none of the above.
+Output a json with the named entities as keys and the tag as values.
+{precisions}{few_shots}
+### ASSISTANT : Ok now I understand I need to only output json with the named entities as keys and the tag as values. Can you now provide me the list of extracted entities and the sentence ? 
+### INPUT : <start_input> {entities_sentence} <end_input>
+### OUTPUT : <start_output> {{ """),
+
+}
+
 shot_prompt = PromptTemplate(
     input_variables=["text", "output_text"], 
     template="### INPUT : <start_input> {text} <end_input>\n### OUTPUT : <start_output> {output_text} <end_output>")
@@ -112,3 +167,4 @@ precision_ner = {'PER' : 'Person entities are all the names you can find in the 
 mapping_abbr_string_ner = {'PER' : 'person entities', 'ORG' : 'organization entities', 'LOC' : 'location entities', 'MISC': 'miscellaneous entities (i.e. entities that are not person, organization or location)'}
 mapping_abbr_string_verifier = {'PER' : 'person entity', 'ORG' : 'organization entity', 'LOC' : 'location entity', 'MISC': 'miscellaneous entity (i.e. en entity that is not a tperson, an organization or a location)'}
 mapping_string_abbr = {'person' : 'PER', 'organization' : 'ORG', 'location' : 'LOC', 'miscellaneous': "MISC"}
+mapping_tag_words = {'PER' : 'person', 'ORG' : 'organisation', 'LOC' : 'location', 'MISC' : 'miscellaneous'}

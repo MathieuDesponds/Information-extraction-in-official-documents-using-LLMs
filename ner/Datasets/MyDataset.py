@@ -1,7 +1,12 @@
 from abc import abstractmethod
 from ner.utils import dump, load, sentence_transformer, get_embbeding
+from ner.llm_ner.prompts import *
 
-mapping_abbr_word =  {'PER' : 'person', 'ORG' : 'organisation', 'LOC' : 'location', 'MISC' : 'miscellaneous'}
+def mapping_abbr_word(tag : str) : 
+    if tag in mapping_tag_words : 
+        return mapping_tag_words[tag]
+    else :
+        return tag.lower()
 
 class MyDataset():
     def __getitem__(self, idx):
@@ -90,7 +95,7 @@ class MyDataset():
     def add_llama_ner_tags_2(data_point, tags = ['PER', 'ORG', 'LOC', 'MISC']):
         text : str = data_point['text']
         for ne, tag in {ne : tag for ne, tag in  data_point['spans']}.items():
-            text = text.replace(ne, f"<{mapping_abbr_word[tag]}>{ne}</{mapping_abbr_word[tag]}>")
+            text = text.replace(ne, f"<{mapping_abbr_word(tag)}>{ne}</{mapping_abbr_word(tag)}>")
         data_point['llama_text_2'] = text
         return data_point
     
@@ -124,6 +129,6 @@ class MyDataset():
         path = f"./ner/saves/datasets/{dataset.name()}_{split}{'_cleaned' if cleaned else ''}_{length}.pkl"
         return load(path)
 
-    def save_dataset(dataset : 'MyDataset'):
-        path = f"./ner/saves/datasets/{dataset.name()}_{dataset.split}_{len(dataset)}.pkl"
-        dump(dataset,path)
+def save_dataset(dataset : 'MyDataset'):
+    path = f"./ner/saves/datasets/{dataset.name()}_{dataset.split}_{len(dataset)}.pkl"
+    dump(dataset,path)

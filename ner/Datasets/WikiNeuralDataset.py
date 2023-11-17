@@ -19,18 +19,18 @@ class WikiNeuralDataset(MyDataset):
         self.split = split
         self.cleaned = cleaned
         if not dataset : 
-            dataset = load_dataset("conll2003", split = split)
-            dataset = dataset.remove_columns(["chunk_tags", "pos_tags"])
+            dataset = load_dataset('Babelscape/wikineural', split = split+'_en')
+            dataset = dataset.remove_columns(["lang"])
             dataset = dataset.map(lambda ex : {'text' : " ".join(ex['tokens'])})
             if cleaned : 
                 dataset = clean_dataset(dataset)
             dataset = dataset.map(lambda row : MyDataset.get_spans(row, CONLL2003_TAG_MAPPING))
-            dataset = dataset.map(MyDataset.add_llama_ner_tags)
-            dataset = dataset.map(MyDataset.add_llama_ner_tags_2)
-            dataset = dataset.map(MyDataset.add_sentence_embedding)
-            dataset = dataset.map(MyDataset.add_entity_embeddings, with_indices=True)
+            # dataset = dataset.map(MyDataset.add_llama_ner_tags)
+            # dataset = dataset.map(MyDataset.add_llama_ner_tags_2)
+            # dataset = dataset.map(MyDataset.add_sentence_embedding)
+            # dataset = dataset.map(MyDataset.add_entity_embeddings, with_indices=True)
             self.dataset = dataset
-            self.all_entity_embeddings = self.get_all_embeddings()
+            # self.all_entity_embeddings = self.get_all_embeddings()
 
         else :
             self.dataset = dataset.map(self.adjust_entity_embeddings_idx, with_indices=True)
