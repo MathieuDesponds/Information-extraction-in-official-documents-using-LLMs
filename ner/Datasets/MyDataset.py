@@ -10,6 +10,41 @@ class MyDataset():
         return len(self.dataset)
     
     @staticmethod
+    def get_spans(data_point, tag_mapping):
+
+        named_entities = []  # To store the extracted named entities and tags
+        current_entity = None  # To keep track of the current named entity being processed
+        current_tag = None  # To keep track of the current NER tag being processed
+
+        for token, ner_tag in zip(data_point['tokens'], data_point['ner_tags']):
+            ner_tag = tag_mapping[ner_tag]
+            if ner_tag == 'O':
+                if current_entity is not None:
+                    named_entities.append((current_entity, current_tag))
+                    current_entity = None
+                    current_tag = None
+            else:
+                tag_prefix, entity_type = ner_tag.split('-')
+                if tag_prefix == 'B':
+                    if current_entity is not None:
+                        named_entities.append((current_entity, current_tag))
+                    current_entity = token
+                    current_tag = entity_type
+                elif tag_prefix == 'I':
+                    if current_entity is not None:
+                        current_entity += ' ' + token
+                    else:
+                        current_entity = token
+                    current_tag = entity_type
+
+        # Check if there is a named entity at the end of the sequence
+        if current_entity is not None:
+            named_entities.append((current_entity, current_tag))
+
+        data_point['spans'] = named_entities
+        return data_point
+    
+    @staticmethod
     def add_llama_ner_tags(data_point, tags = ['PER', 'ORG', 'LOC', 'MISC']):
         mapping_BMES = {'PER' : 1, 'ORG' : 3, 'LOC' : 5, "MISC": 7}
         llamas_tokens = {}
