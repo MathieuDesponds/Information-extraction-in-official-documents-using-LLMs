@@ -46,7 +46,7 @@ class Conll2003Dataset(MyDataset):
 
 
 def get_test_cleaned_split(seed = None):
-    dataset_test : Conll2003Dataset = MyDataset.my_load_dataset(Conll2003Dataset, split = 'test')
+    dataset_test : Conll2003Dataset = MyDataset.my_load_dataset(Conll2003Dataset, split = 'test', cleaned = True, length = 1588)
     if not seed :
         seed = random.randint(0, 1535468)
     return dataset_test.train_test_split(test_size = 50, seed = seed)

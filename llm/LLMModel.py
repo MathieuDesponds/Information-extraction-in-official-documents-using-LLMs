@@ -117,6 +117,7 @@ class LLMModel(ABC):
                         res_insts.append(ResultInstance(
                             model= str(self),
                             nb_few_shots = n,
+                            noshots = 'noshots' in str(self),
                             prompt_technique = str(pt),
                             few_shot_tecnique = str(fst),
                             verifier = str(verifier),
@@ -271,7 +272,9 @@ class NoLLM(LLMModel):
     def __init__(self, base_model_id = "None", base_model_name = "None", llm_loader = None) -> None:
         super().__init__(base_model_id, base_model_name, llm_loader=llm_loader)
     
-    def __call__(self, prompt, stop = ["<end_output>", "\n\n\n"] ) -> Any:
+    def __call__(self, prompt, stop = ["<end_output>", "\n\n\n"], with_full_message = False) -> Any:
+        if with_full_message :
+            return prompt, None
         return prompt
     
     def get_model(self, gguf_model_path = "", quantization = ""):

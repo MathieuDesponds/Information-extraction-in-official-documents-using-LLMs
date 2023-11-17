@@ -34,7 +34,7 @@ class PT_OutputList(PromptTechnique):
     def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier" = None, confidence_checker : ConfidenceChecker= None) :
         return super(PT_OutputList, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '[')
     
-    def process_output(self, response : str, tag : str = None):
+    def process_output(self, response : str, tag : str = None, tags = ["PER", "ORG", "LOC", 'MISC']):
         start_index = response.find('[[')  # Find the opening curly brace
         end_index = response.rfind(']]')    # Find the closing curly brace
         
@@ -51,7 +51,7 @@ class PT_OutputList(PromptTechnique):
         except Exception as e:
             named_entities = []
         
-        named_entities = list(set([(ne, tag ) for ne,tag in named_entities if tag in ["PER", "ORG", "LOC", 'MISC']]))
+        named_entities = list(set([(ne, tag ) for ne,tag in named_entities if tag in tags]))
         return named_entities
     
     def get_gold(self, dataset : MyDataset, tag : str) -> list[str]:
