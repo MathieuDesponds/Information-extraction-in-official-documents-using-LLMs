@@ -21,8 +21,8 @@ def show_cm(cm, f1s, model):
     fig.subplots_adjust(top=0.80)
     plt.show()
 
-def show_cm_multi(cm,f1, precision, recall, model, nb_few_shots = None, nb_training_samples = 0):
-    classes = ['LOC', 'PER', 'ORG', 'MISC', 'None']
+def show_cm_multi(cm,f1, precision, recall, model, nb_few_shots = None, nb_training_samples = 0, tags = ['LOC', 'PER', 'ORG', 'MISC']):
+    classes = tags +['None']
     plt.figure(figsize=(8, 6))
     sns.set(font_scale=1.2)  # Adjust the font size if needed
     sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=classes, yticklabels=classes)
@@ -34,8 +34,8 @@ def show_cm_multi(cm,f1, precision, recall, model, nb_few_shots = None, nb_train
     plt.show()
 
 
-def show_cm_multi_2(cm,f1, precision, recall):
-    classes = ['LOC', 'PER', 'ORG', 'MISC', 'None']
+def show_cm_multi_2(cm,f1, precision, recall, tags = ['LOC', 'PER', 'ORG', 'MISC']):
+    classes = tags +['None']
     
     # Create a figure with three subplots in the same row
     fig, axes = plt.subplots(1, 3, figsize=(18, 6))
@@ -91,8 +91,9 @@ def get_metrics(results, gold):
         f1_scores[tag] = f1_score(y_true, y_pred)
     return cm_tag,f1_scores
 
-def get_metrics_all(results, gold, average = 'weighted', with_y_conf = False):
+def get_metrics_all(results, gold, tags = ['LOC', 'PER', 'ORG', 'MISC'], average = 'weighted', with_y_conf = False):
     y_true, y_pred, y_conf, all_nes = [], [], [], []
+    print(f"results : {results}")
     for i in range(len(results)):
         gold_nes = {ne[0] :ne[1] for ne in gold[i]}
         res_sanitized = [n for n in results[i] if n[1] != 'None']
@@ -106,7 +107,7 @@ def get_metrics_all(results, gold, average = 'weighted', with_y_conf = False):
             results_nes_conf= {ne[0] : ne[2] for ne in [n for n in res_sanitized if n[1] != 'None']}
 
         all_nes.extend(nes)
-    cm = confusion_matrix(y_true, y_pred, labels = ['LOC', 'PER', 'ORG', 'MISC', 'None'])
+    cm = confusion_matrix(y_true, y_pred, labels = tags + ['None'])
     precision, recall, f1, _= precision_recall_fscore_support(y_true, y_pred, average = average, zero_division=0)
     if with_y_conf :
         return cm,f1, precision, recall, y_true, y_pred, [ne[0] for ne in all_nes],y_conf
