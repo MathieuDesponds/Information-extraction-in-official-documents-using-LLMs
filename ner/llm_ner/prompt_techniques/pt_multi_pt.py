@@ -28,7 +28,11 @@ class PT_Multi_PT(PromptTechnique):
         return 'multi_prompt-'+'-'.join([pt.__str__() for pt in self.pts])
     
     @abstractmethod
-    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier", confidence_checker : ConfidenceChecker) :
+    def run_prompt(self, llm : "LLMModel", 
+                   sentence : str, 
+                   verifier : "Verifier" = None, 
+                   confidence_checker : ConfidenceChecker= None,
+                   tags = ["PER", "ORG", "LOC", 'MISC']) :
         pass
 
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
@@ -53,7 +57,11 @@ class PT_2Time_Tagger(PT_Multi_PT) :
         super().__init__(pts = [PT_GetEntities(fst), PT_Tagger(fst)],
                           with_precision = with_precision)
         
-    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier" = None, confidence_checker : ConfidenceChecker= None) :
+    def run_prompt(self, llm : "LLMModel", 
+                   sentence : str, 
+                   verifier : "Verifier" = None, 
+                   confidence_checker : ConfidenceChecker= None,
+                   tags = ["PER", "ORG", "LOC", 'MISC']) :
         output, response_all = self.pts[0].run_prompt(llm, sentence, verifier, None)
         print(f"Output after the first prompt : {output}")
         for pt in self.pts[1:]:

@@ -56,8 +56,12 @@ class PT_Tagger(PromptTechnique):
         return nearest_neighbors_out
     
     # ToDo 
-    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier" = None, confidence_checker : ConfidenceChecker= None) :
-        return super(PT_Tagger, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '{')
+    def run_prompt(self, llm : "LLMModel", 
+                   sentence : str, 
+                   verifier : "Verifier" = None, 
+                   confidence_checker : ConfidenceChecker= None,
+                   tags = ["PER", "ORG", "LOC", 'MISC']) :
+        return super(PT_Tagger, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '{', tags=tags)
 
     def get_prompts_runnable(self, sentence, tags = None):
         # sentence is in fact "{previous_output} in '{sentence}'"

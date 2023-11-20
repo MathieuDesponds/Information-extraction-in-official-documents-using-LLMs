@@ -68,7 +68,7 @@ class LLMModel(ABC):
     def invoke_mulitple(self, sentences : list[str], pt : PromptTechnique, verifier : Verifier, confidence_checker : ConfidenceChecker, tags = ["PER", "ORG", "LOC", 'MISC']):
         all_entities = []
         for sentence in tqdm(sentences) :
-            all_entities.append(self.invoke(sentence, pt, verifier, confidence_checker)[0], tags)
+            all_entities.append(self.invoke(sentence, pt, verifier, confidence_checker, tags)[0])
         return all_entities
     
     
@@ -105,6 +105,7 @@ class LLMModel(ABC):
                        prompt_template = prompt_template_ontonotes,
                        plus_plus = False,
                        dataset_loader = ontonote_get_test_cleaned_split,
+                       test_size = 50,
                        tags = ['CARDINAL', 'ORDINAL', 'WORK_OF_ART', 'PERSON', 'LOC', 'DATE', 'PERCENT', 'PRODUCT', 'MONEY', 'FAC', 'TIME', 'ORG', 'QUANTITY', 'LANGUAGE', 'GPE', 'LAW', 'NORP', 'EVENT']) :
         return self.classical_test(fsts , 
                        pts,
@@ -116,7 +117,7 @@ class LLMModel(ABC):
                        with_precision ,
                        prompt_template,
                        plus_plus,
-                       dataset_loader = dataset_loader,
+                       dataset_loader = lambda seed = 42 : dataset_loader(seed = seed, test_size = test_size),
                        tags = tags)
     
 
@@ -316,8 +317,7 @@ class NoLLM(LLMModel):
     def __call__(self, prompt, stop = ["<end_output>", "\n\n\n"], with_full_message = False) -> Any:
         if with_full_message :
             return prompt, None
-        print(prompt)
-        return prompt
+        return [('Japan', 'NORP')]
     
     def get_model(self, gguf_model_path = "", quantization = ""):
         return None
