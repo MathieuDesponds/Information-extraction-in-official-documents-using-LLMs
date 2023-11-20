@@ -11,12 +11,13 @@ import spacy
 import transformers
 
 from ner.Datasets.Conll2003Dataset import get_test_cleaned_split as conll_get_test_cleaned_split
-from ner.Datasets.OntoNotes5Dataset import get_test_cleaned_split as ontonote_get_test_cleaned_split
+from ner.Datasets.OntoNotes5Dataset import get_test_cleaned_split as ontonote_get_test_cleaned_split, ONTONOTE5_TAGS
 
 from ner.llm_ner.ResultInstance import ResultInstance, ResultInstanceWithConfidenceInterval, save_result_instance_with_CI
 from ner.llm_ner.confidence_checker import ConfidenceChecker
 from ner.llm_ner.verifier import Verifier
 from ner.llm_ner.few_shots_techniques import *
+from ner.llm_ner.prompt_techniques.pt_filing import PT_Filing
 from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
 from ner.llm_ner.prompt_techniques.pt_discussion import PT_OutputList
 from ner.llm_ner.prompt_techniques.pt_gpt_ner import PT_GPT_NER
@@ -77,9 +78,9 @@ class LLMModel(ABC):
         return all_entities, response_all
     
     @staticmethod
-    def show_prompts(pts : list[PromptTechnique] = [PT_OutputList, PT_Wrapper, PT_Tagger, PT_GetEntities, PT_GPT_NER],
+    def show_prompts(pts : list[PromptTechnique] = [PT_Filing, PT_OutputList, PT_Wrapper, PT_Tagger, PT_GetEntities, PT_GPT_NER],
                        nb_few_shots = [5], verifier = False, dataset_loader = ontonote_get_test_cleaned_split,
-                       tags = ['CARDINAL', 'ORDINAL', 'WORK_OF_ART', 'PERSON', 'LOC', 'DATE', 'PERCENT', 'PRODUCT', 'MONEY', 'FAC', 'TIME', 'ORG', 'QUANTITY', 'LANGUAGE', 'GPE', 'LAW', 'NORP', 'EVENT']) :
+                       tags = ONTONOTE5_TAGS) :
         
         data_train, data_test = dataset_loader()
         fst = FST_Sentence(data_train)

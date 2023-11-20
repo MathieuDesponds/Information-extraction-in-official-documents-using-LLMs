@@ -80,6 +80,17 @@ prompt_template_ontonotes = lambda plus_plus : {
 ### INPUT : <start_input> {sentence} <end_input>
 ### OUTPUT : <start_output> ["""),
 
+    "filing" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = get_system_start("ontonote5", plus_plus) + """
+{precisions}### USER : I want you to extract all the named entities in the text and tag them with one of the tag of the OntoNote5 dataset.
+### ASSISTANT : What is the format of the output ?
+### USER : You will output a json disctionnary that has all the 18 tags as keys and a list of named entities as values assigned to the right key. 
+{few_shots}
+### ASSISTANT : I will provide you a json containing all the tags as values and a list of named entities that are of this type of tag as value. Now provide me the sentence.
+### INPUT : <start_input> {sentence} <end_input>
+### OUTPUT : <start_output> ["""),
+
     "wrapper" : PromptTemplate(
         input_variables=['sentence', 'few_shots', 'precisions'],
         template = get_system_start("ontonote5", plus_plus) + """
