@@ -31,8 +31,12 @@ class PT_OutputList(PromptTechnique):
                                             precisions = self.get_precision())
         return [(prompt, "None")]
     
-    def run_prompt(self, llm : "LLMModel", sentence : str, verifier : "Verifier" = None, confidence_checker : ConfidenceChecker= None) :
-        return super(PT_OutputList, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '[')
+    def run_prompt(self, llm : "LLMModel", 
+                   sentence : str, 
+                   verifier : "Verifier" = None, 
+                   confidence_checker : ConfidenceChecker= None,
+                   tags = ["PER", "ORG", "LOC", 'MISC']) :
+        return super(PT_OutputList, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '[',tags =  tags)
     
     def process_output(self, response : str, tag : str = None, tags = ["PER", "ORG", "LOC", 'MISC']):
         start_index = response.find('[[')  # Find the opening curly brace

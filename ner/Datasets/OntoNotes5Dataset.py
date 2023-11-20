@@ -50,11 +50,11 @@ class OntoNote5Dataset(MyDataset):
         train = MyDataset.my_load_dataset(OntoNote5Dataset,split = 'train', cleaned = False, length = 9873)
         return train, test
 
-def get_test_cleaned_split(seed = None):
+def get_test_cleaned_split(seed = None, test_size = 50):
     dataset_test : OntoNote5Dataset = MyDataset.my_load_dataset(OntoNote5Dataset, split = 'test', length=1403)
     if not seed :
         seed = random.randint(0, 1535468)
-    return dataset_test.train_test_split(test_size = 50, seed = seed)
+    return dataset_test.train_test_split(test_size = test_size, seed = seed)
 
 ONTONOTE5_TAGS_PRECISION = {
   "CARDINAL": "Numerals that do not fall under another type.",
