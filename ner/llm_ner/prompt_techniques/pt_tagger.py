@@ -9,6 +9,25 @@ from ner.llm_ner.prompts import *
 import re
 
 LETTER_TO_TAG_MAPPING = {"P" : "PER", "O": "ORG", "L" : "LOC", "M" : "MISC", 'N' : 'None'}
+TAG_TO_CHAR_ONTONOTE = {
+'CARDINAL' : '1',
+'ORDINAL' : '2',
+'WORK_OF_ART' : '3',
+'PERSON' : '4',
+'LOC' : '5',
+'DATE' : '6',
+'PERCENT' : '7',
+'PRODUCT' : '8',
+'MONEY' : '9',
+'FAC' : '0',
+'TIME' : 'A',
+'ORG' : 'B',
+'QUANTITY' : 'C',
+'LANGUAGE' : 'D',
+'GPE' : 'E',
+'LAW' : 'F',
+'NORP' : 'G',
+'EVENT' : 'H'}
 
 class PT_Tagger(PromptTechnique):
     def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False ):
@@ -21,13 +40,13 @@ class PT_Tagger(PromptTechnique):
     def __str__(self):
         return 'tagger'
 
-    def process_nearest_neighbors(self, nearest_neighbors :list, tag):
+    def process_nearest_neighbors(self, nearest_neighbors :list, tag, dataset = "ontonote5"):
         nearest_neighbors_out = []
         for row in nearest_neighbors :
             nes = [ne for ne, tag in row['spans']]
             tags = [tag for ne, tag in row['spans']]
             output_json = '{{ \n' + '\n   '.join([
-                f"'{ne}' : '{tags[i][0]}',"  #do not remove the comma !!!! It is used in the evaluation of confidence
+                f"'{ne}' : '{TAG_TO_CHAR_ONTONOTE[tags[i]]}',"  #do not remove the comma !!!! It is used in the evaluation of confidence
                 for i, ne in enumerate(nes)
             ])+'}}'
             nearest_neighbors_out.append({
