@@ -8,8 +8,7 @@ prompt_template = lambda plus_plus : {
         input_variables=['tag','precision', 'sentence', 'few_shots'],
         template = """### SYSTEM : The task is to extract all the named entites that are {tag} in the following sentence.
 ### USER : Your goal is to add '@@' at the begining and '##' at the end of all the enities that are {tag}. {precision}.
-{few_shots}\n
-### ASSISTANT : Ok now I understand I need to rewrite the sentence and add '@@' at the begining and '##' at the end of all the enities that are {tag}. Can you now provide me the sentence ? 
+{few_shots}### ASSISTANT : Ok now I understand I need to rewrite the sentence and add '@@' at the begining and '##' at the end of all the enities that are {tag}. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
 ### OUTPUT : <start_output> """),
 

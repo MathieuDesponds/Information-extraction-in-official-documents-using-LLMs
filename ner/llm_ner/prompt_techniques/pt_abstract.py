@@ -9,9 +9,10 @@ from datasets import Dataset, concatenate_datasets
 
 from ner.llm_ner.few_shots_techniques import FST_Sentence, FewShotsTechnique
 from ner.llm_ner.prompts import *
+from ner.utils import load, dump
 
 class PromptTechnique(ABC):
-    def __init__(self,fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False ):
+    def __init__(self,fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template_ontonotes, plus_plus = False ):
         self.fst = fst
         self.with_precision = with_precision
         self.prompt_template = prompt_template(plus_plus)
@@ -85,13 +86,15 @@ class PromptTechnique(ABC):
             return ""
         
     
-    def process_dataset_for_finetuning(self, precision, 
+    def process_dataset_for_finetuning(self, precision = "", 
                                        dataset : MyDataset = None, 
                                        fst : FewShotsTechnique = FST_Sentence,
                                        runs = 2000, 
                                        save = True, 
                                        test_size = 400, 
                                        nb_few_shots = [1,2,3,4]):
+        if runs < test_size :
+            test_size = runs
         if not dataset :
             dataset = MyDataset.my_load_dataset(dataset=Conll2003Dataset, split = 'train', cleaned= True)
         old_fst = self.fst
@@ -105,8 +108,10 @@ class PromptTechnique(ABC):
             all_datas.append(processed_data)
         
         merged_datasets = concatenate_datasets(all_datas)
-        with open(f"./ner/saves/datasets/{dataset.name()}_for-ft_{'cleaned_' if dataset.cleaned else ''}{self.__str__()}_{f'{precision}_' if precision else ''}{runs}.pkl", 'wb')as f:
-            pickle.dump(merged_datasets,f)
+        
+        if save :
+            path = f"./ner/saves/datasets/{dataset.name()}_for-ft_{'cleaned_' if dataset.name() == 'conll2003' and dataset.cleaned else ''}{self.__str__()}_{f'{precision}_' if precision else ''}{runs}.pkl"
+            dump(merged_datasets,path)
 
         self.fst = old_fst
         return merged_datasets
@@ -116,7 +121,7 @@ class PromptTechnique(ABC):
         output = []
         for i, sample in tqdm(enumerate(dataset_test)) :
             self.fst.nb_few_shots = random.choice(nb_few_shots)
-            for prompt, tag in self.get_prompts_runnable(sample['text']):
+            for prompt, tag in self.get_prompts_runnable(sample['text'], tags = dataset_test.get_tags()):
                 gold = self.get_gold(dataset_test, tag)
                 output.append({'text' : f"{prompt}{gold[i]} <end_output>"})
 
