@@ -2,11 +2,11 @@ from abc import abstractmethod
 from ner.utils import dump, load, sentence_transformer, get_embbeding
 from ner.llm_ner.prompts import *
 
-def mapping_abbr_word(tag : str) : 
-    if tag in mapping_tag_words : 
+def mapping_abbr_word(tag : str,tags :list[str]) : 
+    if len(tags) == 4 : 
         return mapping_tag_words[tag]
     else :
-        return tag.lower()
+        return tag
 
 class MyDataset():
     def __getitem__(self, idx):
@@ -104,7 +104,7 @@ class MyDataset():
     def add_llama_ner_tags_2(data_point, tags = ['PER', 'ORG', 'LOC', 'MISC']):
         text : str = data_point['text']
         for ne, tag in {ne : tag for ne, tag in  data_point['spans']}.items():
-            text = text.replace(ne, f"<{mapping_abbr_word(tag)}>{ne}</{mapping_abbr_word(tag)}>")
+            text = text.replace(ne, f"<{mapping_abbr_word(tag,tags)}>{ne}</{mapping_abbr_word(tag,tags)}>")
         data_point['llama_text_2'] = text
         return data_point
     

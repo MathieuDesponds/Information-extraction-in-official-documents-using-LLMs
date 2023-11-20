@@ -64,7 +64,7 @@ prompt_template_ontonotes = lambda plus_plus : {
         template = get_system_start("ontonote5", plus_plus) + """
 ### USER : I want to to extract all the named entities that are of type {tag}. {tag} are {precision}
 ### ASSISTANT : What is the format of the output ?
-### USER : You have to rewrite the sentence that I gave you and wrap the named entities of type {tag} by writting '@@' at the begining and '##' at the end. For exemple, with the sentence "Japan is a country" as input and asking for tag GPE, you would answer "@@Japan## is a country". 
+### USER : You have to rewrite the sentence that I gave you and wrap the named entities of type {tag} by writting '@@' at the begining and '##' at the end. For example, with the sentence "Japan is a country" as input and asking for tag GPE, you would answer "@@Japan## is a country". 
 {few_shots}\n
 ### ASSISTANT : I will extract all the named entities that have tag {tag} by writting '@@' at the begining and '##' at the end of all these entities. Can you now provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
@@ -75,7 +75,7 @@ prompt_template_ontonotes = lambda plus_plus : {
         template = get_system_start("ontonote5", plus_plus) + """
 {precisions}### USER : I want you to extract all the named entities in the text and tag them with one of the tag of the OntoNote5 dataset.
 ### ASSISTANT : What is the format of the output ?
-### USER : You have to output a python list of tuples. In each tuple, you have a the named entity and its own tag. For exemple, with the sentence "Japan is a country" as input, you would answer "[('Japan', 'GPE')]". 
+### USER : You have to output a python list of tuples. In each tuple, you have a the named entity and its own tag. For example, with the sentence "Japan is a country" as input, you would answer "[('Japan', 'GPE')]". 
 {few_shots}
 ### ASSISTANT : I will extract all the named entities in the text that has one of the 18 tags of the OntoNote5 dataset and output a python list of tuples containing the named entitiy and its own tag. Now provide me the sentence.
 ### INPUT : <start_input> {sentence} <end_input>
@@ -86,7 +86,7 @@ prompt_template_ontonotes = lambda plus_plus : {
         template = get_system_start("ontonote5", plus_plus) + """
 {precisions}### USER : I want you to extract all the named entities in the text and tag them with one of the tag of the OntoNote5 dataset.
 ### ASSISTANT : What is the format of the output ?
-### USER : As output, you have to rewrite the sentence that I gave you and wrap all the named entities with "<[tag]>" and "</[tag]>" where "[tag]" is one of the 18 tags of the OntoNote5 dataset. For exemple, with the sentence "Japan is a country" as input, you would answer "<GPE>Japan</GPE> is a country". 
+### USER : As output, you have to rewrite the sentence that I gave you and wrap all the named entities with "<[tag]>" and "</[tag]>" where "[tag]" is one of the 18 tags of the OntoNote5 dataset. For example, with the sentence "Japan is a country" as input, you would answer "<GPE>Japan</GPE> is a country". 
 {few_shots}
 ### ASSISTANT : I understand I need to rewrite the sentence and wrap the named entity with"<[tag]>" and "</[tag]>" where "[tag]" is one of the 18 tags of the OntoNote5 dataset. Now, provide me the sentence ? 
 ### INPUT : <start_input> {sentence} <end_input>
@@ -97,7 +97,7 @@ prompt_template_ontonotes = lambda plus_plus : {
         template = get_system_start("ontonote5", plus_plus) + """
 {precisions}### USER : I want you to extract all the named entities in the text and tag them with one of the tag of the OntoNote5 dataset.
 ### ASSISTANT : What is the format of the output ?
-### USER : I want you to output a python list that contains all the named entities in the sentence. For exemple, with the sentence "Japan is a country" as input, you would answer "["Japan"]". 
+### USER : I want you to output a python list that contains all the named entities in the sentence. For example, with the sentence "Japan is a country" as input, you would answer "["Japan"]". 
 {few_shots}
 ### ASSISTANT : Ok now I understand I need to only output a list with all the named entities. Now provide me the sentence. 
 ### INPUT : <start_input> {sentence} <end_input>
@@ -126,7 +126,7 @@ prompt_template_ontonotes = lambda plus_plus : {
     'G' for 'NORP' entities,
     'H' for 'EVENT' entities
 ### ASSISTANT : What is the format of the output ?
-### USER : Output a json with the named entities as keys and the tag as values. For exemple, with the input '"[Japan]" in "Japan is a country", you would answer '{{ "Japan" : "E" }}'. 
+### USER : Output a json with the named entities as keys and the tag as values. For example, with the input '"[Japan]" in "Japan is a country", you would answer '{{ "Japan" : "E" }}'. 
 {few_shots}
 ### ASSISTANT : I will extract all the entities in the sentence you will give me and add one of the 18 charachter corresponding to one of the tags. Now provide me the list of extracted entities and the sentence ? 
 ### INPUT : <start_input> "{entities_sentence}" <end_input>
@@ -182,7 +182,7 @@ The five confidence levels are "low", "medium-low", "medium", "medium-high", "hi
 ###################### Mappings ########################
 
 precision_ner = {'PER' : 'Person entities are all the names you can find in the text. That can be celebrities, historical figures, fictional characters or just names but not pronouns like "he" or "she".', 
-                 'ORG' : 'Organization entities all the organizations you can find in the text. That can be business, educational organisation, broadcaster, sports organisation, scientific organisation, political organisation, institute or government agency.',
+                 'ORG' : 'Organization entities all the organizations you can find in the text. That can be business, educational organization, broadcaster, sports organization, scientific organization, political organization, institute or government agency.',
                  'LOC' : 'Location entities are all countries, the human-geographic territorials, geographical regions, areas in a single country or natural geographic objects.', 
                  'MISC': 'Miscellaneous entities are all events, languages, adjectives to describe things particular to a country. It cannot be verbs, numbers or time related word like weekdays and months. '}
 mapping_abbr_string_ner = {'PER' : 'person entities', 'ORG' : 'organization entities', 'LOC' : 'location entities', 'MISC': 'miscellaneous entities (i.e. entities that are not person, organization or location)',
@@ -204,11 +204,11 @@ mapping_abbr_string_ner = {'PER' : 'person entities', 'ORG' : 'organization enti
                            'EVENT' : 'EVENT entities'}
 mapping_abbr_string_verifier = {'PER' : 'person entity', 'ORG' : 'organization entity', 'LOC' : 'location entity', 'MISC': 'miscellaneous entity (i.e. en entity that is not a tperson, an organization or a location)'}
 mapping_string_abbr = {'person' : 'PER', 'organization' : 'ORG', 'location' : 'LOC', 'miscellaneous': "MISC"}
-mapping_tag_words = {'PER' : 'person', 'ORG' : 'organisation', 'LOC' : 'location', 'MISC' : 'miscellaneous'}
+mapping_tag_words = {'PER' : 'person', 'ORG' : 'organization', 'LOC' : 'location', 'MISC' : 'miscellaneous'}
 
 ###################### SYSTEM START #####################
 
-def get_system_start(dataset : str, plus_plus = False, start = "### SYSTEM : The task is to extract named entites in a sentence." ):
+def get_system_start(dataset : str, plus_plus = False, start = "### SYSTEM : The task is to extract named entities in a sentence." ):
     if dataset == 'ontonote5' :
         if plus_plus :
             return start + """

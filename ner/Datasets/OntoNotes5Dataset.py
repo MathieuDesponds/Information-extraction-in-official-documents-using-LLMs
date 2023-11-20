@@ -44,6 +44,11 @@ class OntoNote5Dataset(MyDataset):
         splitted_dataset = self.dataset.train_test_split(test_size=test_size, seed =seed)
         return OntoNote5Dataset(dataset = splitted_dataset['train']), OntoNote5Dataset(dataset = splitted_dataset['test'])
 
+    @staticmethod
+    def my_load_dataset(split='test'):
+        test = MyDataset.my_load_dataset(OntoNote5Dataset, split = 'test', cleaned = False, length = 1403)
+        train = MyDataset.my_load_dataset(OntoNote5Dataset,split = 'train', cleaned = False, length = 9873)
+        return train, test
 
 def get_test_cleaned_split(seed = None):
     dataset_test : OntoNote5Dataset = MyDataset.my_load_dataset(OntoNote5Dataset, split = 'test', length=1403)
