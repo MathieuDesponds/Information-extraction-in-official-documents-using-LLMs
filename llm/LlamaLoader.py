@@ -26,7 +26,7 @@ class LlamaLoader(ABC) :
         pass
 
 class Llama_LlamaCpp(LlamaLoader) : 
-    def __init__(self, temperature=0, top_p=1, stop=["<end_output>", "\n\n\n"], max_tokens=216) -> None:
+    def __init__(self, temperature=0, top_p=1, stop=["<end_output>", "\n\n\n", '}'], max_tokens=216) -> None:
         super().__init__(temperature, top_p, stop, max_tokens)
     def get_llm_instance(self, model_path = None):
 
@@ -41,7 +41,7 @@ class Llama_LlamaCpp(LlamaLoader) :
             logits_all= True,
             n_gpu_layers=35,
             callback_manager=callback_manager,
-            repeat_penalty=1.0,
+            repeat_penalty=1.3,
             verbose = False
         )
         self.model = llm
@@ -61,7 +61,7 @@ class Llama_LlamaCpp(LlamaLoader) :
         
 
 class Llama_Langchain(LlamaLoader) :
-    def __init__(self, temperature=0, top_p=1, stop=["<end_output>", "\n\n\n"], max_tokens=216) -> None:
+    def __init__(self, temperature=0, top_p=1, stop=["<end_output>", "\n\n\n", '}'], max_tokens=216) -> None:
         super().__init__(temperature, top_p, stop, max_tokens)
 
     def get_llm_instance(self, model_path = None):

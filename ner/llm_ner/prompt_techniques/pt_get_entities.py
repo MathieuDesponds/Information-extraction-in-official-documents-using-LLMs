@@ -44,8 +44,9 @@ class PT_GetEntities(PromptTechnique):
     
     
     def process_output(self, response : str, tag : str, tags = None):
+        response = response + ']'
         start_index = response.find('[')  # Find the opening curly brace
-        end_index = response.rfind(']')    # Find the closing curly brace
+        end_index = response.find(']')    # Find the closing curly brace
         
         if start_index != -1 and end_index != -1:
             response = response[start_index:end_index+1]

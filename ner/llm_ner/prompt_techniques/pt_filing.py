@@ -23,12 +23,12 @@ class PT_Filing(PromptTechnique):
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
         output = lambda spans : '{{' + ', '.join([
             f"'{tag}' : {[', '.join([ne for ne,t in spans if t == tag])] if [ne for ne,t in spans if t == tag] else []}"
-            for tag in self.tags[::-1]
+            for tag in self.tags
         ]) + '}}'
         nearest_neighbors = [{
                 "text" : row['text'],
                 "output_text" : output(row['spans'])} for row in nearest_neighbors]
-        print(type(nearest_neighbors[0]['output_text']))
+        # print(type(nearest_neighbors[0]['output_text']))
         return nearest_neighbors
     
     def get_prompts_runnable(self, sentence, tags = None):
@@ -46,8 +46,9 @@ class PT_Filing(PromptTechnique):
         return super(PT_Filing, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '[',tags =  tags)
     
     def process_output(self, response : str, tag : str = None, tags = ONTONOTE5_TAGS):
+        response += '}'
         start_index = response.find('{')  # Find the opening curly brace
-        end_index = response.rfind('}')    # Find the closing curly brace
+        end_index = response.find('}')    # Find the closing curly brace
         
         if start_index != -1 and end_index != -1:
             response = response[start_index:end_index+2]

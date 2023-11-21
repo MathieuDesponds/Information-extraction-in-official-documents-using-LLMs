@@ -1,6 +1,5 @@
 from langchain import FewShotPromptTemplate, PromptTemplate
 
-
 ######################## NER ###########################
 
 prompt_template = lambda plus_plus : {
@@ -76,7 +75,7 @@ prompt_template_ontonotes = lambda plus_plus : {
 ### ASSISTANT : What is the format of the output ?
 ### USER : You have to output a python list of UNIQUE tuples. Do not repeat a tuple. In each tuple, you have a the named entity and its own tag. For example, with the sentence "Japan is a country" as input, you would answer "[('Japan', 'GPE')]". 
 {few_shots}
-### ASSISTANT : I will extract all the named entities in the text that has one of the 18 tags of the OntoNote5 dataset and will not add other tags. Then I will output a python list of tuples containing the named entitiy and its own tag. There will be NO REPETITIONS in the list. Now provide me the sentence.
+### ASSISTANT : I will extract all the named entities in the text that has one of the 18 tags of the OntoNote5 dataset and will not add other tags. Then I will output a python list of tuples containing the named entitiy and its own tag. There will be NO REPETITIONS in the list and no stopwords that are not entities. Now provide me the sentence.
 ### USER : <start_input> {sentence} <end_input>
 ### ASSISTANT : <start_output> ["""),
 
@@ -85,7 +84,7 @@ prompt_template_ontonotes = lambda plus_plus : {
         template = get_system_start("ontonote5", plus_plus) + """
 {precisions}### USER : I want you to extract all the named entities in the text and tag them with one of the tag of the OntoNote5 dataset.
 ### ASSISTANT : What is the format of the output ?
-### USER : You will output a json disctionnary that has all the 18 tags as keys and a list of named entities as values assigned to the right key. 
+### USER : You will output a json disctionnary that has all the 18 tags as keys and a list of named entities as values assigned to the right key. For example, with the sentence "Japan is the second country that pays $ 13 for a burger 20 percent more than France" as input. The output should be this dictionnary : {{'CARDINAL' : [], 'ORDINAL' : ["second"], 'WORK_OF_ART' : [], 'PERSON' : [], 'LOC' : [], 'DATE' : [], 'PERCENT' : ["20 percent"], 'PRODUCT' : [], 'MONEY' : ["$ 13"], 'FAC' : [], 'TIME' : [], 'ORG' : [], 'QUANTITY' : [], 'LANGUAGE' : [], 'GPE' : ["Japan", "France"], 'LAW' : [], 'NORP' : [], 'EVENT' : []}}.  
 {few_shots}
 ### ASSISTANT : I will provide you a json containing all the tags as values and a list of named entities that are of this type of tag as value. Now provide me the sentence.
 ### INPUT : <start_input> {sentence} <end_input>
@@ -105,9 +104,9 @@ prompt_template_ontonotes = lambda plus_plus : {
     "get-entities" : PromptTemplate(
         input_variables=['sentence', 'few_shots', 'precisions'],
         template = get_system_start("ontonote5", plus_plus) + """
-{precisions}### USER : I want you to extract all the named entities in the text and tag them with one of the tag of the OntoNote5 dataset.
+{precisions}### USER : I want you to extract all the named entities in the text that could be tagged by one of the tag of the OntoNote5 dataset.
 ### ASSISTANT : What is the format of the output ?
-### USER : I want you to output a python list that contains all the named entities in the sentence. For example, with the sentence "Japan is a country" as input, you would answer "["Japan"]". 
+### USER : I want you to output a python list of STRINGs that contains all the named entities in the sentence. For example, with the sentence "Japan is a country" as input, you would answer "['Japan']". 
 {few_shots}
 ### ASSISTANT : Ok now I understand I need to only output a list with all the named entities. Now provide me the sentence. 
 ### USER : <start_input> {sentence} <end_input>
@@ -116,7 +115,7 @@ prompt_template_ontonotes = lambda plus_plus : {
     "tagger" : PromptTemplate(
         input_variables=['entities_sentence', 'few_shots', 'precisions'],
         template = get_system_start("ontonote5", plus_plus, start = "### SYSTEM : The task is to tag all the named entites that were extracted from a sentence.")+"""
-### USER : I want you to tag all the named entites that were extracted from a sentence with the following character :  
+### USER : I want you to tag the named entites that were extracted from a sentence with the following character :  
     '1' for 'CARDINAL' entities,{precisions}
     '2' for 'ORDINAL' entities,
     '3' for 'WORK_OF_ART' entities,
@@ -136,9 +135,9 @@ prompt_template_ontonotes = lambda plus_plus : {
     'G' for 'NORP' entities,
     'H' for 'EVENT' entities
 ### ASSISTANT : What is the format of the output ?
-### USER : Output a json with the named entities as keys and the tag as values. For example, with the input '"[Japan]" in "Japan is a country", you would answer '{{ "Japan" : "E" }}'. 
+### USER : Output a json with the named entities as keys and the tag as values. For example, with the input "[Japan]" in "Japan is a country", you would answer '{{ "Japan" : "E" }}'. 
 {few_shots}
-### ASSISTANT : I will extract all the entities in the sentence you will give me and add one of the 18 charachter corresponding to one of the tags. Now provide me the list of extracted entities and the sentence ? 
+### ASSISTANT : I take the named entities previously extracted in the sentence and add to each named entity one of the 18 character corresponding to one of the tags. Now provide me the list of extracted entities and the sentence ? 
 ### USER : <start_input> "{entities_sentence}" <end_input>
 ### ASSISTANT : <start_output> {{ """),
 
@@ -222,13 +221,13 @@ def get_system_start(dataset : str, plus_plus = False, start = "### SYSTEM : The
     if dataset == 'ontonote5' :
         if plus_plus :
             return start + """
-    A named entity refers to a specific, named object, concept, location, person, organization, or other entities that have a proper name. Named entities are typically unique and distinguishable entities that can be explicitly named or referred to in text. 
+    A named entity refers to a specific, named object, concept, location, person, organization, or other entities that have a proper name. Named entities are typically unique and distinguishable entities that can be explicitly named or referred to in text. Named entities are stopwords like 'the', verbs like 'serving' or question words like 'why'. 
     The goal of named entity extraction is to identify and classify these entities within a given text.
     We are working with 18 types of entities of the OntoNote5 dataset that are listed below with their description :
-        "CARDINAL": "Numerals that do not fall under another type (e.g. 1, 100).",
+        "CARDINAL": "Numerals that do not fall under another type (e.g. 1, 100, twenty-nine).",
         "ORDINAL": "Words or expressions indicating order (e.g. first, 60th).",
-        "WORK_OF_ART": "Titles of creative works.",
-        "PERSON": "Names of people, including fictional and real characters. Group name and surname whan it applies.",
+        "WORK_OF_ART": "Titles of creative works like books, films or artistic work.",
+        "PERSON": "Names of people, including fictional and real characters.",
         "LOC": "Geographical locations, both physical and political.",
         "DATE": "Temporal expressions indicating dates or periods, weekday, months,",
         "PERCENT": "Percentage values (e.g. 70%).",
@@ -241,10 +240,10 @@ def get_system_start(dataset : str, plus_plus = False, start = "### SYSTEM : The
         "LANGUAGE": "Names of languages.",
         "GPE": "Geopolitical entities, such as countries, cities, or states.",
         "LAW": "Legal references, including laws and legal concepts.",
-        "NORP": "Nationalities, religious group, or political groups.",
+        "NORP": "Nationalities, religious group, or political groups. Can be adjective for nationality like "Canadian".",
         "EVENT": "Named occurrences and social, political, cultural, or genera incidents."""
         else : 
-            return start + """
+            return start + f"""
     The types of the entities have to be one of the OntoNote5 dataset that you can find here : ['CARDINAL', 'ORDINAL', 'WORK_OF_ART', 'PERSON', 'LOC', 'DATE', 'PERCENT', 'PRODUCT', 'MONEY', 'FAC', 'TIME', 'ORG', 'QUANTITY', 'LANGUAGE', 'GPE', 'LAW', 'NORP', 'EVENT']."""
     else : 
         return  ""
