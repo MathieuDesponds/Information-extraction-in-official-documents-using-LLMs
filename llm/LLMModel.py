@@ -74,7 +74,7 @@ class LLMModel(ABC):
     
     
     def invoke(self, sentence : str, pt : PromptTechnique, verifier : Verifier, confidence_checker : ConfidenceChecker, tags):
-        all_entities, response_all= pt.run_prompt(self, sentence, verifier, confidence_checker, tags)
+        all_entities, response_all= pt.run_prompt(self, sentence, verifier, confidence_checker, tags = tags)
         return all_entities, response_all
     
     @staticmethod
@@ -106,8 +106,7 @@ class LLMModel(ABC):
                        prompt_template = prompt_template_ontonotes,
                        plus_plus = False,
                        dataset_loader = ontonote_get_test_cleaned_split,
-                       test_size = 50,
-                       tags = ['CARDINAL', 'ORDINAL', 'WORK_OF_ART', 'PERSON', 'LOC', 'DATE', 'PERCENT', 'PRODUCT', 'MONEY', 'FAC', 'TIME', 'ORG', 'QUANTITY', 'LANGUAGE', 'GPE', 'LAW', 'NORP', 'EVENT']) :
+                       test_size = 50) :
         return self.classical_test(fsts , 
                        pts,
                        nb_few_shots, 
@@ -119,7 +118,8 @@ class LLMModel(ABC):
                        prompt_template,
                        plus_plus,
                        dataset_loader = lambda seed = 42 : dataset_loader(seed = seed, test_size = test_size),
-                       tags = tags)
+                       tags = ONTONOTE5_TAGS,
+                       dataset_save_name = "ontonote5")
     
 
     def classical_test(self, 
@@ -134,7 +134,8 @@ class LLMModel(ABC):
                        prompt_template = prompt_template,
                        plus_plus = False,
                        dataset_loader = conll_get_test_cleaned_split,
-                       tags = ["PER", "ORG", "LOC", 'MISC']) :
+                       tags = ["PER", "ORG", "LOC", 'MISC'],
+                       dataset_save_name = "conll2003_cleaned") :
 
         verifier = Verifier(self, data_train) if verifier else None
         confidence_checker = ConfidenceChecker() if confidence_checker else None
@@ -151,7 +152,7 @@ class LLMModel(ABC):
                     res_insts = []
                     for run in range(nb_run_by_test) :
                         start_time = time.time()
-                        seed = random.randint(0, 1535468)
+                        seed = 42# random.randint(0, 1535468)
                         data_train, data_test = dataset_loader(seed = seed)
                         fst.set_dataset(data_train)
                         predictions = self.invoke_mulitple(data_test['text'], pt, verifier, confidence_checker, tags)
@@ -171,11 +172,12 @@ class LLMModel(ABC):
                             elapsed_time = elapsed_time,
                             with_precision = pt.with_precision,
                             seed = seed,
+                            tags = tags
                         ))
                         del data_test, data_train
                     results.append(ResultInstanceWithConfidenceInterval(res_insts))
                     if save :
-                        save_result_instance_with_CI(results[-1])
+                        save_result_instance_with_CI(results[-1], dataset = dataset_save_name)
                     fst.save_few_shots()
         results_df = pd.DataFrame([result.get_dict() for result in results])
         return results, results_df

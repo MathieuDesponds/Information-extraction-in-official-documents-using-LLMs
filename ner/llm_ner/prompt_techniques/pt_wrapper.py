@@ -37,7 +37,7 @@ class PT_Wrapper(PromptTechnique):
         matches = re.findall(pattern, response)
 
         # Create a list of tuples with the extracted named entities and tags
-        named_entities = [(entity, mapping_string_abbr[tag]) for tag, entity in matches if tag in mapping_string_abbr]
+        named_entities = [(entity, mapping_string_abbr[tag] if tag in mapping_string_abbr else tag) for tag, entity in matches]
         return named_entities
 
     

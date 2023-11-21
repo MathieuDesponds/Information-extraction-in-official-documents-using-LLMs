@@ -54,7 +54,6 @@ def get_test_cleaned_split(seed = None, test_size = 50):
     dataset_test : OntoNote5Dataset = MyDataset.my_load_dataset(OntoNote5Dataset, split = 'test', length=1403)
     if not seed :
         seed = random.randint(0, 1535468)
-    print(dataset_test)
     return dataset_test.train_test_split(test_size = test_size, seed = seed)
 
 ONTONOTE5_TAGS_PRECISION = {

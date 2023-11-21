@@ -35,7 +35,7 @@ class ResultInstance():
         
     
     def show_cm(self) :
-        show_cm_multi(*self.get_scores(), self.model, self.tags)
+        show_cm_multi(*self.get_scores(), self.model, tags = self.tags)
 
     def get_dict(self) -> dict:
         self.get_scores()

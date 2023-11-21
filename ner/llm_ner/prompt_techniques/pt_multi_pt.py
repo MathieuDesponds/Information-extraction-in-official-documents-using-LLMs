@@ -65,5 +65,5 @@ class PT_2Time_Tagger(PT_Multi_PT) :
         output, response_all = self.pts[0].run_prompt(llm, sentence, verifier, None)
         print(f"Output after the first prompt : {output}")
         for pt in self.pts[1:]:
-            output, response_all = pt.run_prompt(llm, f"{output} in the following sentence'{sentence}'", verifier, confidence_checker)
+            output, response_all = pt.run_prompt(llm, [output,sentence], verifier, confidence_checker)
         return output, response_all
