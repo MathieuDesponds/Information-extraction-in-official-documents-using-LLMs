@@ -39,7 +39,7 @@ class PromptTechnique(ABC):
         pass
 
     @abstractmethod
-    def process_output(self, response : str, tag : str):
+    def process_output(self, response : str, tag : str, tags):
         pass
 
     def run_prompt(self, llm : "LLMModel", 
@@ -51,7 +51,6 @@ class PromptTechnique(ABC):
         all_entities, all_responses = [], []
         prompts = self.get_prompts_runnable(sentence, tags)
         for prompt,tag in prompts :
-            print(prompt)
             if llm.check_nb_tokens :
                 doc = llm.nlp(prompt)   
                 num_tokens = len(doc)
@@ -61,7 +60,7 @@ class PromptTechnique(ABC):
                     continue
 
             reponse_text, response_all = llm(prompt, with_full_message =True)
-            processed_response = self.process_output(prefix + reponse_text, tag)
+            processed_response = self.process_output(prefix + reponse_text, tag, tags = tags)
             if verifier : 
                 processed_response = verifier.verify(sentence, processed_response, llm)
             if confidence_checker :

@@ -73,7 +73,7 @@ class PT_Tagger(PromptTechnique):
                                             precisions = self.get_precision())
         return [(prompt, "None")]
     
-    def process_output(self, response : str, tag : str):
+    def process_output(self, response : str, tag : str, tags = None):
         start_index = response.find('{')  # Find the opening curly brace
         end_index = response.rfind('}')    # Find the closing curly brace
         
