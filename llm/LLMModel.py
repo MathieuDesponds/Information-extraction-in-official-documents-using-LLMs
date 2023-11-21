@@ -222,7 +222,7 @@ class LLMModel(ABC):
         return results, results_df
     
 
-    def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = True, precision = None):
+    def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = False, precision = None):
         processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision)
         nb_samples = len(processed_dataset)
         output_dir = f"./llm/models/{self.base_model_name}{f'-{precision}' if precision else ''}/finetuned-{pt.__str__()}-{nb_samples}"
@@ -248,9 +248,9 @@ class LLMModel(ABC):
                 optim="paged_adamw_8bit",
                 logging_dir="./logs",        # Directory for storing logs
                 save_strategy="steps",       # Save the model checkpoint every logging step
-                save_steps=runs/4//5,                # Save checkpoints every 50 steps
+                save_steps=runs/4//4,                # Save checkpoints every 50 steps
                 evaluation_strategy="steps", # Evaluate the model every logging step
-                eval_steps=runs/4//10,               # Evaluate and save checkpoints every 50 steps
+                eval_steps=runs/4//8,               # Evaluate and save checkpoints every 50 steps
                 do_eval=True,                # Perform evaluation at the end of training
                 report_to="wandb",           # Comment this out if you don't want to use weights & baises
                 run_name=f"finetuned-{pt.__str__}-{nb_samples}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}"          # Name of the W&B run (optional)

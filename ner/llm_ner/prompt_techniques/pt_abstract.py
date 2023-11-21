@@ -127,6 +127,6 @@ class PromptTechnique(ABC):
         processed_dataset = Dataset.from_list(output)  
         return processed_dataset
     
-    def load_processed_dataset(self, runs, cleaned = True, precision = None):
-        with open(f"./ner/saves/datasets/conll2003_for-ft_{'cleaned_' if cleaned else ''}{self.__str__()}_{f'{precision}_' if precision else ''}{runs}.pkl", 'rb')as f:
-            return pickle.load(f)
+    def load_processed_dataset(self, runs, cleaned = True, precision = None, dataset = "ontonote"):
+        path = f"./ner/saves/datasets/{dataset}_for-ft_{'cleaned_' if cleaned else ''}{self.__str__()}_{f'{precision}_' if precision else ''}{runs}.pkl"
+        return load(path)
