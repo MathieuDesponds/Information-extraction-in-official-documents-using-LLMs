@@ -7,7 +7,7 @@ from ner.process_results import get_metrics_all, show_cm_multi
 from ner.utils import get_student_conf_interval, load, dump
 
 class ResultInstance():
-    def __init__(self, model, nb_few_shots, prompt_technique, few_shot_tecnique, verifier, results, gold, data_train, data_test, elapsed_time= -1, with_precision = False, seed = -1, noshots = False) -> None:
+    def __init__(self, model, nb_few_shots, prompt_technique, few_shot_tecnique, verifier, results, gold, data_train, data_test, elapsed_time= -1, with_precision = False, seed = -1, noshots = False, plus_plus = False, tags = ['LOC', 'PER', 'ORG', 'MISC']) -> None:
         self.model = model
         self.nb_few_shots = nb_few_shots
         self.prompt_technique = prompt_technique
@@ -21,19 +21,21 @@ class ResultInstance():
         self.elapsed_time = elapsed_time
         self.with_precision = with_precision
         self.seed = seed
+        self.plus_plus = plus_plus
+        self.tags = tags
 
         self.cm, self.f1, self.precision, self.recall = None, None, None,None
         
     def get_scores(self, with_y = False):
         if not self.f1 :
-            self.cm, self.f1, self.precision, self.recall, y_true, y_pred, nes = get_metrics_all(self.results, self.gold)
+            self.cm, self.f1, self.precision, self.recall, y_true, y_pred, nes = get_metrics_all(self.results, self.gold, self.tags)
         if with_y :
             return self.cm, self.f1, self.precision, self.recall, y_true, y_pred
         return self.cm, self.f1, self.precision, self.recall
         
     
     def show_cm(self) :
-        show_cm_multi(*self.get_scores(), self.model )
+        show_cm_multi(*self.get_scores(), self.model, self.tags)
 
     def get_dict(self) -> dict:
         self.get_scores()
@@ -51,6 +53,7 @@ class ResultInstance():
 'precision' : self.precision,
 'recall' : self.recall,
 'elapsed_time' : self.elapsed_time if hasattr(self, 'elapsed_time') else -1 ,
+'plus_plus' : self.plus_plus if hasattr(self, 'plus_plus') else False,
 'seed' : self.seed if hasattr(self, 'seed') else -1  
        }
 
@@ -90,6 +93,7 @@ class ResultInstanceWithConfidenceInterval():
             'few_shot_tecnique' : self.res_insts[0].few_shot_tecnique,
             'nb_few_shots' : self.res_insts[0].nb_few_shots,
             'precision' :  self.res_insts[0].with_precision if hasattr(self.res_insts[0], 'with_precision') else "no-precision",
+            'plus_plus' : self.res_insts[0].plus_plus if hasattr(self.res_insts[0], 'plus_plus') else False,
             'verifier' : self.res_insts[0].verifier,
             'len_data_train' : self.res_insts[0].len_data_train,
             'len_data_test' : self.res_insts[0].len_data_test,
@@ -104,12 +108,14 @@ def save_result_instance(res_inst : ResultInstance):
     file_path = f"./ner/saves/results/conll2003_cleaned/{res_inst.model}/{res_inst.prompt_technique}/{res_inst.few_shot_tecnique}_{res_inst.nb_few_shots}_{res_inst.verifier}_{res_inst.len_data_train}_{res_inst.len_data_test}.pkl"
     dump(res_inst, file_path)
 
-def save_result_instance_with_CI(res_inst : ResultInstanceWithConfidenceInterval):
-    file_path = f"./ner/saves/results/conll2003_cleaned/{res_inst.res_insts[0].model}/{res_inst.res_insts[0].prompt_technique}/{res_inst.res_insts[0].few_shot_tecnique}_{res_inst.res_insts[0].nb_few_shots}_{res_inst.res_insts[0].verifier}_{res_inst.res_insts[0].len_data_train}_{res_inst.res_insts[0].len_data_test}_{len(res_inst.res_insts)}_{res_inst.res_insts[0].with_precision}.pkl"
+def save_result_instance_with_CI(res_inst : ResultInstanceWithConfidenceInterval, dataset :str = "conll2003_cleaned"):
+    if dataset == "conll2003_cleaned" :
+        file_path = f"./ner/saves/results/{dataset}/{res_inst.res_insts[0].model}/{res_inst.res_insts[0].prompt_technique}/{res_inst.res_insts[0].few_shot_tecnique}_{res_inst.res_insts[0].nb_few_shots}_{res_inst.res_insts[0].verifier}_{res_inst.res_insts[0].len_data_train}_{res_inst.res_insts[0].len_data_test}_{len(res_inst.res_insts)}_{res_inst.res_insts[0].with_precision}_{res_inst.res_insts[0].plus_plus}.pkl"
+    else :
+        file_path = f"./ner/saves/results/{dataset}/{res_inst.res_insts[0].model}/{res_inst.res_insts[0].prompt_technique}/{res_inst.res_insts[0].nb_few_shots}_{res_inst.res_insts[0].plus_plus}_{res_inst.res_insts[0].len_data_test*len(res_inst.res_insts)}.pkl"    
     dump(res_inst, file_path)
 
-def load_all_results():
-    root_directory = "ner/saves/results/conll2003_cleaned"
+def load_all_results(root_directory = "ner/saves/results/conll2003_cleaned"):
 
     # Initialize a list to store the loaded data
     results = []

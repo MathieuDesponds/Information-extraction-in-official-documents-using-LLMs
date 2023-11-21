@@ -43,7 +43,7 @@ class PT_GetEntities(PromptTechnique):
         return super(PT_GetEntities, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '[', tags = tags)
     
     
-    def process_output(self, response : str, tag : str):
+    def process_output(self, response : str, tag : str, tags = None):
         start_index = response.find('[')  # Find the opening curly brace
         end_index = response.rfind(']')    # Find the closing curly brace
         

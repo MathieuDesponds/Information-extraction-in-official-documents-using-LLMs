@@ -30,7 +30,7 @@ class PT_Wrapper(PromptTechnique):
                                             precisions = self.get_precision())
         return [(prompt, "None")]
     
-    def process_output(self, response : str, tag : str = None):
+    def process_output(self, response : str, tag : str = None, tags = None):
         pattern = r'<([^>]+)>([^<]+)</\1>'
 
         # Find all matches of the pattern in the text

@@ -37,7 +37,7 @@ class PT_GPT_NER(PromptTechnique):
             prompts.append(prompt)
         return list(zip(prompts,tags))
     
-    def process_output(self, response : str, tag : str):
+    def process_output(self, response : str, tag : str, tags = None):
         pattern = r'@@\s*(.*?)##'
         named_entities = re.findall(pattern, response, re.DOTALL)
         return [(ne, tag) for ne in named_entities]
