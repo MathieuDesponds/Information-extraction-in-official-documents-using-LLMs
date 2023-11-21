@@ -22,7 +22,7 @@ class PT_Filing(PromptTechnique):
 
     def process_nearest_neighbors(self, nearest_neighbors :list, tag):
         output = lambda spans : '{{' + ', '.join([
-            f"{tag} : {[', '.join([ne for ne,t in spans if t == tag])] if [ne for ne,t in spans if t == tag] else []}"
+            f"'{tag}' : {[', '.join([ne for ne,t in spans if t == tag])] if [ne for ne,t in spans if t == tag] else []}"
             for tag in self.tags[::-1]
         ]) + '}}'
         nearest_neighbors = [{
