@@ -3,6 +3,9 @@ import pandas as pd
 from ner.llm_ner.few_shots_techniques import FewShotsTechnique
 from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
 
+from ner.Datasets.Conll2003Dataset import CONLL2003_TAGS
+from ner.Datasets.OntoNotes5Dataset import ONTONOTE5_TAGS
+
 from ner.process_results import get_metrics_all, show_cm_multi
 from ner.utils import get_student_conf_interval, load, dump
 
@@ -136,6 +139,7 @@ def load_all_results(root_directory = "ner/saves/results/conll2003_cleaned"):
                         r.prompt_technique = r.prompt_technique if r.prompt_technique != '<>' else 'wrapper'
                         r.with_precision = precision
                         r.noshots = noshots
+                        r.tags = ONTONOTE5_TAGS if "ontonote" in root_directory else CONLL2003_TAGS
                     res_inst.noshots = noshots
                     results.append(res_inst.get_dict())
                     # save_result_instance_with_CI(res_inst)
