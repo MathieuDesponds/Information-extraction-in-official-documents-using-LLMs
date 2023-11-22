@@ -69,15 +69,14 @@ class FST_Sentence(FewShotsTechnique):
         super().__init__(training_dataset, nb_few_shots, save_few_shot_path= SAVED_FEW_SHOTS_SENTENCE)
 
     def get_nearest_neighbors(self, sentence : str)-> list[str]:
-        if self.few_shots_save and  sentence in self.few_shots_save and len(self.few_shots_save[sentence]) >= self.nb_few_shots :
+        if sentence in self.few_shots_save and len(self.few_shots_save[sentence]) >= self.nb_few_shots :
             return self.few_shots_save[sentence][:self.nb_few_shots]
         sentence_embedding = sentence_transformer.encode(sentence)
         similarities = cosine_similarity([sentence_embedding], self.training_dataset['sentence_embedding'])
         top_k_indices = np.argsort(similarities[0])[-self.nb_few_shots:][::-1]
         nearest_neighbors = [self.training_dataset[int(i)] for i in list(top_k_indices)]
 
-        if self.few_shots_save : 
-            self.few_shots_save[sentence] = nearest_neighbors
+        self.few_shots_save[sentence] = nearest_neighbors
         return nearest_neighbors
     
     @staticmethod
