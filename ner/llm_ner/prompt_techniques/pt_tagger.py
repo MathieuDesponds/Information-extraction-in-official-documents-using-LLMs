@@ -8,7 +8,25 @@ from ner.llm_ner.prompts import *
 
 import re
 
-LETTER_TO_TAG_MAPPING = {"P" : "PER", "O": "ORG", "L" : "LOC", "M" : "MISC", 'N' : 'None'}
+LETTER_TO_TAG_MAPPING = {"P" : "PER", "O": "ORG", "L" : "LOC", "M" : "MISC", 'N' : 'None',
+'1' : 'CARDINAL',
+'2' : 'ORDINAL',
+'3' : 'WORK_OF_ART',
+'4' : 'PERSON',
+'5' : 'LOC',
+'6' : 'DATE',
+'7' : 'PERCENT',
+'8' : 'PRODUCT',
+'9' : 'MONEY',
+'0' : 'FAC',
+'A' : 'TIME',
+'B' : 'ORG',
+'C' : 'QUANTITY',
+'D' : 'LANGUAGE',
+'E' : 'GPE',
+'F' : 'LAW',
+'G' : 'NORP',
+'H' : 'EVENT'}
 TAG_TO_CHAR_ONTONOTE = {
 'CARDINAL' : '1',
 'ORDINAL' : '2',
@@ -30,7 +48,7 @@ TAG_TO_CHAR_ONTONOTE = {
 'EVENT' : 'H'}
 
 class PT_Tagger(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False ):
+    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template_ontonotes, plus_plus = False ):
         super().__init__(fst, with_precision, prompt_template, plus_plus)
 
     @staticmethod
@@ -64,18 +82,18 @@ class PT_Tagger(PromptTechnique):
         return super(PT_Tagger, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '{', tags=tags)
 
     def get_prompts_runnable(self, sentence, tags = None):
-        # sentence is in fact "{previous_output} in '{sentence}'"
-        entities_sentence = sentence
-        real_sentence = sentence#.split("'")[-2]
+        entities = sentence[0] if sentence[0] else "No entities found"
+        real_sentence = sentence[1]
         nearest_neighbors = self.fst.get_nearest_neighbors(real_sentence)
-        prompt =  self.prompt_template[self.__str__()].format(entities_sentence = entities_sentence,
+        prompt =  self.prompt_template[self.__str__()].format(entities_sentence = f"{entities} in {real_sentence}",
                                             few_shots = self.get_few_shots(real_sentence, [], nearest_neighbors),
                                             precisions = self.get_precision())
         return [(prompt, "None")]
     
-    def process_output(self, response : str, tag : str):
+    def process_output(self, response : str, tag : str, tags = None):
+        response = response + '}'
         start_index = response.find('{')  # Find the opening curly brace
-        end_index = response.rfind('}')    # Find the closing curly brace
+        end_index = response.find('}')    # Find the closing curly brace
         
         if start_index != -1 and end_index != -1:
             response = response[start_index:end_index+1]
@@ -87,13 +105,15 @@ class PT_Tagger(PromptTechnique):
             named_entities = ast.literal_eval(response)
         except Exception as e:
             named_entities = {}
+        output = [(ne,LETTER_TO_TAG_MAPPING[tag]) for ne, tag in named_entities.items() if isinstance(tag, str) in LETTER_TO_TAG_MAPPING]
+        print(output)
+        return output
 
-        return [(ne,LETTER_TO_TAG_MAPPING[tag]) for ne, tag in named_entities.items() if tag in LETTER_TO_TAG_MAPPING]
-        
+
     def get_gold(self, dataset : MyDataset, tag : str) -> list[str]:
         return [
                 '{\n' + '\n   '.join([
-                    f"{ne} : ONEOF['P', 'O', 'L', 'M', 'N']" 
+                    f"{ne} : ? //The character corresponsing to the entity tag" 
                     for ne, tag in row['spans']
                 ])+'\n}'
             for row in dataset]

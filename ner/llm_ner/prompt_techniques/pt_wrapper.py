@@ -7,7 +7,7 @@ from ner.llm_ner.prompts import *
 import re
 
 class PT_Wrapper(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False ):
+    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template_ontonotes, plus_plus = False ):
         super().__init__(fst, with_precision, prompt_template, plus_plus)
     
     @staticmethod
@@ -30,14 +30,14 @@ class PT_Wrapper(PromptTechnique):
                                             precisions = self.get_precision())
         return [(prompt, "None")]
     
-    def process_output(self, response : str, tag : str = None):
+    def process_output(self, response : str, tag : str = None, tags = None):
         pattern = r'<([^>]+)>([^<]+)</\1>'
 
         # Find all matches of the pattern in the text
         matches = re.findall(pattern, response)
 
         # Create a list of tuples with the extracted named entities and tags
-        named_entities = [(entity, mapping_string_abbr[tag]) for tag, entity in matches if tag in mapping_string_abbr]
+        named_entities = [(entity, mapping_string_abbr[tag] if tag in mapping_string_abbr else tag) for tag, entity in matches]
         return named_entities
 
     

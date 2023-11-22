@@ -8,7 +8,7 @@ from ner.llm_ner.prompts import *
 import re
 
 class PT_GPT_NER(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False ):
+    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template_ontonotes, plus_plus = False ):
         super().__init__(fst, with_precision, prompt_template, plus_plus)
 
     @staticmethod
@@ -37,7 +37,7 @@ class PT_GPT_NER(PromptTechnique):
             prompts.append(prompt)
         return list(zip(prompts,tags))
     
-    def process_output(self, response : str, tag : str):
+    def process_output(self, response : str, tag : str, tags = None):
         pattern = r'@@\s*(.*?)##'
         named_entities = re.findall(pattern, response, re.DOTALL)
         return [(ne, tag) for ne in named_entities]

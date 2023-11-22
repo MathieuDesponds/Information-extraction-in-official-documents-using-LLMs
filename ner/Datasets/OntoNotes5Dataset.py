@@ -48,6 +48,8 @@ class OntoNote5Dataset(MyDataset):
     def my_load_dataset(split='test'):
         test = MyDataset.my_load_dataset(OntoNote5Dataset, split = 'test', cleaned = False, length = 1403)
         train = MyDataset.my_load_dataset(OntoNote5Dataset,split = 'train', cleaned = False, length = 9873)
+        train.dataset = train.dataset.filter(lambda row : '{' not in row['text'])
+        test.dataset = test.dataset.filter(lambda row : '{' not in row['text'])
         return train, test
 
 def get_test_cleaned_split(seed = None, test_size = 50):

@@ -39,7 +39,7 @@ class PromptTechnique(ABC):
         pass
 
     @abstractmethod
-    def process_output(self, response : str, tag : str):
+    def process_output(self, response : str, tag : str, tags):
         pass
 
     def run_prompt(self, llm : "LLMModel", 
@@ -51,7 +51,6 @@ class PromptTechnique(ABC):
         all_entities, all_responses = [], []
         prompts = self.get_prompts_runnable(sentence, tags)
         for prompt,tag in prompts :
-            print(prompt)
             if llm.check_nb_tokens :
                 doc = llm.nlp(prompt)   
                 num_tokens = len(doc)
@@ -61,7 +60,7 @@ class PromptTechnique(ABC):
                     continue
 
             reponse_text, response_all = llm(prompt, with_full_message =True)
-            processed_response = self.process_output(prefix + reponse_text, tag)
+            processed_response = self.process_output(prefix + reponse_text, tag, tags = tags)
             if verifier : 
                 processed_response = verifier.verify(sentence, processed_response, llm)
             if confidence_checker :
@@ -91,7 +90,7 @@ class PromptTechnique(ABC):
                                        fst : FewShotsTechnique = FST_Sentence,
                                        runs = 2000, 
                                        save = True, 
-                                       test_size = 400, 
+                                       test_size = 200, 
                                        nb_few_shots = [1,2,3,4]):
         if runs < test_size :
             test_size = runs
@@ -102,7 +101,7 @@ class PromptTechnique(ABC):
         for i in range(runs//test_size):
             seed = random.randint(0,2156867)
             data_tr_tr, data_tr_te = dataset.train_test_split(test_size = test_size, seed=seed)
-            data_tr_tr.select(range(1600))
+            data_tr_tr.select(range(800))
             self.fst = fst(data_tr_tr, -1)
             processed_data = self.process_dataset_for_finetuning_helper(data_tr_te, nb_few_shots)
             all_datas.append(processed_data)
@@ -121,13 +120,13 @@ class PromptTechnique(ABC):
         output = []
         for i, sample in tqdm(enumerate(dataset_test)) :
             self.fst.nb_few_shots = random.choice(nb_few_shots)
-            for prompt, tag in self.get_prompts_runnable(sample['text'], tags = dataset_test.get_tags()):
-                gold = self.get_gold(dataset_test, tag)
-                output.append({'text' : f"{prompt}{gold[i]} <end_output>"})
+            prompt, tag = random.choice(self.get_prompts_runnable(sample['text'], tags = dataset_test.get_tags()))
+            gold = self.get_gold(dataset_test, tag)
+            output.append({'text' : f"{prompt}{gold[i]} <end_output>"})
 
         processed_dataset = Dataset.from_list(output)  
         return processed_dataset
     
-    def load_processed_dataset(self, runs, cleaned = True, precision = None):
-        with open(f"./ner/saves/datasets/conll2003_for-ft_{'cleaned_' if cleaned else ''}{self.__str__()}_{f'{precision}_' if precision else ''}{runs}.pkl", 'rb')as f:
-            return pickle.load(f)
+    def load_processed_dataset(self, runs, cleaned = True, precision = None, dataset = "ontonote5"):
+        path = f"./ner/saves/datasets/{dataset}_for-ft_{'cleaned_' if cleaned else ''}{self.__str__()}_{f'{precision}_' if precision else ''}{runs}.pkl"
+        return load(path)

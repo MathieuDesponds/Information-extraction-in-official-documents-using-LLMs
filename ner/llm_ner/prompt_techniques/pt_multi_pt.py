@@ -42,19 +42,19 @@ class PT_Multi_PT(PromptTechnique):
     def get_prompts_runnable(self, sentence, tags = ["PER", "ORG", "LOC", 'MISC']):
         raise TypeError("This function in multiprompt should not be used")
     
-    def process_output(self, response : str, tag : str):
+    def process_output(self, response : str, tag : str, tags = None):
         raise TypeError("This function in multiprompt should not be used")
         
     def get_gold(self, dataset : MyDataset, tag : str) -> list[str]:
         raise TypeError("This function in multiprompt should not be used")
 
 class PT_2Time_Tagger(PT_Multi_PT) :
-    def __init__(self, fst : FewShotsTechnique , with_precision = False):
+    def __init__(self, fst : FewShotsTechnique , with_precision = False, plus_plus = False, prompt_template = prompt_template_ontonotes):
         """
         pts : a list of PromptTechnique where the input output names of the prompts should be 
                 (sentence, output), (input, output), ... , (input, output)
         """         
-        super().__init__(pts = [PT_GetEntities(fst), PT_Tagger(fst)],
+        super().__init__(pts = [PT_GetEntities(fst, plus_plus= plus_plus, prompt_template = prompt_template, with_precision=with_precision), PT_Tagger(fst,plus_plus= plus_plus, with_precision=with_precision, prompt_template = prompt_template)],
                           with_precision = with_precision)
         
     def run_prompt(self, llm : "LLMModel", 
@@ -65,5 +65,5 @@ class PT_2Time_Tagger(PT_Multi_PT) :
         output, response_all = self.pts[0].run_prompt(llm, sentence, verifier, None)
         print(f"Output after the first prompt : {output}")
         for pt in self.pts[1:]:
-            output, response_all = pt.run_prompt(llm, f"{output} in the following sentence'{sentence}'", verifier, confidence_checker)
+            output, response_all = pt.run_prompt(llm, [output,sentence], verifier, confidence_checker)
         return output, response_all

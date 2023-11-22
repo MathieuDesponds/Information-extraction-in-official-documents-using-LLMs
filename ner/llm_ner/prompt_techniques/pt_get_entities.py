@@ -9,7 +9,7 @@ from ner.llm_ner.prompts import *
 import re
 
 class PT_GetEntities(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False ):
+    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template_ontonotes, plus_plus = False ):
         super().__init__(fst, with_precision, prompt_template, plus_plus)
 
     @staticmethod
@@ -43,9 +43,10 @@ class PT_GetEntities(PromptTechnique):
         return super(PT_GetEntities, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '[', tags = tags)
     
     
-    def process_output(self, response : str, tag : str):
+    def process_output(self, response : str, tag : str, tags = None):
+        response = response + ']'
         start_index = response.find('[')  # Find the opening curly brace
-        end_index = response.rfind(']')    # Find the closing curly brace
+        end_index = response.find(']')    # Find the closing curly brace
         
         if start_index != -1 and end_index != -1:
             response = response[start_index:end_index+1]
