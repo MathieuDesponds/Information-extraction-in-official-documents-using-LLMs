@@ -171,6 +171,7 @@ class LLMModel(ABC):
                             data_train = data_train,
                             elapsed_time = elapsed_time,
                             with_precision = pt.with_precision,
+                            plus_plus = plus_plus,
                             seed = seed,
                             tags = tags
                         ))
@@ -225,7 +226,7 @@ class LLMModel(ABC):
     def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = False, precision = None):
         processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision)
         nb_samples = len(processed_dataset)
-        output_dir = f"./llm/models/{self.base_model_name}{f'-{precision}' if precision else ''}/finetuned-{pt.__str__()}-{nb_samples}"
+        output_dir = f"./llm/models/{self.base_model_name}/{pt.__str__()}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
 
         test_size = 50
         train_size = nb_samples-test_size
