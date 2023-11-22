@@ -120,9 +120,9 @@ class PromptTechnique(ABC):
         output = []
         for i, sample in tqdm(enumerate(dataset_test)) :
             self.fst.nb_few_shots = random.choice(nb_few_shots)
-            for prompt, tag in self.get_prompts_runnable(sample['text'], tags = dataset_test.get_tags()):
-                gold = self.get_gold(dataset_test, tag)
-                output.append({'text' : f"{prompt}{gold[i]} <end_output>"})
+            prompt, tag = random.choice(self.get_prompts_runnable(sample['text'], tags = dataset_test.get_tags()))
+            gold = self.get_gold(dataset_test, tag)
+            output.append({'text' : f"{prompt}{gold[i]} <end_output>"})
 
         processed_dataset = Dataset.from_list(output)  
         return processed_dataset
