@@ -49,7 +49,7 @@ class PT_Multi_PT(PromptTechnique):
         raise TypeError("This function in multiprompt should not be used")
 
 class PT_2Time_Tagger(PT_Multi_PT) :
-    def __init__(self, fst : FewShotsTechnique , with_precision = False, plus_plus = False, prompt_template = prompt_template):
+    def __init__(self, fst : FewShotsTechnique , with_precision = False, plus_plus = False, prompt_template = prompt_template_ontonotes):
         """
         pts : a list of PromptTechnique where the input output names of the prompts should be 
                 (sentence, output), (input, output), ... , (input, output)

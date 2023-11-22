@@ -9,7 +9,7 @@ from ner.llm_ner.prompts import *
 import re
 
 class PT_GetEntities(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False ):
+    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template_ontonotes, plus_plus = False ):
         super().__init__(fst, with_precision, prompt_template, plus_plus)
 
     @staticmethod

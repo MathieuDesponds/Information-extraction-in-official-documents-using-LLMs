@@ -9,7 +9,7 @@ from ner.llm_ner.prompts import *
 
 
 class PT_Filing(PromptTechnique):
-    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template, plus_plus = False, tags = ONTONOTE5_TAGS ):
+    def __init__(self, fst : FewShotsTechnique, with_precision = True, prompt_template : dict[PromptTemplate] = prompt_template_ontonotes, plus_plus = False, tags = ONTONOTE5_TAGS ):
         super().__init__(fst, with_precision, prompt_template, plus_plus)
         self.tags = tags
     

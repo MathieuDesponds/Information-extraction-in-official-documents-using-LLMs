@@ -222,15 +222,15 @@ class LLMModel(ABC):
         results_df = pd.DataFrame([result.get_dict() for result in results])
         return results, results_df
     
-
-    def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = False, precision = None):
+    @staticmethod
+    def finetune(pt: PromptTechnique, base_model_id = "mistralai/Mistral-7B-v0.1", runs = 2000, cleaned = False, precision = None, checkpoint = None):
         processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision)
         nb_samples = len(processed_dataset)
-        output_dir = f"./llm/models/{self.base_model_name}/{pt.__str__()}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
+        output_dir = f"./llm/models/{base_model_id.split('/')[1].lower()}/{pt.__str__()}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
 
         test_size = 50
         train_size = nb_samples-test_size
-        base_model, tokenizer = load_model_tokenizer_for_training(self.base_model_id)
+        base_model, tokenizer = load_model_tokenizer_for_training(base_model_id)
         tokenized_dataset = processed_dataset.map(lambda row : tokenize_prompt(row, tokenizer))
         tokenized_train_dataset, tokenized_val_dataset = split_train_test(tokenized_dataset, train_size, test_size = test_size)
 
@@ -260,11 +260,13 @@ class LLMModel(ABC):
         )
 
         base_model.config.use_cache = False  # silence the warnings. Please re-enable for inference!
+        if checkpoint : 
+            trainer.train(resume_from_checkpoint = True)
         trainer.train()
         trainer.save_model()
 
     def load_finetuned_model(self, prompt_type, nb_samples = 2000, quantization = "Q5_0", precision = None):
-        path_to_lora = f"./llm/models/{self.base_model_name}/finetuned-{prompt_type}-{f'{precision}-' if precision else ''}{nb_samples}"
+        path_to_lora = f"./llm/models/{self.base_model_name}/{prompt_type}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
         print(path_to_lora)
         model_out = f"{path_to_lora}/model-{quantization}.gguf"
         if not os.path.exists(model_out):
