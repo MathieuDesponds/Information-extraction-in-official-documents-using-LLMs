@@ -152,7 +152,7 @@ class LLMModel(ABC):
                     res_insts = []
                     for run in range(nb_run_by_test) :
                         start_time = time.time()
-                        seed = 42# random.randint(0, 1535468)
+                        seed = [42,43,44,45,46][run]# random.randint(0, 1535468)
                         data_train, data_test = dataset_loader(seed = seed)
                         fst.set_dataset(data_train)
                         predictions = self.invoke_mulitple(data_test['text'], pt, verifier, confidence_checker, tags)

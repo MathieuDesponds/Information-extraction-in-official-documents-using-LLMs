@@ -7,7 +7,7 @@ class ConfidenceChecker() :
                                                      entities_sentence = f"""In the sentence "{sentence}" the extracted entities were "{spans}" """)
         
         model_response = model(prompt, with_full_message = False)
-        print(model_response)
+        # print(model_response)
         processed_model_response = self.process_output('{'+model_response, spans)
         return processed_model_response
     

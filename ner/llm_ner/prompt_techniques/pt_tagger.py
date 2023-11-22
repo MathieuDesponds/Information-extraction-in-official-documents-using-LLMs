@@ -105,7 +105,7 @@ class PT_Tagger(PromptTechnique):
             named_entities = ast.literal_eval(response)
         except Exception as e:
             named_entities = {}
-        output = [(ne,LETTER_TO_TAG_MAPPING[tag]) for ne, tag in named_entities.items() if tag in LETTER_TO_TAG_MAPPING]
+        output = [(ne,LETTER_TO_TAG_MAPPING[tag]) for ne, tag in named_entities.items() if isinstance(tag, str) in LETTER_TO_TAG_MAPPING]
         print(output)
         return output
 
