@@ -74,7 +74,7 @@ class LLMModel(ABC):
     
     
     def invoke(self, sentence : str, pt : PromptTechnique, verifier : Verifier, confidence_checker : ConfidenceChecker, tags):
-        all_entities, response_all= pt.run_prompt(self, sentence, verifier, confidence_checker, tags)
+        all_entities, response_all= pt.run_prompt(self, sentence, verifier, confidence_checker, tags = tags)
         return all_entities, response_all
     
     @staticmethod
@@ -106,8 +106,7 @@ class LLMModel(ABC):
                        prompt_template = prompt_template_ontonotes,
                        plus_plus = False,
                        dataset_loader = ontonote_get_test_cleaned_split,
-                       test_size = 50,
-                       tags = ['CARDINAL', 'ORDINAL', 'WORK_OF_ART', 'PERSON', 'LOC', 'DATE', 'PERCENT', 'PRODUCT', 'MONEY', 'FAC', 'TIME', 'ORG', 'QUANTITY', 'LANGUAGE', 'GPE', 'LAW', 'NORP', 'EVENT']) :
+                       test_size = 50) :
         return self.classical_test(fsts , 
                        pts,
                        nb_few_shots, 
@@ -119,7 +118,8 @@ class LLMModel(ABC):
                        prompt_template,
                        plus_plus,
                        dataset_loader = lambda seed = 42 : dataset_loader(seed = seed, test_size = test_size),
-                       tags = tags)
+                       tags = ONTONOTE5_TAGS,
+                       dataset_save_name = "ontonote5")
     
 
     def classical_test(self, 
@@ -134,7 +134,8 @@ class LLMModel(ABC):
                        prompt_template = prompt_template,
                        plus_plus = False,
                        dataset_loader = conll_get_test_cleaned_split,
-                       tags = ["PER", "ORG", "LOC", 'MISC']) :
+                       tags = ["PER", "ORG", "LOC", 'MISC'],
+                       dataset_save_name = "conll2003_cleaned") :
 
         verifier = Verifier(self, data_train) if verifier else None
         confidence_checker = ConfidenceChecker() if confidence_checker else None
@@ -151,7 +152,7 @@ class LLMModel(ABC):
                     res_insts = []
                     for run in range(nb_run_by_test) :
                         start_time = time.time()
-                        seed = random.randint(0, 1535468)
+                        seed = [42,43,44,45,46][run]# random.randint(0, 1535468)
                         data_train, data_test = dataset_loader(seed = seed)
                         fst.set_dataset(data_train)
                         predictions = self.invoke_mulitple(data_test['text'], pt, verifier, confidence_checker, tags)
@@ -170,12 +171,14 @@ class LLMModel(ABC):
                             data_train = data_train,
                             elapsed_time = elapsed_time,
                             with_precision = pt.with_precision,
+                            plus_plus = plus_plus,
                             seed = seed,
+                            tags = tags
                         ))
                         del data_test, data_train
                     results.append(ResultInstanceWithConfidenceInterval(res_insts))
                     if save :
-                        save_result_instance_with_CI(results[-1])
+                        save_result_instance_with_CI(results[-1], dataset = dataset_save_name)
                     fst.save_few_shots()
         results_df = pd.DataFrame([result.get_dict() for result in results])
         return results, results_df
@@ -219,15 +222,15 @@ class LLMModel(ABC):
         results_df = pd.DataFrame([result.get_dict() for result in results])
         return results, results_df
     
-
-    def finetune(self, pt: PromptTechnique, runs = 2000, cleaned = True, precision = None):
+    @staticmethod
+    def finetune(pt: PromptTechnique, base_model_id = "mistralai/Mistral-7B-v0.1", runs = 2000, cleaned = False, precision = None, checkpoint = None):
         processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision)
         nb_samples = len(processed_dataset)
-        output_dir = f"./llm/models/{self.base_model_name}{f'-{precision}' if precision else ''}/finetuned-{pt.__str__()}-{nb_samples}"
+        output_dir = f"./llm/models/{base_model_id.split('/')[1].lower()}/{pt.__str__()}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
 
         test_size = 50
         train_size = nb_samples-test_size
-        base_model, tokenizer = load_model_tokenizer_for_training(self.base_model_id)
+        base_model, tokenizer = load_model_tokenizer_for_training(base_model_id)
         tokenized_dataset = processed_dataset.map(lambda row : tokenize_prompt(row, tokenizer))
         tokenized_train_dataset, tokenized_val_dataset = split_train_test(tokenized_dataset, train_size, test_size = test_size)
 
@@ -246,9 +249,9 @@ class LLMModel(ABC):
                 optim="paged_adamw_8bit",
                 logging_dir="./logs",        # Directory for storing logs
                 save_strategy="steps",       # Save the model checkpoint every logging step
-                save_steps=runs/4//5,                # Save checkpoints every 50 steps
+                save_steps=runs/4//4,                # Save checkpoints every 50 steps
                 evaluation_strategy="steps", # Evaluate the model every logging step
-                eval_steps=runs/4//10,               # Evaluate and save checkpoints every 50 steps
+                eval_steps=runs/4//8,               # Evaluate and save checkpoints every 50 steps
                 do_eval=True,                # Perform evaluation at the end of training
                 report_to="wandb",           # Comment this out if you don't want to use weights & baises
                 run_name=f"finetuned-{pt.__str__}-{nb_samples}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}"          # Name of the W&B run (optional)
@@ -257,11 +260,13 @@ class LLMModel(ABC):
         )
 
         base_model.config.use_cache = False  # silence the warnings. Please re-enable for inference!
+        if checkpoint : 
+            trainer.train(resume_from_checkpoint = True)
         trainer.train()
         trainer.save_model()
 
     def load_finetuned_model(self, prompt_type, nb_samples = 2000, quantization = "Q5_0", precision = None):
-        path_to_lora = f"./llm/models/{self.base_model_name}/finetuned-{prompt_type}-{f'{precision}-' if precision else ''}{nb_samples}"
+        path_to_lora = f"./llm/models/{self.base_model_name}/{prompt_type}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
         print(path_to_lora)
         model_out = f"{path_to_lora}/model-{quantization}.gguf"
         if not os.path.exists(model_out):

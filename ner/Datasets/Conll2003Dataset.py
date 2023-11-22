@@ -14,6 +14,9 @@ CONLL2003_TAG_MAPPING = {
             7: 'B-MISC',
             8: 'I-MISC'
         }
+CONLL2003_TAGS =  ['PER', 'ORG', 'LOC', 'MISC']
+
+
 class Conll2003Dataset(MyDataset):
     def __init__(self, dataset = None, split = "test", cleaned = False):
         self.split = split

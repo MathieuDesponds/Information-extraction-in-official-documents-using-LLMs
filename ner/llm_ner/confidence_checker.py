@@ -7,7 +7,7 @@ class ConfidenceChecker() :
                                                      entities_sentence = f"""In the sentence "{sentence}" the extracted entities were "{spans}" """)
         
         model_response = model(prompt, with_full_message = False)
-        print(model_response)
+        # print(model_response)
         processed_model_response = self.process_output('{'+model_response, spans)
         return processed_model_response
     
@@ -17,8 +17,9 @@ class ConfidenceChecker() :
 
 
     def process_output(self, response : str, spans : list):
+        response += '}'
         start_index = response.find('{')  # Find the opening curly brace
-        end_index = response.rfind('}')    # Find the closing curly brace
+        end_index = response.find('}')    # Find the closing curly brace
         
         if start_index != -1 and end_index != -1:
             response = response[start_index:end_index+1]

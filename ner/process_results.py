@@ -94,7 +94,6 @@ def get_metrics(results, gold):
 
 def get_metrics_all(results, gold, tags = ['LOC', 'PER', 'ORG', 'MISC'], average = 'weighted', with_y_conf = False):
     y_true, y_pred, y_conf, all_nes = [], [], [], []
-    print(f"results : {results}")
     for i in range(len(results)):
         gold_nes = {ne[0] :ne[1] for ne in gold[i]}
         res_sanitized = [n for n in results[i] if n[1] != 'None']
