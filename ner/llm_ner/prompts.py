@@ -56,6 +56,65 @@ Output a json with the named entities as keys and the tag as values.
 
 }
 
+
+prompt_raw = lambda plus_plus : {
+    "@@##" : PromptTemplate(
+        input_variables=['tag', 'sentence', 'few_shots', 'precision'],
+        template = """{few_shots}{precision}### SYSTEM : Your task is to extract all the named entities that are of type {tag} by writting '@@' at the begining and '##' at the end of all these entities.
+### USER : <start_input> {sentence} <end_input>
+### ASSISTANT : <start_output> """),
+
+    "discussion" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """{few_shots}{precisions}### SYSTEM : Your task is to extract all the named entities in a python list of tuples. In each tuple, you have a the named entity and its own tag that is part of the OntoNote5 tags.
+### USER : <start_input> {sentence} <end_input>
+### ASSISTANT : <start_output> """),
+
+    "filing" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """{few_shots}{precisions}### SYSTEM : Your task is to extract all the named entities in a json containing all the tags as values and a list of named entities that are of this type of tag as value.
+### INPUT : <start_input> {sentence} <end_input>
+### OUTPUT : <start_output> """),
+
+    "wrapper" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """{few_shots}{precisions}### USER : Your task is to rewrite the sentence that I gave you and wrap all the named entities with "<[tag]>" and "</[tag]>" where "[tag]" is one of the 18 tags of OntoNote5.
+### USER : <start_input> {sentence} <end_input>
+### ASSISTANT : <start_output> """),
+
+    "get-entities" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """{few_shots}{precisions}### SYSTEM : Your task is to extract all the named entities and output a python list that contains all the named entities in the sentence that can be tagged with one of the of the OntoNote5 tags.
+### USER : <start_input> {sentence} <end_input>
+### ASSISTANT : <start_output> """),
+
+    "tagger" : PromptTemplate(
+        input_variables=['entities_sentence', 'few_shots', 'precisions'],
+        template = """{few_shots}{precisions}### SYSTEM :Your task is to tag all the named entites that were extracted from a sentence in a json with the named entities as keys and the tag as values with the following character :  
+    '1' for 'CARDINAL' entities,
+    '2' for 'ORDINAL' entities,
+    '3' for 'WORK_OF_ART' entities,
+    '4' for 'PERSON' entities,
+    '5' for 'LOC' entities,
+    '6' for 'DATE' entities,
+    '7' for 'PERCENT' entities,
+    '8' for 'PRODUCT' entities,
+    '9' for 'MONEY' entities,
+    '0' for 'FAC' entities,
+    'A' for 'TIME' entities,
+    'B' for 'ORG' entities,
+    'C' for 'QUANTITY' entities,
+    'D' for 'LANGUAGE' entities,
+    'E' for 'GPE' entities,
+    'F' for 'LAW' entities,
+    'G' for 'NORP' entities,
+    'H' for 'EVENT' entities
+### USER : <start_input> "{entities_sentence}" <end_input>
+### ASSISTANT : <start_output> """),
+
+}
+
+
 prompt_template_ontonotes = lambda plus_plus : {
     "@@##" : PromptTemplate(
         input_variables=['tag', 'sentence', 'few_shots', 'precision'],
