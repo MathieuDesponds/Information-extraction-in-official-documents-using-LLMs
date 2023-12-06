@@ -7,3 +7,5 @@ llm/models/*
 ner/saves/results/conll2003_not_cleaned/*
 
 wandb/
+
+.venv/
