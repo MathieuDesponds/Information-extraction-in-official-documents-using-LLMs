@@ -1,0 +1,8 @@
+tqdm
+datasets
+nltk
+spacy
+langchain
+
+transformers
+sentence_transformers
