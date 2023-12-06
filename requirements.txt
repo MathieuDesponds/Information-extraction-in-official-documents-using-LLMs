@@ -1,8 +1,17 @@
 tqdm
+matplotlib
+
 datasets
 nltk
 spacy
 langchain
 
+seaborn
 transformers
 sentence_transformers
+accelerate
+peft
+bitsandbytes
+
+wandb
+llama-cpp-python
