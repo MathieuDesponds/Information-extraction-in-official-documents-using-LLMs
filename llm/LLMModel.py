@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-import logging
+import torch
 import time
 from typing import Any
 
@@ -55,7 +55,8 @@ class LLMModel(ABC):
             model_path = gguf_model_path
         else :
             model_path = f"llm/models/{self.base_model_name}/{self.base_model_name}.{quantization}.gguf"
-
+        with torch.no_grad():
+            torch.cuda.empty_cache()
         return self.llm_loader.get_llm_instance(model_path)
         
     
@@ -265,9 +266,8 @@ class LLMModel(ABC):
         trainer.train()
         trainer.save_model()
 
-    def load_finetuned_model(self, prompt_type, nb_samples = 2000, quantization = "Q5_0", precision = None):
-        path_to_lora = f"./llm/models/{self.base_model_name}/{prompt_type}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
-        print(path_to_lora)
+    def load_finetuned_model(self,pt, prompt_type_name, nb_samples = 2000, quantization = "Q5_0", precision = None):
+        path_to_lora = f"./llm/models/{self.base_model_name}/{pt.__str__()}-{prompt_type_name}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
         model_out = f"{path_to_lora}/model-{quantization}.gguf"
         if not os.path.exists(model_out):
             model_type = 'llama' #llama, starcoder, falcon, baichuan, or gptneox
@@ -285,7 +285,7 @@ class LLMModel(ABC):
 
             run_command(command)
 
-        self.name = f"{self.name}-ft-{prompt_type}-{nb_samples}-{quantization}{f'-{precision}' if precision else ''}"
+        self.name = f"{self.name}-ft-{prompt_type_name}-{nb_samples}-{quantization}{f'-{precision}' if precision else ''}"
         return self.get_model(gguf_model_path =  model_out)
 
 
