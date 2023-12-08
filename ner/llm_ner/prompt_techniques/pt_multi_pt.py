@@ -3,7 +3,7 @@ from ner.Datasets.MyDataset import MyDataset
 from ner.llm_ner.confidence_checker import ConfidenceChecker
 from ner.llm_ner.prompt_techniques.pt_get_entities import PT_GetEntities
 from ner.llm_ner.prompt_techniques.pt_tagger import PT_Tagger
-
+from datasets import Dataset
 from ner.llm_ner.few_shots_techniques import *
 
 from ner.llm_ner.prompt_techniques.pt_abstract import PromptTechnique
@@ -47,6 +47,27 @@ class PT_Multi_PT(PromptTechnique):
         
     def get_gold(self, dataset : MyDataset, tag : str) -> list[str]:
         raise TypeError("This function in multiprompt should not be used")
+
+    def process_dataset_for_finetuning(self, precision = "", 
+                                       dataset : MyDataset = None, 
+                                       fst : FewShotsTechnique = FST_Sentence,
+                                       runs = 2000, 
+                                       save = True, 
+                                       test_size = 200, 
+                                       nb_few_shots = [1,2,3,4]):
+        for pt in self.pts :
+            pt.process_dataset_for_finetuning(precision, dataset, fst, runs, save, test_size, nb_few_shots)
+    
+    def load_processed_dataset(self, runs, cleaned = True, precision = None, dataset = "ontonote5"):
+        datasets = [pt.load_processed_dataset(runs, cleaned, precision, dataset) for pt in self.pts]
+
+        multi = []
+        for i in range(len(datasets[0])):
+            for dataset in datasets :
+                multi.append(dataset[i])
+        
+        return Dataset.from_list(multi)
+            
 
 class PT_2Time_Tagger(PT_Multi_PT) :
     def __init__(self, fst : FewShotsTechnique , with_precision = False, plus_plus = False, prompt_template = prompt_template_ontonotes):
