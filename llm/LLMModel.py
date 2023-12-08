@@ -153,7 +153,7 @@ class LLMModel(ABC):
                     res_insts = []
                     for run in range(nb_run_by_test) :
                         start_time = time.time()
-                        seed = [42,43,44,45,46][run]# random.randint(0, 1535468)
+                        seed = [43,44,45,46][run]# random.randint(0, 1535468)
                         data_train, data_test = dataset_loader(seed = seed)
                         fst.set_dataset(data_train)
                         predictions = self.invoke_mulitple(data_test['text'], pt, verifier, confidence_checker, tags)
@@ -271,7 +271,7 @@ class LLMModel(ABC):
         model_out = f"{path_to_lora}/model-{quantization}.gguf"
         if not os.path.exists(model_out):
             model_type = 'llama' #llama, starcoder, falcon, baichuan, or gptneox
-            command = f"python3 ../llama.cpp/convert-lora-to-ggml.py {path_to_lora}"
+            command = f"python3 llama.cpp/convert-lora-to-ggml.py {path_to_lora}"
             run_command(command)
 
 
@@ -281,7 +281,7 @@ class LLMModel(ABC):
             # model_out = f"{path_to_lora}/llama-13b-finetuned-2000-v0.gguf"
             # lora_scaled = f"{path_to_lora}/ggml-adapter-model.bin"
 
-            command = f"../llama.cpp/export-lora --model-base {model_base} --model-out {model_out} --lora-scaled {lora_scaled} 1.0"
+            command = f"llama.cpp/export-lora --model-base {model_base} --model-out {model_out} --lora-scaled {lora_scaled} 1.0"
 
             run_command(command)
 
