@@ -23,7 +23,7 @@ class FewShotsTechnique(ABC) :
         
     def set_dataset(self, dataset : MyDataset):
         self.training_dataset = dataset
-
+        
     @abstractmethod
     def get_nearest_neighbors(self, sentence : str)-> list[str]:
         pass
