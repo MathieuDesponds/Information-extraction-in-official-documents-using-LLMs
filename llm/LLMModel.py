@@ -225,7 +225,7 @@ class LLMModel(ABC):
         return results, results_df
     
     @staticmethod
-    def finetune(pt: PromptTechnique, base_model_id = "mistralai/Mistral-7B-v0.1", runs = 2000, cleaned = False, precision = None, checkpoint = None, dataset = "conll2003_cleaned"):
+    def finetune(pt: PromptTechnique, dataset = None, base_model_id = "mistralai/Mistral-7B-v0.1", runs = 2000, cleaned = False, precision = None, checkpoint = None):
         processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision, dataset = dataset)
         nb_samples = len(processed_dataset)
         output_dir = f"./llm/models/{base_model_id.split('/')[1].lower()}/{pt.__str__()}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"

@@ -29,7 +29,6 @@ def show_results_ontonote(with_ft = False):
 
     # Convert the f1_conf_inter column to a tuple of floats
     df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
-
     # Set up the plot
     fig, ax = plt.subplots()
 
