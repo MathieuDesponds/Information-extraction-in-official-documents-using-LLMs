@@ -7,7 +7,7 @@ from ner.llm_ner.ResultInstance import load_all_results
 from ner.utils import get_student_conf_interval
 
 def show_results_ontonote(with_ft = False):
-    df_results = load_all_results(root_directory = "ner/saves/results/ontonote5/mistral-7b-v0.1/")
+    df_results = load_all_results(root_directory = "ner/saves/results/ontonote5/")
     if with_ft:
         df_to_show = df_results[df_results['model'].str.contains('ft')]
     else : 
@@ -15,8 +15,8 @@ def show_results_ontonote(with_ft = False):
     
     df_to_show = df_to_show[['f1_mean', 'f1_conf_inter', 'prompt_technique',
         'few_shot_tecnique', 'nb_few_shots', 'precision', 'plus_plus']]
-
     df_res = df_to_show[df_to_show['precision'] == '300']
+    df_res = df_res[df_res['nb_few_shots'].isin( [0,3])]
     df_res['tech_name'] = df_res.apply(lambda row :f"With {row['nb_few_shots']} few_shots {'and ++' if row['plus_plus']  else ''}", axis = 1)
     df_res
 
