@@ -74,7 +74,7 @@ def show_diff_plus_plus(with_ft = False):
     pivot_df['result'] = pivot_df[True] - pivot_df[False]
     mean, conf = get_student_conf_interval(list(pivot_df['result']))
     # Display the result
-    return f"The mean difference between plus plus and raw is \n     {mean} with confidence 95% student interval {conf}",pivot_df[['prompt_technique',
+    return f"The mean difference between results that had a detailled explenation and thos that did not is \n     {mean} with confidence 95% student interval {conf}",pivot_df[['prompt_technique',
         'few_shot_tecnique', 'nb_few_shots', 'precision', 'result', True, False]]
 
 def show_diff_few_shots(with_ft = False):
@@ -98,16 +98,16 @@ def show_diff_ft(with_few_shots = False):
         df_to_show = df_results[df_results['nb_few_shots'] == 0]
     df_to_show = df_to_show[df_to_show['precision'] == '300']
     df_to_show['with_ft'] = df_to_show['model'].str.contains('ft')
-    df_to_show = df_to_show[['f1_mean', 'f1_conf_inter', 'prompt_technique', 'nb_few_shots', 'precision', 'plus_plus']]
+    df_to_show = df_to_show[['f1_mean', 'f1_conf_inter', 'prompt_technique', 'nb_few_shots', 'precision', 'plus_plus', 'with_ft']]
     # Pivot the DataFrame to have 'True' and 'False' types as columns
-    pivot_df = df_to_show.pivot(index=['prompt_technique',  'plus_plus', 'precision'], columns='with_ft', values='f1_mean').reset_index()
+    pivot_df = df_to_show.pivot(index=['prompt_technique',  'plus_plus','nb_few_shots'], columns='with_ft', values='f1_mean').reset_index()
 
     # Subtract 'False' from 'True'
     pivot_df['result'] = pivot_df[True] - pivot_df[False]
     mean, conf = get_student_conf_interval(list(pivot_df['result']))
     # Display the result
-    return f"The mean difference between results that have more detaillled explenations fo the task and those that do not is \n     {mean} with confidence 95% student interval {conf}",pivot_df[['prompt_technique',
-        'plus_plus', 'precision', 'result', True, False]]
+    return f"The mean difference between results that used a finetuned model and those that do not is \n     {mean} with confidence 95% student interval {conf}",pivot_df[['prompt_technique',
+        'plus_plus', 'nb_few_shots', 'result', True, False]]
 
 
 def show_results_few_shots():
