@@ -100,7 +100,7 @@ class PT_Tagger(PromptTechnique):
         else:
             response ="{}"
     
-        print(f"response of tagger : {response}")
+        # print(f"response of tagger : {response}")
         try:
             named_entities = ast.literal_eval(response)
         except Exception as e:
@@ -108,7 +108,7 @@ class PT_Tagger(PromptTechnique):
         if not isinstance(named_entities, dict):
             named_entities = {}
         output = [(ne,LETTER_TO_TAG_MAPPING[tag]) for ne, tag in named_entities.items() if isinstance(tag, str) in LETTER_TO_TAG_MAPPING]
-        print(output)
+        # print(output)
         return output
 
 
