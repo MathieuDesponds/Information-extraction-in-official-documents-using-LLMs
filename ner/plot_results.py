@@ -6,7 +6,8 @@ import ast
 from ner.llm_ner.ResultInstance import load_all_results
 from ner.utils import get_student_conf_interval
 
-def show_results_ontonote(with_ft = False):
+
+def get_results(with_ft):
     df_results = load_all_results(root_directory = "ner/saves/results/ontonote5/")
     if with_ft:
         df_to_show = df_results[df_results['model'].str.contains('ft')]
@@ -17,6 +18,11 @@ def show_results_ontonote(with_ft = False):
         'few_shot_tecnique', 'nb_few_shots', 'precision', 'plus_plus']]
     df_res = df_to_show[df_to_show['precision'] == '300']
     df_res = df_res[df_res['nb_few_shots'].isin( [0,3])]
+    return df_res
+
+
+def show_results_ontonote(with_ft = False):
+    df_res = get_results(with_ft)
     df_res['tech_name'] = df_res.apply(lambda row :f"With {row['nb_few_shots']} few_shots {'and ++' if row['plus_plus']  else ''}", axis = 1)
     df_res
 
@@ -59,14 +65,8 @@ def show_results_ontonote(with_ft = False):
     plt.show()
 
 def show_diff_plus_plus(with_ft = False):
-    df_results = load_all_results(root_directory = "ner/saves/results/ontonote5/mistral-7b-v0.1/")
-    if with_ft:
-        df_to_show = df_results[df_results['model'].str.contains('ft')]
-    else : 
-        df_to_show = df_results[~df_results['model'].str.contains('ft')]
-    df_to_show = df_to_show[df_to_show['precision'] == '300']
-    df_to_show = df_to_show[['f1_mean', 'f1_conf_inter', 'prompt_technique',
-        'few_shot_tecnique', 'nb_few_shots', 'precision', 'plus_plus']]
+
+    df_to_show = get_results(with_ft)
     # Pivot the DataFrame to have 'True' and 'False' types as columns
     pivot_df = df_to_show.pivot(index=['prompt_technique',
         'few_shot_tecnique', 'nb_few_shots', 'precision'], columns='plus_plus', values='f1_mean').reset_index()
@@ -75,17 +75,12 @@ def show_diff_plus_plus(with_ft = False):
     pivot_df['result'] = pivot_df[True] - pivot_df[False]
     mean, conf = get_student_conf_interval(list(pivot_df['result']))
     # Display the result
-    return f"The mean difference between plus plus and raw is {mean} with confidence 95% student interval {conf}",pivot_df[['prompt_technique',
+    return f"The mean difference between plus plus and raw is \n     {mean} with confidence 95% student interval {conf}",pivot_df[['prompt_technique',
         'few_shot_tecnique', 'nb_few_shots', 'precision', 'result', True, False]]
 
 def show_diff_few_shots(with_ft = False):
-    df_results = load_all_results(root_directory = "ner/saves/results/ontonote5/mistral-7b-v0.1/")
-    if with_ft:
-        df_to_show = df_results[df_results['model'].str.contains('ft')]
-    else : 
-        df_to_show = df_results[~df_results['model'].str.contains('ft')]
-    df_to_show = df_to_show[df_to_show['precision'] == '300']
-    df_to_show = df_to_show[['f1_mean', 'f1_conf_inter', 'prompt_technique', 'nb_few_shots', 'precision', 'plus_plus']]
+    df_to_show = get_results(with_ft)
+    
     # Pivot the DataFrame to have 'True' and 'False' types as columns
     pivot_df = df_to_show.pivot(index=['prompt_technique', 'plus_plus', 'precision'], columns='nb_few_shots', values='f1_mean').reset_index()
 
@@ -93,7 +88,7 @@ def show_diff_few_shots(with_ft = False):
     pivot_df['result'] = pivot_df[3] - pivot_df[0]
     mean, conf = get_student_conf_interval(list(pivot_df['result']))
     # Display the result
-    return f"The mean difference between plus plus and raw is {mean} with confidence 95% student interval {conf}",pivot_df[['prompt_technique',
+    return f"The mean difference between results that uses few_shots and those that do not and raw is \n     {mean} with confidence 95% student interval {conf}",pivot_df[['prompt_technique',
     'plus_plus', 'precision', 'result', 3, 0]]
 
 def show_diff_ft(with_few_shots = False):
@@ -112,7 +107,7 @@ def show_diff_ft(with_few_shots = False):
     pivot_df['result'] = pivot_df[True] - pivot_df[False]
     mean, conf = get_student_conf_interval(list(pivot_df['result']))
     # Display the result
-    return f"The mean difference between plus plus and raw is {mean} with confidence 95% student interval {conf}",pivot_df[['prompt_technique',
+    return f"The mean difference between results that have more detaillled explenations fo the task and those that do not is \n     {mean} with confidence 95% student interval {conf}",pivot_df[['prompt_technique',
     'plus_plus', 'precision', 'result', True, False]]
 
 
