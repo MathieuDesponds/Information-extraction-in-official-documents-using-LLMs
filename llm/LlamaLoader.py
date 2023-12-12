@@ -38,7 +38,7 @@ class Llama_LlamaCpp(LlamaLoader) :
         # Make sure the model path is correct for your system!
         llm = Llama(
             model_path= model_path, #"./llama_ft/llama2-7b-llamma-ner-finetune/checkpoint-375/ggml-adapter-model.bin",
-            n_ctx = 2048,
+            n_ctx = 4096,
             n_batch=512,
             logits_all= True,
             n_gpu_layers=100,
@@ -76,7 +76,7 @@ class Llama_Langchain(LlamaLoader) :
             model_path= model_path, #"./llama_ft/llama2-7b-llamma-ner-finetune/checkpoint-375/ggml-adapter-model.bin",#
             temperature=self.temperature,
             max_tokens=self.max_tokens,
-            n_ctx = 2048,
+            n_ctx = 4096,
             seed = 42,
             n_batch=512,
             n_threads=12,
