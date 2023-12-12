@@ -56,6 +56,49 @@ Output a json with the named entities as keys and the tag as values.
 
 }
 
+prompt_raw_conll = lambda plus_plus : {
+    "@@##" : PromptTemplate(
+        input_variables=['tag', 'sentence', 'few_shots', 'precision'],
+        template = """{few_shots}{precision}### SYSTEM : Your task is to extract all the named entities that are of type {tag} by writting '@@' at the begining and '##' at the end of all these entities.
+### USER : <start_input> {sentence} <end_input>
+### ASSISTANT : <start_output> """),
+
+    "discussion" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """{few_shots}{precisions}### SYSTEM : Your task is to extract all the named entities in a python list of tuples. In each tuple, you have a the named entity and its own tag that is part of the Conll2003 Dataset tags.
+### USER : <start_input> {sentence} <end_input>
+### ASSISTANT : <start_output> """),
+
+    "filing" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """{few_shots}{precisions}### SYSTEM : Your task is to extract all the named entities in a json containing all the tags as values and a list of named entities that are of this type of tag as value.
+### INPUT : <start_input> {sentence} <end_input>
+### OUTPUT : <start_output> """),
+
+    "wrapper" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """{few_shots}{precisions}### USER : Your task is to rewrite the sentence that I gave you and wrap all the named entities with "<[tag]>" and "</[tag]>" where "[tag]" is one of the 18 tags of Conll2003 Dataset.
+### USER : <start_input> {sentence} <end_input>
+### ASSISTANT : <start_output> """),
+
+    "get-entities" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """{few_shots}{precisions}### SYSTEM : Your task is to extract all the named entities and output a python list that contains all the named entities in the sentence that can be tagged with one of the of the Conll2003 Dataset tags.
+### USER : <start_input> {sentence} <end_input>
+### ASSISTANT : <start_output> """),
+
+    "tagger" : PromptTemplate(
+        input_variables=['entities_sentence', 'few_shots', 'precisions'],
+        template = """{few_shots}{precisions}### SYSTEM :Your task is to tag all the named entites that were extracted from a sentence in a json with the named entities as keys and the tag as values with the following character :  
+    'P' for person entities, 
+    'O' for organization entities, 
+    'L' for location entities,
+    'M' for miscallaneous entities or
+    'N' is it is none of the above.
+### USER : <start_input> "{entities_sentence}" <end_input>
+### ASSISTANT : <start_output> """),
+
+}
 
 prompt_raw = lambda plus_plus : {
     "@@##" : PromptTemplate(
