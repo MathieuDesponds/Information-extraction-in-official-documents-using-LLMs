@@ -7,8 +7,8 @@ from datasets import Dataset
 
 
 # Download the NLTK data (if not already downloaded)
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
+# nltk.download('punkt')
+# nltk.download('averaged_perceptron_tagger')
 
 # Define a function to check if a sentence contains verbs
 def contains_verbs(text):

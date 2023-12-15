@@ -21,20 +21,20 @@ import numpy as np
 # if not model_path_chat :
 #     logging.error("MODEL_PATH environment variable not set")
 #     exit(1)
-language = "en"
-# Download the stopwords dataset if you haven't already
-nltk.download('stopwords')
-# Define a set of stopwords and punctuation
-punctuation = set(string.punctuation)
-if language == 'en' :
-    model_name_ner = "dslim/bert-base-NER"
-    stop_words = set(stopwords.words('english'))
-elif language == 'fr' :
-    model_name_ner = "Jean-Baptiste/camembert-ner"
-    stop_words = set(stopwords.words('french'))
-tokenizer_ner = AutoTokenizer.from_pretrained(model_name_ner)
-model_ner = AutoModelForTokenClassification.from_pretrained(model_name_ner)
-stop_words.update(['[CLS]', '[SEP]'])
+# language = "en"
+# # Download the stopwords dataset if you haven't already
+# nltk.download('stopwords')
+# # Define a set of stopwords and punctuation
+# punctuation = set(string.punctuation)
+# if language == 'en' :
+#     model_name_ner = "dslim/bert-base-NER"
+#     stop_words = set(stopwords.words('english'))
+# elif language == 'fr' :
+#     model_name_ner = "Jean-Baptiste/camembert-ner"
+#     stop_words = set(stopwords.words('french'))
+# tokenizer_ner = AutoTokenizer.from_pretrained(model_name_ner)
+# model_ner = AutoModelForTokenClassification.from_pretrained(model_name_ner)
+# stop_words.update(['[CLS]', '[SEP]'])
 
 sentence_transformer = SentenceTransformer('sentence-transformers/paraphrase-multilingual-mpnet-base-v2')
 

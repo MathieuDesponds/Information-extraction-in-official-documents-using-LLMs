@@ -136,7 +136,6 @@ class MyDataset():
     @staticmethod
     def my_load_dataset(dataset : 'MyDataset', split = 'test', cleaned = None, length =1588):
         path = f"./ner/saves/datasets/{dataset.name()}_{split}{'_cleaned' if cleaned else ''}_{length}.pkl"
-        print(path)
         return load(path)
 
 def save_dataset(dataset : 'MyDataset'):
