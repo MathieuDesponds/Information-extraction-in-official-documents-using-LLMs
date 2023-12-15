@@ -78,6 +78,7 @@ class PromptTechnique(ABC):
 
     def get_few_shots(self, sentence : str, tag : str, nearest_neighbors : list)-> str:
         nearest_neighbors = self.process_nearest_neighbors(nearest_neighbors, tag)
+        nearest_neighbors = [nn for nn in nearest_neighbors if '{' not in nn['text'] and '}' not in nn['text']]
         if nearest_neighbors :
             return """### ASSISTANT : Can you provide me examples ?  
 ### USER : There are examples : \n""" + few_shot_prompt(nearest_neighbors).format()+'\n'

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
-import logging
+import torch
 import time
 from typing import Any
 
@@ -26,7 +26,7 @@ from ner.llm_ner.prompt_techniques.pt_multi_pt import PT_Multi_PT, PT_2Time_Tagg
 from ner.llm_ner.prompt_techniques.pt_tagger import PT_Tagger
 from ner.llm_ner.prompt_techniques.pt_get_entities import PT_GetEntities
 
-from ner.llm_ner.llm_finetune import load_model_tokenizer_for_training, split_train_test, tokenize_prompt
+from ner.llm_ner.llm_finetune import load_model_tokenizer_for_inference, load_model_tokenizer_for_training, split_train_test, tokenize_prompt
 
 from ner.utils import run_command, latex_escape
 from ner.llm_ner.prompts import prompt_template, prompt_template_ontonotes
@@ -34,31 +34,42 @@ from ner.llm_ner.prompts import prompt_template, prompt_template_ontonotes
 from llm.LlamaLoader import LlamaLoader, Llama_LlamaCpp, Llama_Langchain
 
 class LLMModel(ABC):
-    def __init__(self, base_model_id, base_model_name, check_nb_tokens = True, max_tokens = 256, quantization = "Q5_0", llm_loader : LlamaLoader = None) -> None:
+    def __init__(self, base_model_id, 
+                 base_model_name, 
+                 check_nb_tokens = True, 
+                 max_tokens = 256, 
+                 quantization = "Q5_0", 
+                 llm_loader : LlamaLoader = None, 
+                 without_model = False,
+                 lora_path = None) -> None:
         self.base_model_id = base_model_id
         self.base_model_name = base_model_name.lower()
         self.name = self.base_model_name
 
         self.max_tokens = max_tokens
-        
         if not llm_loader :
-            llm_loader = Llama_Langchain()
-        self.llm_loader = llm_loader
-        self.model : LlamaLoader = self.get_model(quantization = quantization)
+            llm_loader = Llama_LlamaCpp
+        self.llm_loader = llm_loader()
+        
+        if not without_model :
+            self.model : LlamaLoader = self.get_model(quantization = quantization, lora_path = lora_path)
         self.check_nb_tokens = check_nb_tokens
         if check_nb_tokens :
             self.nlp = spacy.load("en_core_web_sm")  # Load a spaCy language model
             
     
-    def get_model(self, quantization = 'Q5_0', gguf_model_path = ""):
+    def get_model(self, quantization = 'Q5_0', gguf_model_path = "" ,lora_path = None):
         if gguf_model_path :
             model_path = gguf_model_path
         else :
             model_path = f"llm/models/{self.base_model_name}/{self.base_model_name}.{quantization}.gguf"
-
-        return self.llm_loader.get_llm_instance(model_path)
         
-    
+        self.model = self.llm_loader.get_llm_instance(model_path = model_path, lora_path= lora_path)
+        with torch.no_grad():
+            torch.cuda.empty_cache()
+        return self.model
+        
+
     def __str__(self) -> str:
         return self.name
 
@@ -152,7 +163,7 @@ class LLMModel(ABC):
                     res_insts = []
                     for run in range(nb_run_by_test) :
                         start_time = time.time()
-                        seed = [42,43,44,45,46][run]# random.randint(0, 1535468)
+                        seed = [45, 46, 43, 42,41][run]# random.randint(0, 1535468)
                         data_train, data_test = dataset_loader(seed = seed)
                         fst.set_dataset(data_train)
                         predictions = self.invoke_mulitple(data_test['text'], pt, verifier, confidence_checker, tags)
@@ -223,11 +234,10 @@ class LLMModel(ABC):
         return results, results_df
     
     @staticmethod
-    def finetune(pt: PromptTechnique, base_model_id = "mistralai/Mistral-7B-v0.1", runs = 2000, cleaned = False, precision = None, checkpoint = None):
-        processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision)
+    def finetune(pt: PromptTechnique, dataset = None, base_model_id = "mistralai/Mistral-7B-v0.1", runs = 2000, cleaned = False, precision = None, checkpoint = None):
+        processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision, dataset = dataset)
         nb_samples = len(processed_dataset)
         output_dir = f"./llm/models/{base_model_id.split('/')[1].lower()}/{pt.__str__()}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
-
         test_size = 50
         train_size = nb_samples-test_size
         base_model, tokenizer = load_model_tokenizer_for_training(base_model_id)
@@ -253,7 +263,7 @@ class LLMModel(ABC):
                 evaluation_strategy="steps", # Evaluate the model every logging step
                 eval_steps=runs/4//8,               # Evaluate and save checkpoints every 50 steps
                 do_eval=True,                # Perform evaluation at the end of training
-                report_to="wandb",           # Comment this out if you don't want to use weights & baises
+                # report_to="wandb",           # Comment this out if you don't want to use weights & baises
                 run_name=f"finetuned-{pt.__str__}-{nb_samples}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}"          # Name of the W&B run (optional)
             ),
             data_collator=transformers.DataCollatorForLanguageModeling(tokenizer, mlm=False),
@@ -265,13 +275,14 @@ class LLMModel(ABC):
         trainer.train()
         trainer.save_model()
 
-    def load_finetuned_model(self, prompt_type, nb_samples = 2000, quantization = "Q5_0", precision = None):
-        path_to_lora = f"./llm/models/{self.base_model_name}/{prompt_type}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
-        print(path_to_lora)
+    def load_finetuned_model(self,pt, prompt_type_name, nb_samples = 2000, quantization = "Q5_0", precision = None):
+        path_to_lora = f"./llm/models/{self.base_model_name}/{pt.__str__()}-{prompt_type_name}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
         model_out = f"{path_to_lora}/model-{quantization}.gguf"
+
         if not os.path.exists(model_out):
             model_type = 'llama' #llama, starcoder, falcon, baichuan, or gptneox
-            command = f"python3 ../llama.cpp/convert-lora-to-ggml.py {path_to_lora}"
+            command = f"python3 llama.cpp/convert-lora-to-ggml.py {path_to_lora}"
+            print(command)
             run_command(command)
 
 
@@ -281,17 +292,18 @@ class LLMModel(ABC):
             # model_out = f"{path_to_lora}/llama-13b-finetuned-2000-v0.gguf"
             # lora_scaled = f"{path_to_lora}/ggml-adapter-model.bin"
 
-            command = f"../llama.cpp/export-lora --model-base {model_base} --model-out {model_out} --lora-scaled {lora_scaled} 1.0"
+            command = f"llama.cpp/export-lora --model-base {model_base} --model-out {model_out} --lora-scaled {lora_scaled} 1.0"
+            print(command)
 
             run_command(command)
 
-        self.name = f"{self.name}-ft-{prompt_type}-{nb_samples}-{quantization}{f'-{precision}' if precision else ''}"
-        return self.get_model(gguf_model_path =  model_out)
-
+        self.name = f"{self.base_model_name}-ft-{prompt_type_name}-{nb_samples}-{quantization}{f'-{precision}' if precision else ''}"
+        self.get_model(gguf_model_path =  model_out)
+        return self.model
 
 class Llama13b(LLMModel):
-    def __init__(self, base_model_id = "meta-llama/Llama-2-13b-hf", base_model_name = "Llama-2-13b", llm_loader = None) -> None:
-        super().__init__(base_model_id, base_model_name, llm_loader=llm_loader)
+    def __init__(self, base_model_id = "meta-llama/Llama-2-13b-hf", base_model_name = "Llama-2-13b", llm_loader = None, without_model = False) -> None:
+        super().__init__(base_model_id, base_model_name, llm_loader=llm_loader, without_model=without_model)
     
     @staticmethod
     def name():
@@ -299,8 +311,8 @@ class Llama13b(LLMModel):
 
 
 class Llama7b(LLMModel):
-    def __init__(self, base_model_id = "meta-llama/Llama-2-7b-hf", base_model_name = "Llama-2-7b", llm_loader = None) -> None:
-        super().__init__(base_model_id, base_model_name, llm_loader=llm_loader)
+    def __init__(self, base_model_id = "meta-llama/Llama-2-7b-hf", base_model_name = "Llama-2-7b", llm_loader = None, without_model = False) -> None:
+        super().__init__(base_model_id, base_model_name, llm_loader=llm_loader, without_model=without_model)
     
     @staticmethod
     def name():
@@ -308,8 +320,8 @@ class Llama7b(LLMModel):
 
 
 class MistralAI(LLMModel):
-    def __init__(self, base_model_id = "mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1", quantization = 'Q5_0', llm_loader = None) -> None:
-        super().__init__(base_model_id, base_model_name, quantization=quantization, llm_loader=llm_loader)
+    def __init__(self, base_model_id = "mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1", quantization = 'Q5_0', llm_loader = None, without_model = False, lora_path = None) -> None:
+        super().__init__(base_model_id, base_model_name, quantization=quantization, llm_loader=llm_loader, without_model=without_model, lora_path = lora_path)
     
     @staticmethod
     def name():
@@ -317,8 +329,8 @@ class MistralAI(LLMModel):
 
     
 class NoLLM(LLMModel):
-    def __init__(self, base_model_id = "None", base_model_name = "None", llm_loader = None) -> None:
-        super().__init__(base_model_id, base_model_name, llm_loader=llm_loader)
+    def __init__(self, base_model_id = "None", base_model_name = "None", llm_loader = None, without_model = False) -> None:
+        super().__init__(base_model_id, base_model_name, llm_loader=llm_loader, without_model=without_model)
     
     def __call__(self, prompt, stop = ["<end_output>", "\n\n\n"], with_full_message = False) -> Any:
         if with_full_message :
