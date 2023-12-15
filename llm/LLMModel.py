@@ -34,31 +34,40 @@ from ner.llm_ner.prompts import prompt_template, prompt_template_ontonotes
 from llm.LlamaLoader import LlamaLoader, Llama_LlamaCpp, Llama_Langchain
 
 class LLMModel(ABC):
-    def __init__(self, base_model_id, base_model_name, check_nb_tokens = True, max_tokens = 256, quantization = "Q5_0", llm_loader : LlamaLoader = None, without_model = False) -> None:
+    def __init__(self, base_model_id, 
+                 base_model_name, 
+                 check_nb_tokens = True, 
+                 max_tokens = 256, 
+                 quantization = "Q5_0", 
+                 llm_loader : LlamaLoader = None, 
+                 without_model = False,
+                 lora_path = None) -> None:
         self.base_model_id = base_model_id
         self.base_model_name = base_model_name.lower()
         self.name = self.base_model_name
 
         self.max_tokens = max_tokens
         if not llm_loader :
-            llm_loader = Llama_LlamaCpp()
-        self.llm_loader = llm_loader
+            llm_loader = Llama_LlamaCpp
+        self.llm_loader = llm_loader()
         
         if not without_model :
-            self.model : LlamaLoader = self.get_model(quantization = quantization)
+            self.model : LlamaLoader = self.get_model(quantization = quantization, lora_path = lora_path)
         self.check_nb_tokens = check_nb_tokens
         if check_nb_tokens :
             self.nlp = spacy.load("en_core_web_sm")  # Load a spaCy language model
             
     
-    def get_model(self, quantization = 'Q5_0', gguf_model_path = ""):
+    def get_model(self, quantization = 'Q5_0', gguf_model_path = "" ,lora_path = None):
         if gguf_model_path :
             model_path = gguf_model_path
         else :
             model_path = f"llm/models/{self.base_model_name}/{self.base_model_name}.{quantization}.gguf"
+        
+        self.model = self.llm_loader.get_llm_instance(model_path = model_path, lora_path= lora_path)
         with torch.no_grad():
             torch.cuda.empty_cache()
-        return self.llm_loader.get_llm_instance(model_path)
+        return self.model
         
 
     def __str__(self) -> str:
@@ -229,7 +238,6 @@ class LLMModel(ABC):
         processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision, dataset = dataset)
         nb_samples = len(processed_dataset)
         output_dir = f"./llm/models/{base_model_id.split('/')[1].lower()}/{pt.__str__()}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
-
         test_size = 50
         train_size = nb_samples-test_size
         base_model, tokenizer = load_model_tokenizer_for_training(base_model_id)
@@ -255,7 +263,7 @@ class LLMModel(ABC):
                 evaluation_strategy="steps", # Evaluate the model every logging step
                 eval_steps=runs/4//8,               # Evaluate and save checkpoints every 50 steps
                 do_eval=True,                # Perform evaluation at the end of training
-                report_to="wandb",           # Comment this out if you don't want to use weights & baises
+                # report_to="wandb",           # Comment this out if you don't want to use weights & baises
                 run_name=f"finetuned-{pt.__str__}-{nb_samples}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}"          # Name of the W&B run (optional)
             ),
             data_collator=transformers.DataCollatorForLanguageModeling(tokenizer, mlm=False),
@@ -289,8 +297,8 @@ class LLMModel(ABC):
 
             run_command(command)
 
-        self.name = f"{self.name}-ft-{prompt_type_name}-{nb_samples}-{quantization}{f'-{precision}' if precision else ''}"
-        self.model = self.get_model(gguf_model_path =  model_out)
+        self.name = f"{self.base_model_name}-ft-{prompt_type_name}-{nb_samples}-{quantization}{f'-{precision}' if precision else ''}"
+        self.get_model(gguf_model_path =  model_out)
         return self.model
 
 class Llama13b(LLMModel):
@@ -312,8 +320,8 @@ class Llama7b(LLMModel):
 
 
 class MistralAI(LLMModel):
-    def __init__(self, base_model_id = "mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1", quantization = 'Q5_0', llm_loader = None, without_model = False) -> None:
-        super().__init__(base_model_id, base_model_name, quantization=quantization, llm_loader=llm_loader, without_model=without_model)
+    def __init__(self, base_model_id = "mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1", quantization = 'Q5_0', llm_loader = None, without_model = False, lora_path = None) -> None:
+        super().__init__(base_model_id, base_model_name, quantization=quantization, llm_loader=llm_loader, without_model=without_model, lora_path = lora_path)
     
     @staticmethod
     def name():

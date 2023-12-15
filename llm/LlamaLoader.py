@@ -20,7 +20,7 @@ class LlamaLoader(ABC) :
         self.stop = stop
 
     @abstractmethod
-    def get_llm_instance(self, model_path = None) :
+    def get_llm_instance(self, model_path, lora_path = None) :
         pass 
 
     @abstractmethod
@@ -30,7 +30,7 @@ class LlamaLoader(ABC) :
 class Llama_LlamaCpp(LlamaLoader) : 
     def __init__(self, temperature=0, top_p=1, stop=["<end_output>", "\n\n\n", '}'], max_tokens=216) -> None:
         super().__init__(temperature, top_p, stop, max_tokens)
-    def get_llm_instance(self, model_path = None):
+    def get_llm_instance(self, model_path, lora_path = None):
 
         # Callbacks support token-wise streaming
         callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
@@ -38,6 +38,8 @@ class Llama_LlamaCpp(LlamaLoader) :
         # Make sure the model path is correct for your system!
         llm = Llama(
             model_path= model_path, #"./llama_ft/llama2-7b-llamma-ner-finetune/checkpoint-375/ggml-adapter-model.bin",
+            lora_base=model_path,
+            lora_path=lora_path,
             n_ctx = 4096,
             n_batch=512,
             logits_all= True,
@@ -66,7 +68,7 @@ class Llama_Langchain(LlamaLoader) :
     def __init__(self, temperature=0, top_p=0.01, stop=["<end_output>", "\n\n\n", '}'], max_tokens=216) -> None:
         super().__init__(temperature, top_p, stop, max_tokens)
 
-    def get_llm_instance(self, model_path = None):
+    def get_llm_instance(self,  model_path, lora_path = None):
 
         # Callbacks support token-wise streaming
         callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
@@ -103,24 +105,29 @@ class Llama_Langchain(LlamaLoader) :
 class Llama_HF(LlamaLoader) : 
     def __init__(self, temperature=0, top_p=1, stop=["<end_output>", "\n\n\n", '}'], max_tokens=216) -> None:
         super().__init__(temperature, top_p, stop, max_tokens)
-    def get_llm_instance(self, model_path = None, base_model_id = None):
-
-        llm, tokenizer =load_model_tokenizer_for_inference(ft_path = model_path, base_model_id = base_model_id)
+    
+    def get_llm_instance(self, model_path, lora_path = None):
+        llm, tokenizer =load_model_tokenizer_for_inference(ft_path = lora_path)
+        llm.save_pretrained(lora_path, safe_serialization = False)
         self.tokenizer = tokenizer
+        self.bad_words_ids = self.tokenizer(self.stop, add_special_tokens=False).input_ids 
         self.model = llm
         return self
 
     def __call__(self, prompt, with_full_message = False):
         model_input = self.tokenizer(prompt, return_tensors="pt").to("cuda")
-        del model_input['token_type_ids']
+        if  'token_type_ids' in model_input :
+            del model_input['token_type_ids']
         with torch.no_grad():
-            output = self.tokenizer.decode(self.model.generate(
-                **model_input, 
-                max_new_tokens=50, 
-                pad_token_id=2, temperature = self.temperature, 
-                   top_p = self.top_p, 
-                   max_tokens = self.max_tokens, 
-                   stop = self.stop,)[0], skip_special_tokens=True)
+            output = self.tokenizer.decode(
+                self.model.generate(
+                    **model_input, 
+                    max_new_tokens=self.max_tokens, 
+                    pad_token_id=2, 
+                    temperature = self.temperature, 
+                    top_p = self.top_p,
+                    bad_words_ids=self.bad_words_ids
+                )[0], skip_special_tokens=True)
         if with_full_message :
             return output, output 
         return output
