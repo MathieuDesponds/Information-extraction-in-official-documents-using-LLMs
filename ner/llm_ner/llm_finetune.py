@@ -90,7 +90,13 @@ def load_model_tokenizer_for_training(base_model_id : str):
   tokenizer = get_tokenizer(base_model_id)
   return model, tokenizer
 
-def load_model_tokenizer_for_inference(ft_path: str, base_model_id = "meta-llama/Llama-2-7b-hf") :
+def load_model_tokenizer_for_inference(ft_path: str, base_model_id = "mistralai/Mistral-7B-v0.1") :
+  fsdp_plugin = FullyShardedDataParallelPlugin(
+    state_dict_config=FullStateDictConfig(offload_to_cpu=True, rank0_only=False),
+    optim_state_dict_config=FullOptimStateDictConfig(offload_to_cpu=True, rank0_only=False),
+  )
+  accelerator = Accelerator(fsdp_plugin=fsdp_plugin)
+
   bnb_config = BitsAndBytesConfig(
     load_in_4bit=True,
     bnb_4bit_use_double_quant=True,
@@ -102,14 +108,15 @@ def load_model_tokenizer_for_inference(ft_path: str, base_model_id = "meta-llama
       base_model_id,  # Llama 2 7B, same as before
       quantization_config=bnb_config,  # Same quantization config as before
       device_map="auto",
-      trust_remote_code=True,
-      use_auth_token=True
+      trust_remote_code=True
   )
 
   tokenizer = AutoTokenizer.from_pretrained(base_model_id, trust_remote_code=True)
   tokenizer.pad_token = tokenizer.eos_token
 
   ft_model = PeftModel.from_pretrained(base_model, ft_path)
+
+  ft_model = accelerator.prepare_model(ft_model)
 
   return ft_model, tokenizer
 
