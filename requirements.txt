@@ -4,11 +4,10 @@ matplotlib
 datasets
 nltk
 spacy>=2.2.0,<3.0.0
-https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.0/en_core_web_sm-2.2.0.tar.gz#egg=en_core_web_sm
 langchain
 
 seaborn
-transformers=4.34.0
+transformers
 sentence_transformers
 accelerate
 peft
@@ -16,5 +15,3 @@ bitsandbytes
 
 wandb
 llama-cpp-python
-
-ipykernel
