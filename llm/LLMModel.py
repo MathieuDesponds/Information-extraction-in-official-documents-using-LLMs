@@ -48,7 +48,7 @@ class LLMModel(ABC):
 
         self.max_tokens = max_tokens
         if not llm_loader :
-            llm_loader = Llama_LlamaCpp
+            llm_loader = Llama_Langchain
         self.llm_loader = llm_loader()
         
         if not without_model :
@@ -63,7 +63,7 @@ class LLMModel(ABC):
             model_path = gguf_model_path
         else :
             model_path = f"llm/models/{self.base_model_name}/{self.base_model_name}.{quantization}.gguf"
-        
+        self.model = None
         self.model = self.llm_loader.get_llm_instance(model_path = model_path, lora_path= lora_path)
         with torch.no_grad():
             torch.cuda.empty_cache()

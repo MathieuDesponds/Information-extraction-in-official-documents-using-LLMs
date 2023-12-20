@@ -44,7 +44,7 @@ class Llama_LlamaCpp(LlamaLoader) :
             n_batch=512,
             logits_all= True,
             n_gpu_layers=100,
-            callback_manager=callback_manager,
+            # callback_manager=callback_manager,
             repeat_penalty=1.3,
             verbose = False
         )
@@ -84,7 +84,7 @@ class Llama_Langchain(LlamaLoader) :
             n_threads=12,
             top_p=self.top_p,
             n_gpu_layers=100,
-            callback_manager=callback_manager,
+            # callback_manager=callback_manager,
             repeat_penalty=1.2,
             verbose = False
         )

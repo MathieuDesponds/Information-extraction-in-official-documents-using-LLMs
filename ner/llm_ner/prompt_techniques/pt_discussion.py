@@ -39,8 +39,10 @@ class PT_OutputList(PromptTechnique):
         return super(PT_OutputList, self).run_prompt(llm, sentence, verifier, confidence_checker, prefix = '[',tags =  tags)
     
     def process_output(self, response : str, tag : str = None, tags = ["PER", "ORG", "LOC", 'MISC']):
-        start_index = response.find('[(')  # Find the opening curly brace
-        end_index = response.find(')]')    # Find the closing curly brace
+        start_index, end_index = response.find('[['), response.find(']]') # Find the opening curly brace
+        start_index =  response.find('[(') if start_index == -1 else start_index
+        end_index = response.find(')]') if end_index == -1 else end_index   # Find the closing curly brace
+        
         if start_index != -1 and end_index != -1:
             response = response[start_index:end_index+2]
         else:

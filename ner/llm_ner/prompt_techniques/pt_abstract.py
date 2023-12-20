@@ -56,7 +56,7 @@ class PromptTechnique(ABC):
                 num_tokens = len(doc)
                 # print(num_tokens, prompt)
                 if num_tokens > 4096 - llm.max_tokens :
-                    print("prompt is too big") 
+                    print(f"prompt is too big : {prompt}") 
                     continue
 
             reponse_text, response_all = llm(prompt, with_full_message =True)
