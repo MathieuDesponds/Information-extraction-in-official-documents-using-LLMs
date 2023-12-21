@@ -6,7 +6,7 @@ from ner.Datasets.utils import *
 from ner.utils import load, dump
 
 class OntoNote5Dataset(MyDataset):
-    def __init__(self, dataset = None, split = "test"):
+    def __init__(self, dataset = None, split = "test", small_sentence = False):
         self.split = split
         if not dataset : 
             dataset = load_dataset("tner/ontonotes5", split = split)
@@ -15,7 +15,10 @@ class OntoNote5Dataset(MyDataset):
             dataset = dataset.map(lambda row : MyDataset.get_spans(row, ONTONOTE5_MAPPING_TAG))
             dataset = dataset.map(lambda row : {'nb_tokens' : len(row['tokens']),
                                                     'nb_spans' : len(row['spans'])})
-            dataset = dataset.filter(lambda row : row['nb_tokens'] >30 )
+            if small_sentence :
+                dataset = dataset.filter(lambda row : row['nb_tokens'] <10 )
+            else :    
+                dataset = dataset.filter(lambda row : row['nb_tokens'] >30 )
             dataset = dataset.remove_columns(['nb_tokens', 'nb_spans'])
             dataset = dataset.map(lambda row : MyDataset.add_llama_ner_tags(row, self.get_tags(), ONTONOTE5_MAPPING_TAG))
             dataset = dataset.map(lambda row : MyDataset.add_llama_ner_tags_2(row, self.get_tags()))
