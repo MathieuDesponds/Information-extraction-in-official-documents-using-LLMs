@@ -7,8 +7,8 @@ from ner.llm_ner.ResultInstance import load_all_results
 from ner.utils import get_student_conf_interval
 
 
-def get_results(with_ft, few_shots = [0,3]):
-    df_results = load_all_results(root_directory = "ner/saves/results/ontonote5/")
+def get_results(with_ft, few_shots = [0,3], dataset = "ontonote5"):
+    df_results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
     if with_ft:
         df_to_show = df_results[df_results['model'].str.contains('ft')]
     else : 
@@ -21,8 +21,8 @@ def get_results(with_ft, few_shots = [0,3]):
     return df_res
 
 
-def show_results_ontonote(with_ft = False):
-    df_res = get_results(with_ft)
+def show_results(with_ft = False, dataset = "ontonote5"):
+    df_res = get_results(with_ft, dataset = dataset)
     df_res['tech_name'] = df_res.apply(lambda row :f"With {row['nb_few_shots']} few_shots {'and ++' if row['plus_plus']  else ''}", axis = 1)
 
     df = df_res
@@ -30,7 +30,7 @@ def show_results_ontonote(with_ft = False):
     # Convert the f1_conf_inter column to a tuple of floats
     df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
     # Set up the plot
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize = (10,8))
 
     # Set up jitter for x-axis positions
     jitter = 0.1
@@ -52,7 +52,7 @@ def show_results_ontonote(with_ft = False):
 
     # Customize the plot
     ax.set_xticks(np.arange(len(df['prompt_technique'].unique())) + 0.5 * (len(df['tech_name'].unique()) - 1) * jitter)
-    ax.set_xticklabels(df.sort_values('prompt_technique')['prompt_technique'].unique(), rotation = 45)
+    ax.set_xticklabels(df.sort_values('prompt_technique')['prompt_technique'].unique(), rotation = 15)
     ax.set_xlabel('Prompt Technique', fontsize=12)
     ax.set_ylabel('F1 Mean', fontsize=12)
     ax.set_title('F1 Mean with Confidence Intervals', fontsize=14)
@@ -149,7 +149,7 @@ def show_results_few_shots():
 
     # Customize the plot
     ax.set_xticks(np.arange(len(df['x_names'].unique())) + 0.5 * (len(df['tech_name'].unique()) - 1) * jitter)
-    ax.set_xticklabels(df.sort_values('x_names')['x_names'].unique(), rotation = 45)
+    ax.set_xticklabels(df.sort_values('x_names')['x_names'].unique(), rotation = 20)
     ax.set_xlabel('Parameters', fontsize=12)
     ax.set_ylabel('F1 Mean', fontsize=12)
     ax.set_title('F1 Mean with Confidence Intervals', fontsize=14)
