@@ -1,5 +1,5 @@
 from datasets import Dataset
-from langchain import PromptTemplate
+from langchain.prompts import PromptTemplate
 
 from ner.Datasets.Conll2003Dataset import Conll2003Dataset
 from ner.llm_ner.prompts import *

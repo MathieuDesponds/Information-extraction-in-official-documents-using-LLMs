@@ -100,6 +100,8 @@ class PromptTechnique(ABC):
         old_fst = self.fst
         all_datas = []
         for i in range(runs//test_size):
+            if i %10 == 9 :
+                print(i+1)
             seed = random.randint(0,2156867)
             data_tr_tr, data_tr_te = dataset.train_test_split(test_size = test_size, seed=seed)
             data_tr_tr.select(range(800))

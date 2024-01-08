@@ -2,8 +2,8 @@
 from abc import ABC, abstractmethod
 import logging
 import os
-from langchain.llms import LlamaCpp
-from langchain.embeddings import LlamaCppEmbeddings
+from langchain_community.llms import LlamaCpp
+from langchain_community.embeddings import LlamaCppEmbeddings
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import torch
@@ -92,7 +92,7 @@ class Llama_Langchain(LlamaLoader) :
         return self
     
     def __call__(self, prompt, with_full_message = False):
-        output = self.model(prompt, stop = self.stop)
+        output = self.model.invoke(prompt, stop = self.stop)
         if with_full_message :
             return output, {
                 'choices': [
