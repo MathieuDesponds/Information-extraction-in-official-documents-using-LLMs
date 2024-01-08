@@ -1,4 +1,4 @@
-from langchain import FewShotPromptTemplate, PromptTemplate
+from langchain.prompts import FewShotPromptTemplate, PromptTemplate
 
 ######################## NER ###########################
 
