@@ -1,9 +1,5 @@
-root ::=
-  "{" ws
-            "\"Type de document\"" ":" ws value
-     "}" 
-value ::=  ("\"Facture\"" | "\"Lettre\"" | "\"E-mails\"" | "\"Contrat\"" | "\"Bail à loyer\"" | "\"Procuration\"" | "\"Acte\"" | "\"Dossier de mutation\"" | "\"Déclaration fiscale\"" | "\"Avis d\'imposition\"" | "\"Attestation forfait fiscal\"" | "\"Attestation de loyer de régie\"" | "\"Bordereau de taxation\"" | "\"Certificat annuel de salaire\"" | "\"Certificat annuel de prévoyance / Versicherungsausweis\"" | "\"Fiche de salaire\"" | "\"Justification bonus\"" | "\"Relevé bancaire\"" | "\"Relevé de porte-feuille\"" | "\"Relevé LPP\"" | "\"Simulation après retrait\"" | "\"Règlement LPP\"" | "\"Attestation retrait prévoyance\"" | "\"Procès-verbal\"" | "\"Attestation de valeur de rachat\"" | "\"Plaquette de vente\"" | "\"Extrait du registre foncier\"" | "\"Règlement PPE\"" | "\"Cahier PPE\"" | "\"Plan\"" | "\"Tableau de répartition des locaux\"" | "\"Descriptif de construction\"" | "\"Convention pour travaux\"" | "\"Décision d’autorisation de construire\"" | "\"Division et réunion de parcelles\"" | "\"Titre de propriété\"" | "\"Police d\'assurance\"" | "\"CGA\"" | "\"Devis travaux\"" | "\"Facture travaux\"" | "\"Extrait du registre des poursuites\"" | "\"Extrait du casier judiciaire\"" | "\"Rapport rating ZEK\"" | "\"Autorisation consultation ZEK\"" | "\"Resultat recherche ZEK\"" | "\"Bilan & PP\"" | "\"Attestation de donation familiale\"" | "\"Pièce d\'identité\"" | "\"Rapport / Pré-avis\"" | "\"Relevé crédit ou dette\"" | "\"Attestation fiscale de rente de prévoyance\"" | "\"Décompte prestation prévoyance\"")
+root ::= "{" ws "\"Type de document\"" ":" ws value "}" 
+value ::=  value1
+value1 ::= ("\"Facture\"" | "\"Lettre\"" | "\"E-mails\"" | "\"Contrat\"" | "\"Bail à loyer\"" | "\"Procuration\"" | "\"Acte\"" | "\"Dossier de mutation\"" | "\"Déclaration fiscale\"" | "\"Avis d'imposition\"" | "\"Attestation forfait fiscal\"" | "\"Attestation de loyer de régie\"" | "\"Bordereau de taxation\"" | "\"Certificat annuel de salaire\"" | "\"Certificat annuel de prévoyance / Versicherungsausweis\"" | "\"Fiche de salaire\"" | "\"Justification bonus\"" | "\"Relevé bancaire\"" | "\"Relevé de porte-feuille\"" | "\"Relevé LPP\"" | "\"Simulation après retrait\"" | "\"Règlement LPP\"" | "\"Attestation retrait prévoyance\"")
 
-
-# Optional space: by convention, applied in this grammar after literal chars when allowed
 ws ::= ([ \t\n] ws)?
