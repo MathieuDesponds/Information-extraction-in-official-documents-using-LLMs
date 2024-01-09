@@ -31,8 +31,6 @@ def get_results(with_ft, few_shots = [0,3], dataset = "ontonote5"):
 
 
 def show_results(with_ft = False, datasets = ["ontonote5", "conll2003_cleaned"]):
-    
-   
     # Set up the plot
     fig, axs = plt.subplots(1,len(datasets),figsize = (15,8))
 
@@ -44,11 +42,13 @@ def show_results(with_ft = False, datasets = ["ontonote5", "conll2003_cleaned"])
 
         # Convert the f1_conf_inter column to a tuple of floats
         df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
+        
+        df = df[df['precision'] == '300']
+        df = df[df['f1_mean'] != 0]
         # Loop through unique tech_names
         for h, tech_name in enumerate(df['tech_name'].unique()):
             # Filter the DataFrame for the current tech_name
             tech_df = df[df['tech_name'] == tech_name].sort_values('prompt_technique')
-            
             # Add jitter to x-axis positions
             x_positions = np.arange(len(tech_df['prompt_technique'])) + h * jitter
             # Plot the f1_mean values with jitter
@@ -77,6 +77,7 @@ def show_diff_plus_plus(with_ft = False, datasets = ["ontonote5"]):
     for dataset in datasets:
         df_to_show = get_results(with_ft, dataset =dataset)
 
+        df_to_show = df_to_show[df_to_show['f1_mean'] != 0]
         # Pivot the DataFrame to have 'True' and 'False' types as columns
         pivot_df = df_to_show.pivot(index=['prompt_technique',
             'few_shot_tecnique', 'nb_few_shots', 'precision'], columns='plus_plus', values='f1_mean').reset_index()
@@ -120,16 +121,21 @@ def show_diff_ft(with_few_shots = False, datasets = ["ontonote5", "conll2003_cle
             df_to_show = df_to_show[df_to_show['precision'] == '300']
         elif dataset == 'conll2003_dataset' :
             df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == '300']
-        df_to_show['with_ft'] = df_to_show['model'].str.contains('ft') & df_to_show['model'].str.contains('2000')
-        df_to_show = df_to_show[['f1_mean', 'f1_conf_inter', 'prompt_technique', 'nb_few_shots', 'precision', 'plus_plus', 'with_ft']]
+            
+        df_to_show= df_to_show[df_to_show['precision'] == '300']
+        df_to_show['with_ft'] = df_to_show['model'].str.contains('ft') & df_to_show['model'].str.contains('2000-')
+        
+        df_to_show = df_to_show[['f1_mean', 'model','f1_conf_inter', 'prompt_technique', 'nb_few_shots', 'precision', 'plus_plus', 'with_ft']]
+        df_to_show = df_to_show[df_to_show['model'].isin(['mistral-7b-v0.1', 'mistral-7b-v0.1-ft-raw-2000-Q5_0', 'mistral-7b-v0.1-ft-raw-2000-Q5_0-conll2003'])]
+        df_to_show = df_to_show[df_to_show['prompt_technique'].isin(['wrapper', 'discussion'])]
         # Pivot the DataFrame to have 'True' and 'False' types as columns
-        pivot_df = df_to_show.pivot(index=['prompt_technique',  'plus_plus','nb_few_shots'], columns='with_ft', values='f1_mean').reset_index()
-
+        pivot_df = df_to_show.pivot(index=['prompt_technique', 'plus_plus','nb_few_shots'], columns='with_ft', values='f1_mean')
+        pivot_df = pivot_df.reset_index()
         # Subtract 'False' from 'True'
         pivot_df['result'] = pivot_df[True] - pivot_df[False]
         mean, conf = get_student_conf_interval(list(pivot_df['result']))
         # Display the result
-        output+= f"For {dataset.capitalize()} :\n    The mean difference between results that used a finetuned model and those that do not is \n     {mean} with confidence 95% student interval {conf}"
+        output+= f"For {dataset.capitalize()} :\n    The mean difference between results that used a finetuned model and those that do not is \n     {mean} with confidence 95% student interval {conf}\n\n"
         tables[dataset]= pivot_df[['prompt_technique','plus_plus', 'nb_few_shots', 'result', True, False]]
     return output, tables
 
