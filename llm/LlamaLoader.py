@@ -9,7 +9,7 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import torch
 from ner.llm_ner.llm_finetune import load_model_tokenizer_for_inference
 
-from llama_cpp import Llama
+from llama_cpp import Llama, LlamaGrammar
 
 
 class LlamaLoader(ABC) :
@@ -30,6 +30,9 @@ class LlamaLoader(ABC) :
 class Llama_LlamaCpp(LlamaLoader) : 
     def __init__(self, temperature=0, top_p=1, stop=["<end_output>", "\n\n\n", '}'], max_tokens=216) -> None:
         super().__init__(temperature, top_p, stop, max_tokens)
+        self.grammar = None
+    
+    
     def get_llm_instance(self, model_path, lora_path = None):
 
         # Callbacks support token-wise streaming
@@ -50,15 +53,21 @@ class Llama_LlamaCpp(LlamaLoader) :
         )
         self.model = llm
         return self
+    
+    def add_grammar(self, type_of_grammar):
+        if type_of_grammar == "discussion":
+            self.grammar = LlamaGrammar.from_file("ner/grammars/discussion.gbnf")
+
 
     def __call__(self, prompt, with_full_message = False):
         output = self.model(prompt, 
-                   temperature = self.temperature, 
-                   top_p = self.top_p, 
-                   max_tokens = self.max_tokens, 
-                   stop = self.stop,
-                #    logprobs = 20
-                   )
+            temperature = self.temperature, 
+            top_p = self.top_p, 
+            max_tokens = self.max_tokens, 
+            stop = self.stop,
+            grammar = self.grammar
+            # logprobs = 20
+            )
         if with_full_message :
             return output['choices'][0]['text'], output 
         return output

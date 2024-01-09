@@ -44,7 +44,11 @@ class LLMModel(ABC):
                  lora_path = None) -> None:
         self.base_model_id = base_model_id
         self.base_model_name = base_model_name.lower()
-        self.name = self.base_model_name
+        if not lora_path :
+            self.name = self.base_model_name
+        else :
+            model_info = lora_path.split('/')
+            self.name = f"{self.base_model_name}-ft-{model_info[-2].split('-')[0]}-{model_info[-1].split('-')[1]}-{quantization}{('-' + '-'.join(model_info[-2].split('-')[1:])) if len(model_info[-2].split('-')) > 1 else ''}"
 
         self.max_tokens = max_tokens
         if not llm_loader :
@@ -61,6 +65,8 @@ class LLMModel(ABC):
     def get_model(self, quantization = 'Q5_0', gguf_model_path = "" ,lora_path = None):
         if gguf_model_path :
             model_path = gguf_model_path
+        elif not quantization : 
+            model_path = self.base_model_id
         else :
             model_path = f"llm/models/{self.base_model_name}/{self.base_model_name}.{quantization}.gguf"
         self.model = None
@@ -264,7 +270,7 @@ class LLMModel(ABC):
                 save_strategy="steps",       # Save the model checkpoint every logging step
                 save_steps=min(runs/4//4,2000),                # Save checkpoints every 50 steps
                 evaluation_strategy="steps", # Evaluate the model every logging step
-                eval_steps=min(runs/4//8, 500),               # Evaluate and save checkpoints every 50 steps
+                eval_steps=min(runs/4//8, 500//4),               # Evaluate and save checkpoints every 50 steps
                 save_safetensors = False,
                 do_eval=True,                # Perform evaluation at the end of training
                 # report_to="wandb",           # Comment this out if you don't want to use weights & baises
@@ -341,7 +347,7 @@ class NoLLM(LLMModel):
             return prompt, None
         return [('Japan', 'NORP')]
     
-    def get_model(self, gguf_model_path = "", quantization = ""):
+    def get_model(self, gguf_model_path = "", quantization = "", lora_path = ""):
         return None
     
     @staticmethod
