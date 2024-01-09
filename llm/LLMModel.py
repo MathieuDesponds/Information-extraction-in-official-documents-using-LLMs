@@ -44,7 +44,11 @@ class LLMModel(ABC):
                  lora_path = None) -> None:
         self.base_model_id = base_model_id
         self.base_model_name = base_model_name.lower()
-        self.name = self.base_model_name
+        if not lora_path :
+            self.name = self.base_model_name
+        else :
+            model_info = lora_path.split('/')
+            self.name = f"{self.base_model_name}-ft-{model_info[-2].split('-')[0]}-{model_info[-1].split('-')[1]}-{quantization}{('-' + '-'.join(model_info[-2].split('-')[1:])) if len(model_info[-2].split('-')) > 1 else ''}"
 
         self.max_tokens = max_tokens
         if not llm_loader :
@@ -61,6 +65,8 @@ class LLMModel(ABC):
     def get_model(self, quantization = 'Q5_0', gguf_model_path = "" ,lora_path = None):
         if gguf_model_path :
             model_path = gguf_model_path
+        elif not quantization : 
+            model_path = self.base_model_id
         else :
             model_path = f"llm/models/{self.base_model_name}/{self.base_model_name}.{quantization}.gguf"
         self.model = None
@@ -234,12 +240,12 @@ class LLMModel(ABC):
         return results, results_df
     
     @staticmethod
-    def finetune(pt: PromptTechnique, dataset = None, base_model_id = "mistralai/Mistral-7B-v0.1", runs = 2000, cleaned = False, precision = None, checkpoint = None):
+    def finetune(pt: PromptTechnique, dataset = None, base_model_id = "mistralai/Mistral-7B-v0.1", runs = 2000, cleaned = False, precision = None, checkpoint = None, testing = False):
         processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision, dataset = dataset)
-        nb_samples = len(processed_dataset)
+        nb_samples = len(processed_dataset) 
         output_dir = f"./llm/models/{base_model_id.split('/')[1].lower()}/{pt.__str__()}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
-        test_size = 50
-        train_size = nb_samples-test_size
+        test_size = 50 if not testing else 2
+        train_size = nb_samples-test_size if not testing else 2
         base_model, tokenizer = load_model_tokenizer_for_training(base_model_id)
         tokenized_dataset = processed_dataset.map(lambda row : tokenize_prompt(row, tokenizer))
         tokenized_train_dataset, tokenized_val_dataset = split_train_test(tokenized_dataset, train_size, test_size = test_size)
@@ -250,18 +256,22 @@ class LLMModel(ABC):
             eval_dataset=tokenized_val_dataset,
             args=transformers.TrainingArguments(
                 output_dir=output_dir,
+                overwrite_output_dir = True,
                 warmup_steps=1,
                 per_device_train_batch_size=4,
                 gradient_accumulation_steps=1,
                 num_train_epochs = 1,
                 learning_rate=2.5e-4, # Want a small lr for finetuning
+                
                 # bf16=True,
                 optim="paged_adamw_8bit",
                 logging_dir="./logs",        # Directory for storing logs
+
                 save_strategy="steps",       # Save the model checkpoint every logging step
-                save_steps=runs/4//4,                # Save checkpoints every 50 steps
+                save_steps=min(runs/4//4,2000),                # Save checkpoints every 50 steps
                 evaluation_strategy="steps", # Evaluate the model every logging step
-                eval_steps=runs/4//8,               # Evaluate and save checkpoints every 50 steps
+                eval_steps=min(runs/4//8, 500//4),               # Evaluate and save checkpoints every 50 steps
+                save_safetensors = False,
                 do_eval=True,                # Perform evaluation at the end of training
                 # report_to="wandb",           # Comment this out if you don't want to use weights & baises
                 run_name=f"finetuned-{pt.__str__}-{nb_samples}-{datetime.now().strftime('%Y-%m-%d-%H-%M')}"          # Name of the W&B run (optional)
@@ -337,7 +347,7 @@ class NoLLM(LLMModel):
             return prompt, None
         return [('Japan', 'NORP')]
     
-    def get_model(self, gguf_model_path = "", quantization = ""):
+    def get_model(self, gguf_model_path = "", quantization = "", lora_path = ""):
         return None
     
     @staticmethod
