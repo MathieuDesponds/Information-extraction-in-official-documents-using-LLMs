@@ -45,9 +45,20 @@ git config --global user.email "mathieu.desponds@ketl.ch"
 git config --global user.name "Mathieu Desponds"
 ```
 
-### Install cuda-toolkit
+### To use the application from the servers 
+You want to setup the nginx server and override `/etc/nginx/conf.d/default.conf`
 ```bash 
-conda install -c nvidia cuda-toolkit
+server {
+    listen 80;
+    server_name compute.datascience.ch;
+    location /custom-nginx/my-app/ {
+        proxy_pass  http://127.0.0.1:45505;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Prefix /;
+    }
+}
 ```
 
 apt update
