@@ -1,0 +1,6 @@
+root :: "[" entity   (","   ws   entity)*  "]"
+entity :: "(" string "," ws tag ")"
+tag :: "CARDINAL"| "ORDINAL" | "WORK_OF_ART" | "PERSON" | "LOC" | "DATE" | "PERCENT" | "PRODUCT" | "MONEY" | "FAC" | "TIME" | "ORG" | "QUANTITY" | "LANGUAGE" | "GPE" | "LAW" | "NORP" | "EVENT"
+
+string ::= "\""   ([^"]*)   "\""
+ws ::= [ \t\n]*

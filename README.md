@@ -2,23 +2,15 @@
 
 
 ## Installation 
-
-### Install Miniconda
-
+Add the path of the right python version
 ```bash
-mkdir -p ~/miniconda3
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
-bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
-rm -rf ~/miniconda3/miniconda.sh
-~/miniconda3/bin/conda init bash
-~/miniconda3/bin/conda init zsh
-
-conda config --add channels conda-forge
-conda config --set channel_priority strict
+export PATH=/myhome/miniconda3/bin/python3.10:$PATH
+export PATH=/myhome/miniconda3/bin:$PATH
 ```
 
-### Select kernel and python version 
-You may find the jupyter extension in vscode 
+If it does not work, add `export PATH=/myhome/miniconda3/bin:$PATH` in `~/.bashrc` with `vim`
+Install `vim` with `apt-get install vim`
+And restart your terminal and verify with `python -V` the version of python that you have. 
 
 ### Install the requirements
 ```bash
@@ -27,15 +19,53 @@ spacy download  en_core_web_sm
 CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
 ```
 
-### Create python kernel 
+### Setup git 
+```bash 
+cp /myhome/.ssh/id_rsa.pub /root/.ssh/id_rsa.pub
+cp /myhome/.ssh/id_rsa /root/.ssh/id_rsa
+git config --global user.email "mathieu.desponds@ketl.ch"
+git config --global user.name "Mathieu Desponds"
+```
+
+### Create python kernel --> usefull ? 
 ```bash
 python -m ipykernel install --user --name build_central --display-name "gpu-test"
 ```
 
-### Install cuda-toolkit
-```bash 
-conda install -c nvidia cuda-toolkit
+### Direct run of everything
+```bash
+export PATH=/myhome/miniconda3/bin/python3.10:$PATH
+export PATH=/myhome/miniconda3/bin:$PATH
+pip install -r requirements.txt
+spacy download  en_core_web_sm
+CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
+cp /myhome/.ssh/id_rsa.pub /root/.ssh/id_rsa.pub
+cp /myhome/.ssh/id_rsa /root/.ssh/id_rsa
+git config --global user.email "mathieu.desponds@ketl.ch"
+git config --global user.name "Mathieu Desponds"
 ```
+
+### To use the application from the servers 
+You want to setup the nginx server and override `/etc/nginx/conf.d/default.conf`
+```bash 
+server {
+    listen 80;
+    server_name compute.datascience.ch;
+    location /custom-nginx/my-app/ {
+        proxy_pass  http://127.0.0.1:45505;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Prefix /;
+    }
+}
+```
+
+apt update
+apt upgrade
+add-apt-repository ppa:ubuntu-toolchain-r/test
+apt update
+apt install gcc-11 g++-11
 
 apt-get install aptitude
 aptitude update && sudo aptitude safe-upgrade
