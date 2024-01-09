@@ -119,7 +119,7 @@ def show_diff_ft(with_few_shots = False, datasets = ["ontonote5", "conll2003_cle
             df_to_show = df_results[df_results['nb_few_shots'] == 0]
         if dataset == 'ontonote5' :
             df_to_show = df_to_show[df_to_show['precision'] == '300']
-        elif dataset == 'conll2003_dataset' :
+        elif dataset == 'conll2003_cleaned' :
             df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == '300']
             
         df_to_show= df_to_show[df_to_show['precision'] == '300']
@@ -150,14 +150,17 @@ def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         df_to_show = df_to_show[df_to_show['plus_plus'] == True]
         if dataset == 'ontonote5' :
             df_to_show = df_to_show[df_to_show['precision'] == '300']
-        elif dataset == 'conll2003_dataset' :
-            df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == '300']
+        elif dataset == 'conll2003_cleaned' :
+            df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == 300]
+            df_to_show = df_to_show[df_to_show['precision'] == '300']
         df_to_show = df_to_show[df_to_show['prompt_technique'].isin(['wrapper', 'discussion'])]
 
         df_to_show['x_names']= df_to_show.apply(lambda row :f"{row['prompt_technique']} | {'With' if row['ft'] else 'Without'} finetuning", axis = 1)
         df_to_show['tech_name'] = df_to_show.apply(lambda row :f"With {' ' if row['nb_few_shots'] <10 else ''}{row['nb_few_shots']} few shots", axis = 1)
 
         df = df_to_show
+
+        print(df.sort_values(["model", "prompt_technique"]))
 
         # Convert the f1_conf_inter column to a tuple of floats
         df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
