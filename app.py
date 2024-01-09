@@ -1,15 +1,22 @@
 import logging
 from flask import Flask, request
 from llm.LLMModel import MistralAI, NoLLM
+from llm.LlamaLoader import VLLM
 
 BASE_PATH = '/custom-nginx/my-app'
 
 app = Flask(__name__)
-model = MistralAI(quantization="Q8_0")
+# model = MistralAI(quantization="Q5_0")
+# model.add_grammar("doc_type")
+model = MistralAI(llm_loader=VLLM)
 
 @app.route(BASE_PATH+'/', methods=['GET'])
 def base():
     return 'Welcome'
+
+@app.route('/', methods=['GET'])
+def basebase():
+    return 'Welcome Base'
 
 
 @app.route(BASE_PATH+'/hello', methods=['GET'])
