@@ -48,11 +48,11 @@ class LLMModel(ABC):
             self.name = self.base_model_name
         else :
             model_info = lora_path.split('/')
-            self.name = f"{self.base_model_name}-ft-{model_info[-2].split('-')[0]}-{model_info[-1].split('-')[1]}-{quantization}{('-' + '-'.join(model_info[-2].split('-')[1:])) if len(model_info[-2].split('-')) > 1 else ''}"
+            self.name = f"{self.base_model_name}-ft-{model_info[-2].split('-')[1]}-{model_info[-1].split('-')[1]}-{quantization}"
 
         self.max_tokens = max_tokens
         if not llm_loader :
-            llm_loader = Llama_Langchain
+            llm_loader = Llama_LlamaCpp
         self.llm_loader = llm_loader()
         
         if not without_model :
@@ -310,6 +310,9 @@ class LLMModel(ABC):
         self.name = f"{self.base_model_name}-ft-{prompt_type_name}-{nb_samples}-{quantization}{f'-{precision}' if precision else ''}"
         self.get_model(gguf_model_path =  model_out)
         return self.model
+    
+    def add_grammar(self, type_of_grammar):
+        self.llm_loader.add_grammar(type_of_grammar)
 
 class Llama13b(LLMModel):
     def __init__(self, base_model_id = "meta-llama/Llama-2-13b-hf", base_model_name = "Llama-2-13b", llm_loader = None, without_model = False) -> None:
