@@ -46,7 +46,26 @@ git config --global user.name "Mathieu Desponds"
 ```
 
 ### To use the application from the servers 
+```bash
+cp /myhome/default.conf /etc/nginx/conf.d/default.conf
+nginx -s reload
+apt-get update -y
+apt-get install -y sqlite3 
+
+cd /myhome/Master-thesis/
+python app.py
+```
+
+
+
+#### Explenations
+
 You want to setup the nginx server and override `/etc/nginx/conf.d/default.conf`
+
+You can copy form `myhome/` with `
+
+
+
 ```bash 
 server {
     listen 80;

@@ -6,6 +6,7 @@ nltk
 spacy>=2.2.0,<3.0.0
 langchain
 langchain-community
+vllm
 
 seaborn
 transformers
@@ -17,5 +18,6 @@ bitsandbytes
 wandb
 llama-cpp-python
 ipykernel
+ipywidgets
 
 Flask

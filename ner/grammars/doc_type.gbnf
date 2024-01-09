@@ -1,0 +1,5 @@
+root ::= "{" ws "\"Type de document\"" ":" ws value "}" 
+value ::=  value1
+value1 ::= ("\"Facture\"" | "\"Lettre\"" | "\"E-mails\"" | "\"Contrat\"" | "\"Bail à loyer\"" | "\"Procuration\"" | "\"Acte\"" | "\"Dossier de mutation\"" | "\"Déclaration fiscale\"" | "\"Avis d'imposition\"" | "\"Attestation forfait fiscal\"" | "\"Attestation de loyer de régie\"" | "\"Bordereau de taxation\"" | "\"Certificat annuel de salaire\"" | "\"Certificat annuel de prévoyance / Versicherungsausweis\"" | "\"Fiche de salaire\"" | "\"Justification bonus\"" | "\"Relevé bancaire\"" | "\"Relevé de porte-feuille\"" | "\"Relevé LPP\"" | "\"Simulation après retrait\"" | "\"Règlement LPP\"" | "\"Attestation retrait prévoyance\"")
+
+ws ::= ([ \t\n] ws)?

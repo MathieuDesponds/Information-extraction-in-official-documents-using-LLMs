@@ -1,9 +1,8 @@
 
 from abc import ABC, abstractmethod
-import logging
-import os
+from vllm import LLM, SamplingParams
+
 from langchain_community.llms import LlamaCpp
-from langchain_community.embeddings import LlamaCppEmbeddings
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import torch
@@ -57,6 +56,10 @@ class Llama_LlamaCpp(LlamaLoader) :
     def add_grammar(self, type_of_grammar):
         if type_of_grammar == "discussion":
             self.grammar = LlamaGrammar.from_file("ner/grammars/discussion.gbnf")
+        elif type_of_grammar == "json":
+            self.grammar = LlamaGrammar.from_file("ner/grammars/json.gbnf")
+        elif type_of_grammar == "doc_type":
+            self.grammar = LlamaGrammar.from_file("ner/grammars/doc_type.gbnf")
 
 
     def __call__(self, prompt, with_full_message = False):
@@ -70,9 +73,39 @@ class Llama_LlamaCpp(LlamaLoader) :
             )
         if with_full_message :
             return output['choices'][0]['text'], output 
-        return output
+        return output['choices'][0]['text']
         
+class VLLM(LlamaLoader) :
+    def __init__(self, temperature=0, top_p=0.01, stop=["<end_output>", "\n\n\n", '}'], max_tokens=216) -> None:
+        super().__init__(temperature, top_p, stop, max_tokens)
 
+    def get_llm_instance(self, model_path, lora_path = None):
+        if "mistral" in model_path :
+            model_path = "mistralai/Mistral-7B-v0.1"
+
+        llm = LLM(model=model_path,
+                  dtype="half", gpu_memory_utilization = 0.96, max_seq_len = 4000
+                  )
+        self.model = llm
+        return self
+    
+    def __call__(self, prompt, with_full_message = False):
+        sampling_params = SamplingParams(
+            temperature=self.temperature,
+            top_p=self.top_p,
+            max_tokens=self.max_tokens,
+        )
+        output = self.model.generate(prompt)
+        if with_full_message :
+            return output, {
+                'choices': [
+                    {'text' :  output }
+                    ]
+                    }
+        else :
+            return output
+        
+    
 class Llama_Langchain(LlamaLoader) :
     def __init__(self, temperature=0, top_p=0.01, stop=["<end_output>", "\n\n\n", '}'], max_tokens=216) -> None:
         super().__init__(temperature, top_p, stop, max_tokens)
