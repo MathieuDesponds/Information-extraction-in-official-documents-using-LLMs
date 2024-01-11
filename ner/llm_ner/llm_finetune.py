@@ -114,9 +114,9 @@ def load_model_tokenizer_for_inference(ft_path: str, base_model_id = "mistralai/
   tokenizer = AutoTokenizer.from_pretrained(base_model_id, trust_remote_code=True)
   tokenizer.pad_token = tokenizer.eos_token
 
-  ft_model = PeftModel.from_pretrained(base_model, ft_path)
+  ft_model = PeftModel.from_pretrained(base_model, ft_path).merge_and_unload()
 
-  ft_model = accelerator.prepare_model(ft_model)
+  # ft_model = accelerator.prepare_model(ft_model)
 
   return ft_model, tokenizer
 

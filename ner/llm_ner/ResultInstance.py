@@ -112,10 +112,7 @@ def save_result_instance(res_inst : ResultInstance):
     dump(res_inst, file_path)
 
 def save_result_instance_with_CI(res_inst : ResultInstanceWithConfidenceInterval, dataset :str = "conll2003_cleaned"):
-    if dataset == "conll2003_cleaned" :
-        file_path = f"./ner/saves/results/{dataset}/{res_inst.res_insts[0].model}/{res_inst.res_insts[0].prompt_technique}/{res_inst.res_insts[0].few_shot_tecnique}_{res_inst.res_insts[0].nb_few_shots}_{res_inst.res_insts[0].verifier}_{res_inst.res_insts[0].len_data_train}_{res_inst.res_insts[0].len_data_test}_{len(res_inst.res_insts)}_{res_inst.res_insts[0].with_precision}_{res_inst.res_insts[0].plus_plus}.pkl"
-    else :
-        file_path = f"./ner/saves/results/{dataset}/{res_inst.res_insts[0].model}/{res_inst.res_insts[0].prompt_technique}/{res_inst.res_insts[0].nb_few_shots}_{res_inst.res_insts[0].plus_plus}_{res_inst.res_insts[0].len_data_test*len(res_inst.res_insts)}.pkl"    
+    file_path = f"./ner/saves/results/{dataset}/{res_inst.res_insts[0].model}/{res_inst.res_insts[0].prompt_technique}/{res_inst.res_insts[0].nb_few_shots}_{res_inst.res_insts[0].plus_plus}_{res_inst.res_insts[0].len_data_test*len(res_inst.res_insts)}.pkl"    
     dump(res_inst, file_path)
 
 def load_all_results(root_directory = "ner/saves/results/conll2003_cleaned"):
