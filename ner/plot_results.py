@@ -120,7 +120,7 @@ def show_diff_ft(with_few_shots = False, datasets = ["ontonote5", "conll2003_cle
             df_to_show = df_results[df_results['nb_few_shots'] == 0]
         if dataset == 'ontonote5' :
             df_to_show = df_to_show[df_to_show['precision'] == '300']
-        elif dataset == 'conll2003_dataset' :
+        elif dataset == 'conll2003_cleaned' :
             df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == '300']
             
         df_to_show= df_to_show[df_to_show['precision'] == '300']
