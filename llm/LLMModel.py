@@ -97,7 +97,7 @@ class LLMModel(ABC):
     @staticmethod
     def show_prompts(pts : list[PromptTechnique] = [PT_Filing, PT_OutputList, PT_Wrapper, PT_Tagger, PT_GetEntities, PT_GPT_NER],
                        nb_few_shots = [5], verifier = False, dataset_loader = ontonote_get_test_cleaned_split,
-                       tags = ONTONOTE5_TAGS) :
+                       tags = ONTONOTE5_TAGS, with_gold = True) :
         
         data_train, data_test = dataset_loader()
         fst = FST_Sentence(data_train)
@@ -108,7 +108,8 @@ class LLMModel(ABC):
                 print(f'---------------------{"prompt++" if plus_plus else "raw"}---------------------')
                 print()
                 pt = i_pt(fst, with_precision = False, prompt_template = prompt_template_ontonotes, plus_plus = plus_plus)
-                print(latex_escape(pt.get_prompts_runnable(data_test[0]['text'], tags)[0][0]))
+                gold = pt.get_gold(data_test, tag = tags[0])
+                print(f"{latex_escape(pt.get_prompts_runnable(data_test[0]['text'], tags[0][0]))} {gold[0] if with_gold else ''}")
                 print("----------------------------------------------------")
 
     def classical_test_ontonote5(self, 
@@ -123,7 +124,7 @@ class LLMModel(ABC):
                        prompt_template = prompt_template_ontonotes,
                        plus_plus = False,
                        dataset_loader = ontonote_get_test_cleaned_split,
-                       test_size = 50) :
+                       test_size = 100) :
         return self.classical_test(fsts , 
                        pts,
                        nb_few_shots, 

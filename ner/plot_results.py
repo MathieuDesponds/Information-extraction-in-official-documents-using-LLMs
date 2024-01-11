@@ -45,6 +45,7 @@ def show_results(with_ft = False, datasets = ["ontonote5", "conll2003_cleaned"])
         
         df = df[df['precision'] == '300']
         df = df[df['f1_mean'] != 0]
+        print(df)
         # Loop through unique tech_names
         for h, tech_name in enumerate(df['tech_name'].unique()):
             # Filter the DataFrame for the current tech_name
@@ -159,9 +160,6 @@ def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         df_to_show['tech_name'] = df_to_show.apply(lambda row :f"With {' ' if row['nb_few_shots'] <10 else ''}{row['nb_few_shots']} few shots", axis = 1)
 
         df = df_to_show
-
-        print(df.sort_values(["model", "prompt_technique"]))
-
         # Convert the f1_conf_inter column to a tuple of floats
         df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
 
@@ -196,6 +194,7 @@ def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         axs[idx].legend()
     plt.savefig('ner/saves/results/ontonote5/impact_few_shots.png', dpi=300, bbox_inches='tight')
     plt.show()
+    return df
 
 def show_diff_ft_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
     output = ""
