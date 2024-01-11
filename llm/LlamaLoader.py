@@ -1,6 +1,6 @@
 
 from abc import ABC, abstractmethod
-from vllm import LLM, SamplingParams
+# from vllm import LLM, SamplingParams
 
 from langchain_community.llms import LlamaCpp
 from langchain.callbacks.manager import CallbackManager
@@ -75,35 +75,35 @@ class Llama_LlamaCpp(LlamaLoader) :
             return output['choices'][0]['text'], output 
         return output['choices'][0]['text']
         
-class VLLM(LlamaLoader) :
-    def __init__(self, temperature=0, top_p=0.01, stop=["<end_output>", "\n\n\n", '}'], max_tokens=216) -> None:
-        super().__init__(temperature, top_p, stop, max_tokens)
+# class VLLM(LlamaLoader) :
+#     def __init__(self, temperature=0, top_p=0.01, stop=["<end_output>", "\n\n\n", '}'], max_tokens=216) -> None:
+#         super().__init__(temperature, top_p, stop, max_tokens)
 
-    def get_llm_instance(self, model_path, lora_path = None):
-        if "mistral" in model_path :
-            model_path = "mistralai/Mistral-7B-v0.1"
+#     def get_llm_instance(self, model_path, lora_path = None):
+#         if "mistral" in model_path :
+#             model_path = "mistralai/Mistral-7B-v0.1"
 
-        llm = LLM(model=model_path,
-                  dtype="half", gpu_memory_utilization = 0.96, max_seq_len = 4000
-                  )
-        self.model = llm
-        return self
+#         llm = LLM(model=model_path,
+#                   dtype="half", gpu_memory_utilization = 0.96, max_seq_len = 4000
+#                   )
+#         self.model = llm
+#         return self
     
-    def __call__(self, prompt, with_full_message = False):
-        sampling_params = SamplingParams(
-            temperature=self.temperature,
-            top_p=self.top_p,
-            max_tokens=self.max_tokens,
-        )
-        output = self.model.generate(prompt)
-        if with_full_message :
-            return output, {
-                'choices': [
-                    {'text' :  output }
-                    ]
-                    }
-        else :
-            return output
+#     def __call__(self, prompt, with_full_message = False):
+#         sampling_params = SamplingParams(
+#             temperature=self.temperature,
+#             top_p=self.top_p,
+#             max_tokens=self.max_tokens,
+#         )
+#         output = self.model.generate(prompt)
+#         if with_full_message :
+#             return output, {
+#                 'choices': [
+#                     {'text' :  output }
+#                     ]
+#                     }
+#         else :
+#             return output
         
     
 class Llama_Langchain(LlamaLoader) :
@@ -150,7 +150,7 @@ class Llama_HF(LlamaLoader) :
     
     def get_llm_instance(self, model_path, lora_path = None):
         llm, tokenizer =load_model_tokenizer_for_inference(ft_path = lora_path)
-        llm.save_pretrained(lora_path, safe_serialization = False)
+        # llm.save_pretrained(lora_path, safe_serialization = False)
         self.tokenizer = tokenizer
         self.bad_words_ids = self.tokenizer(self.stop, add_special_tokens=False).input_ids 
         self.model = llm
