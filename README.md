@@ -6,11 +6,22 @@ Add the path of the right python version
 ```bash
 export PATH=/myhome/miniconda3/bin/python3.10:$PATH
 export PATH=/myhome/miniconda3/bin:$PATH
+export PATH=/myhome/miniconda3/lib:$PATH
 ```
 
-If it does not work, add `export PATH=/myhome/miniconda3/bin:$PATH` in `~/.bashrc` with `vim`
+If it does not work, add `export PATH=/myhome/miniconda3/bin:$PATH` in `~/.bashrc` with `vim` and run `source ~/.bashrc`
 Install `vim` with `apt-get install vim`
 And restart your terminal and verify with `python -V` the version of python that you have. 
+
+If you ahve problem with `apt-get` run 
+
+```bash
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+apt-get clean
+apt-get update 
+apt-get upgrade
+```
 
 ### Install the requirements
 ```bash
@@ -27,10 +38,12 @@ git config --global user.email "mathieu.desponds@ketl.ch"
 git config --global user.name "Mathieu Desponds"
 ```
 
-### Create python kernel --> usefull ? 
-```bash
-python -m ipykernel install --user --name build_central --display-name "gpu-test"
-```
+### Add jupyter extension on vscode
+Add the jupyter notebook extension on vscode
+
+### Run the set up script
+
+We need to reload the dataset that were on the cache run `python setup.py`
 
 ### Direct run of everything
 ```bash
@@ -38,11 +51,12 @@ export PATH=/myhome/miniconda3/bin/python3.10:$PATH
 export PATH=/myhome/miniconda3/bin:$PATH
 pip install -r requirements.txt
 spacy download  en_core_web_sm
+git config --global user.email "mathieu.desponds@ketl.ch"
+git config --global user.name "Mathieu Desponds"
 CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
 cp /myhome/.ssh/id_rsa.pub /root/.ssh/id_rsa.pub
 cp /myhome/.ssh/id_rsa /root/.ssh/id_rsa
-git config --global user.email "mathieu.desponds@ketl.ch"
-git config --global user.name "Mathieu Desponds"
+python setup.py
 ```
 
 ### To use the application from the servers 
