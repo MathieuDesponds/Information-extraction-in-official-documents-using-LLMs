@@ -1,3 +1,4 @@
+from datetime import datetime
 import pandas as pd
 from myMongoClient import *
 
@@ -24,11 +25,21 @@ def format_date(row):
 # Function to check if 'label_value' for 'model'='user' is in any row where 'model'!='user'
 def check_label_value(group):
     user_row = group[group['model'] == 'user']
-    
+    label_name = group['label_name'].unique().item()
     if not user_row.empty:
         user_label_value = user_row['label_value'].iloc[0]
-        if user_label_value == NONE_USER :
+        if label_name.lower() == 'client' and user_label_value == NONE_USER :
             return 1 if len(group[group['model'] != 'user']) == 0 else 0
+        
+        # Si la date validée par l'utilisateur en en 01,24 alors on valide si le LLM n'a rien proposé
+        if label_name.lower() == 'relevant date': 
+            dt = datetime.strptime(user_label_value, '%Y-%m-%d')
+            # Check if the datetime is in January 2024
+            if (dt.month == 1) and (dt.year == 2024) :
+                return 1 if len(group[group['model'] != 'user']) == 0 else 0
+            else :
+                pass
+        
         # Check if 'label_value' for 'model'='user' is in any row where 'model'!='user'
         return int(any(user_row['label_value'].isin(group.loc[group['model'] != 'user', 'label_value'])))
     else:
