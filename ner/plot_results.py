@@ -9,7 +9,7 @@ from ner.utils import get_student_conf_interval
 
 def get_results(with_ft, few_shots = [0,3], dataset = "ontonote5"):
     if dataset == "ontonote5":
-        df_results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
+        df_results,results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
         if with_ft:
             df_to_show = df_results[df_results['model'].str.contains('ft') & df_results['model'].str.contains('2000')]
         else : 
@@ -17,7 +17,7 @@ def get_results(with_ft, few_shots = [0,3], dataset = "ontonote5"):
         df_res = df_to_show[df_to_show['precision'] == '300']
         df_res = df_res[df_res['nb_few_shots'].isin(few_shots)]
     elif dataset == "conll2003_cleaned" :
-        df_results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
+        df_results, results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
         df_results['nb_samples'] = df_results['nb_test_run'] * df_results['len_data_test']
         df_res = df_results[df_results['nb_samples'] == 300]
         if with_ft:
@@ -113,7 +113,7 @@ def show_diff_ft(with_few_shots = False, datasets = ["ontonote5", "conll2003_cle
     output = ""
     tables = {}
     for dataset in datasets:
-        df_results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
+        df_results, results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
         if with_few_shots:
             df_to_show = df_results[df_results['nb_few_shots'] == 3]
         else : 
@@ -143,8 +143,8 @@ def show_diff_ft(with_few_shots = False, datasets = ["ontonote5", "conll2003_cle
 def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
     fig, axs = plt.subplots(1, len(datasets), figsize=(15,10))
     for idx, dataset in enumerate(datasets):
-        df_results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
-        df_results = df_results[df_results['model'].str.contains('2000') & df_results['model'].str.contains('ft') | ~df_results['model'].str.contains('ft')]
+        df_results,results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
+        df_results = df_results[(df_results['model'].str.contains('2000')) & (df_results['model'].str.contains('ft')) | ~df_results['model'].str.contains('ft')]
         df_results['ft'] = df_results['model'].str.contains('ft') & df_results['model'].str.contains('2000')
         df_to_show = df_results[['model', 'f1_mean', 'f1_conf_inter', 'prompt_technique',
             'few_shot_tecnique', 'nb_few_shots', 'precision', 'plus_plus', 'ft']]
@@ -200,7 +200,7 @@ def show_diff_ft_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
     output = ""
     tables = {}
     for idx, dataset in enumerate(datasets):
-        df_results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
+        df_results,results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
         df_results = df_results[df_results['model'].str.contains('2000') & df_results['model'].str.contains('ft') | ~df_results['model'].str.contains('ft')]
         df_results['ft'] = df_results['model'].str.contains('ft') & df_results['model'].str.contains('2000')
         df_to_show = df_results[['model', 'f1_mean', 'f1_conf_inter', 'prompt_technique',
