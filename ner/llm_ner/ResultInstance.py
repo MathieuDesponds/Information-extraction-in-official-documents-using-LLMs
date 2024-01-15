@@ -119,6 +119,7 @@ def load_all_results(root_directory = "ner/saves/results/conll2003_cleaned"):
 
     # Initialize a list to store the loaded data
     results = []
+    raw_results= []
 
     # Walk through the directory and its subdirectories
     for foldername, subfolders, filenames in os.walk(root_directory):
@@ -139,8 +140,9 @@ def load_all_results(root_directory = "ner/saves/results/conll2003_cleaned"):
                         r.tags = ONTONOTE5_TAGS if "ontonote" in root_directory else CONLL2003_TAGS
                     res_inst.noshots = noshots
                     results.append(res_inst.get_dict())
+                    raw_results.append(res_inst)
                     # save_result_instance_with_CI(res_inst)
-    return pd.DataFrame(results).sort_values('f1_mean', ascending = False)
+    return pd.DataFrame(results).sort_values('f1_mean', ascending = False), raw_results
 
 def load_result(model : str, pt : str, fst : str, nb_few_shots = 5, 
                 verifier = None, len_data_train = 1538, len_data_test = 50, with_precision = 'no-precision', nb_runs = None):
