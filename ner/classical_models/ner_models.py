@@ -76,8 +76,8 @@ def get_results(dataset, with_save = False, path_to_save= lambda dataset : f'./n
     for i in tqdm(range(len(dataset))):
         true_labels.append(dataset[i]['spans'])
 
-        spacy_entities = extract_entities_spacy(dataset[i]['text'])
-        spacy_pred_labels.append(spacy_entities)
+        # spacy_entities = extract_entities_spacy(dataset[i]['text'])
+        # spacy_pred_labels.append(spacy_entities)
 
         # flair_entities = extract_entities_flair(dataset[i]['text'], tagger_flair)
         # flair_pred_labels.append(flair_entities)
@@ -85,8 +85,8 @@ def get_results(dataset, with_save = False, path_to_save= lambda dataset : f'./n
         # flair_multi_entities = extract_entities_flair(dataset[i]['text'], tagger_flair_mutli)
         # flair_multi_pred_labels.append(flair_multi_entities)
 
-        flair_ontonote_base_entities = extract_entities_flair(dataset[i]['text'], tagger_flair_ontonote)
-        flair_ontonote_base.append(flair_ontonote_base_entities)
+        # flair_ontonote_base_entities = extract_entities_flair(dataset[i]['text'], tagger_flair_ontonote)
+        # flair_ontonote_base.append(flair_ontonote_base_entities)
 
         # flair_ontonote_large_entities = extract_entities_flair(dataset[i]['text'], tagger_flair_ontonote_large)
         # flair_ontonote_large.append(flair_ontonote_large_entities)
