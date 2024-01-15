@@ -63,8 +63,9 @@ def get_LLM_performance(mongo_client : MyMongoClient, PREDICTION_DOCUMENT_FOLDER
     # Applying the function to each group
     result_df = label_versions.groupby(['doc_id', 'label_name']).apply(check_label_value).reset_index(name='output')
 
-    score = result_df['output'].sum()/len(result_df)
-    return score, result_df, label_versions
+    score_by_fields = result_df['output'].sum()/len(result_df)
+    score_by_documents = result_df.groupby('doc_id').agg({'output' : 'mean'})['output'].mean()
+    return score_by_fields,score_by_documents, result_df, label_versions
 
 def get_results_by_label_name(score_df) :
     result_df = score_df.groupby('label_name')['output'].agg(['mean', 'count']).reset_index()
@@ -74,5 +75,18 @@ def get_results_by_label_name(score_df) :
     result_df = result_df.sort_values(by='count_values', ascending=False)
     return result_df
 
+def get_results_by_doc_type(label_versions) :
+    doc_type_analysis = label_versions[label_versions['label_name'] == 'document type'].pivot(index=['doc_id'], columns='model', values='label_value').reset_index()
+    doc_type_analysis['output'] = doc_type_analysis.apply(lambda row : row['llm - openai azure'] == row['user'], axis  = 1)
+    doc_type_analysis.groupby('user').agg({'output' : ['mean', 'count']}).reset_index().sort_values([('output', 'count')], ascending = False)
+    return doc_type_analysis
+
 def get_doc_hash_wrong_value(score_df, label_name):
     return score_df[(score_df['label_name'] == label_name) & (score_df['output'] == 0)]['doc_id'].tolist()
+
+def get_score_for_asked_fields(score_df):
+    doc_wrong_type = get_doc_hash_wrong_value(score_df, 'document type')
+    score_df2 = score_df[~(score_df['doc_id'].isin(doc_wrong_type) & (~score_df['label_name'].isin(['client', 'document type'])))]
+    score_by_fields = score_df2['output'].sum()/len(score_df2)
+    score_by_documents = score_df2.groupby('doc_id').agg({'output' : 'mean'})['output'].mean()
+    return score_by_fields,score_by_documents
