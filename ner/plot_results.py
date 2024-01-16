@@ -16,6 +16,7 @@ def get_results(with_ft, few_shots = [0,3], dataset = "ontonote5"):
             df_to_show = df_results[~df_results['model'].str.contains('ft')]
         df_res = df_to_show[df_to_show['precision'] == '300']
         df_res = df_res[df_res['nb_few_shots'].isin(few_shots)]
+        df_res = df_res[df_res['prompt_technique'] != 'multi_prompt-get-entities-tagger']
     elif dataset == "conll2003_cleaned" :
         df_results, results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
         df_results['nb_samples'] = df_results['nb_test_run'] * df_results['len_data_test']
@@ -39,7 +40,7 @@ def show_results(with_ft = False, datasets = ["ontonote5", "conll2003_cleaned"])
     for i, dataset in enumerate(datasets) :
         df = get_results(with_ft, dataset = dataset)
         df['tech_name'] = df.apply(lambda row :f"With {row['nb_few_shots']} few_shots {'and ++' if row['plus_plus']  else ''}", axis = 1)
-
+        df = df.sort_values('tech_name')
         # Convert the f1_conf_inter column to a tuple of floats
         df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
         
@@ -160,6 +161,7 @@ def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         df_to_show['tech_name'] = df_to_show.apply(lambda row :f"With {' ' if row['nb_few_shots'] <10 else ''}{row['nb_few_shots']} few shots", axis = 1)
 
         df = df_to_show
+        print(df)
         # Convert the f1_conf_inter column to a tuple of floats
         df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
 
@@ -206,9 +208,9 @@ def show_diff_ft_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         df_to_show = df_results[['model', 'f1_mean', 'f1_conf_inter', 'prompt_technique',
             'few_shot_tecnique', 'nb_few_shots', 'precision', 'plus_plus', 'ft']]
         df_to_show = df_to_show[df_to_show['plus_plus'] == True]
-        if dataset == 'ontonote5' :
+        if dataset == 'ontonote5':
             df_to_show = df_to_show[df_to_show['precision'] == '300']
-        elif dataset == 'conll2003_dataset' :
+        elif dataset == 'conll2003_dataset':
             df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == '300']
 
         # Pivot the DataFrame to have 'True' and 'False' types as columns

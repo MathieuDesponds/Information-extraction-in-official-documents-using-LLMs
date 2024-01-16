@@ -27,7 +27,7 @@ class LlamaLoader(ABC) :
         pass
 
 class Llama_LlamaCpp(LlamaLoader) : 
-    def __init__(self, temperature=0, top_p=1, stop=["<end_output>", "\n\n\n", '}'], max_tokens=216) -> None:
+    def __init__(self, temperature=0, top_p=1, stop=["<end_output>", "\n\n\n", '}'], max_tokens=512) -> None:
         super().__init__(temperature, top_p, stop, max_tokens)
         self.grammar = None
     

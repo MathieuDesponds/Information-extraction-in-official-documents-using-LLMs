@@ -52,6 +52,7 @@ class PT_Filing(PromptTechnique):
         
         if start_index != -1 and end_index != -1:
             response = response[start_index:end_index+2]
+            response.replace('\\n', '')
         else:
             print("-----------------------------------------------")
             print(f"response does not contain {{}}. Returned {response}")
@@ -60,6 +61,8 @@ class PT_Filing(PromptTechnique):
     
         try:
             named_entities = ast.literal_eval(response)
+            if not isinstance(named_entities, dict) :
+                print(named_entities)
         except Exception as e:
             named_entities = {}
         
@@ -72,8 +75,8 @@ class PT_Filing(PromptTechnique):
         return named_entities
     
     def get_gold(self, dataset : MyDataset, tag : str) -> list[str]:
-        output = lambda spans : {
-            f"{tag} : [{', '.join([ne for ne,t in spans if t == tag])}]\n"
+        output = lambda spans : '{' + ', '.join([
+            f"""'{tag}' : [{', '.join([f"'{ne}'" for ne,t in spans if t == tag])}]"""
             for tag in self.tags
-        }
+        ]) +'}'
         return [output(row['spans']) for row in dataset] 
