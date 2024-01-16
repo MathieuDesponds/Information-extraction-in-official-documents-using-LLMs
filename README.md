@@ -4,9 +4,7 @@
 ## Installation 
 Add the path of the right python version
 ```bash
-export PATH=/myhome/miniconda3/bin/python3.10:$PATH
 export PATH=/myhome/miniconda3/bin:$PATH
-export PATH=/myhome/miniconda3/lib:$PATH
 ```
 
 If it does not work, add `export PATH=/myhome/miniconda3/bin:$PATH` in `~/.bashrc` with `vim` and run `source ~/.bashrc`
@@ -47,7 +45,6 @@ We need to reload the dataset that were on the cache run `python setup.py`
 
 ### Direct run of everything
 ```bash
-export PATH=/myhome/miniconda3/bin/python3.10:$PATH
 export PATH=/myhome/miniconda3/bin:$PATH
 pip install -r requirements.txt
 spacy download  en_core_web_sm
@@ -58,6 +55,7 @@ cp /myhome/.ssh/id_rsa.pub /root/.ssh/id_rsa.pub
 cp /myhome/.ssh/id_rsa /root/.ssh/id_rsa
 python setup.py
 ```
+Then, restart the VM so that the changes are added 
 
 ### To use the application from the servers 
 ```bash
@@ -65,7 +63,7 @@ cp /myhome/default.conf /etc/nginx/conf.d/default.conf
 nginx -s reload
 apt-get update -y
 apt-get install -y sqlite3 
-
+CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
 cd /myhome/Master-thesis/
 python app.py
 ```
@@ -74,10 +72,21 @@ python app.py
 
 #### Explenations
 
-You want to setup the nginx server and override `/etc/nginx/conf.d/default.conf`
+You want to setup the nginx server and override `/etc/nginx/conf.d/default.conf` then make `nginx -s reload`
+Install sqlite3 `apt-get install sqlite3`
+You can copy form `myhome/` with `cp /myhome/default.conf /etc/nginx/conf.d/default.conf`
 
-You can copy form `myhome/` with `
-
+```bash
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+apt-get clean
+apt-get update -y
+apt-get upgrade -y
+apt-get install sqlite3 -y
+cp /myhome/default.conf /etc/nginx/conf.d/default.conf
+nginx -s reload
+CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
+```
 
 
 ```bash 
@@ -90,6 +99,9 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Prefix /;
+        proxy_read_timeout 120;
+        proxy_connect_timeout 120;
+        proxy_send_timeout 120; 
     }
 }
 ```
