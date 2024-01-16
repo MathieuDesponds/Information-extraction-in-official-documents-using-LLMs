@@ -122,7 +122,7 @@ def show_diff_ft(with_few_shots = False, datasets = ["ontonote5", "conll2003_cle
         if dataset == 'ontonote5' :
             df_to_show = df_to_show[df_to_show['precision'] == '300']
         elif dataset == 'conll2003_cleaned' :
-            df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == '300']
+            df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == 300]
             
         df_to_show= df_to_show[df_to_show['precision'] == '300']
         df_to_show['with_ft'] = df_to_show['model'].str.contains('ft') & df_to_show['model'].str.contains('2000-')
@@ -130,6 +130,8 @@ def show_diff_ft(with_few_shots = False, datasets = ["ontonote5", "conll2003_cle
         df_to_show = df_to_show[['f1_mean', 'model','f1_conf_inter', 'prompt_technique', 'nb_few_shots', 'precision', 'plus_plus', 'with_ft']]
         df_to_show = df_to_show[df_to_show['model'].isin(['mistral-7b-v0.1', 'mistral-7b-v0.1-ft-raw-2000-Q5_0', 'mistral-7b-v0.1-ft-raw-2000-Q5_0-conll2003'])]
         df_to_show = df_to_show[df_to_show['prompt_technique'].isin(['wrapper', 'discussion'])]
+
+
         # Pivot the DataFrame to have 'True' and 'False' types as columns
         pivot_df = df_to_show.pivot(index=['prompt_technique', 'plus_plus','nb_few_shots'], columns='with_ft', values='f1_mean')
         pivot_df = pivot_df.reset_index()
@@ -154,7 +156,7 @@ def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
             df_to_show = df_to_show[df_to_show['precision'] == '300']
         elif dataset == 'conll2003_cleaned' :
             df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == 300]
-            df_to_show = df_to_show[df_to_show['precision'] == '300']
+            df_to_show = df_to_show[df_to_show['precision'].isin(['300', 300])]
         df_to_show = df_to_show[df_to_show['prompt_technique'].isin(['wrapper', 'discussion'])]
 
         df_to_show['x_names']= df_to_show.apply(lambda row :f"{row['prompt_technique']} | {'With' if row['ft'] else 'Without'} finetuning", axis = 1)
@@ -203,23 +205,28 @@ def show_diff_ft_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
     tables = {}
     for idx, dataset in enumerate(datasets):
         df_results,results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
-        df_results = df_results[df_results['model'].str.contains('2000') & df_results['model'].str.contains('ft') | ~df_results['model'].str.contains('ft')]
+        df_results = df_results[df_results['model'].str.contains('2000-') & df_results['model'].str.contains('ft') | ~df_results['model'].str.contains('ft')]
         df_results['ft'] = df_results['model'].str.contains('ft') & df_results['model'].str.contains('2000')
         df_to_show = df_results[['model', 'f1_mean', 'f1_conf_inter', 'prompt_technique',
             'few_shot_tecnique', 'nb_few_shots', 'precision', 'plus_plus', 'ft']]
-        df_to_show = df_to_show[df_to_show['plus_plus'] == True]
+        df_to_show = df_to_show[df_to_show['plus_plus'] & ~df_to_show['ft']]
         if dataset == 'ontonote5':
             df_to_show = df_to_show[df_to_show['precision'] == '300']
-        elif dataset == 'conll2003_dataset':
-            df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == '300']
+        elif dataset == 'conll2003_cleaned':
+            df_to_show = df_to_show[df_to_show['precision'] == '300']
+            df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == 300]
 
         # Pivot the DataFrame to have 'True' and 'False' types as columns
-        pivot_df = df_to_show.pivot(index=['prompt_technique',  'nb_few_shots'], columns='ft', values='f1_mean').reset_index()
+        pivot_df = df_to_show.pivot(index=['prompt_technique'], columns='nb_few_shots', values='f1_mean').reset_index()
 
         # Subtract 'False' from 'True'
-        pivot_df['result'] = pivot_df[True] - pivot_df[False]
-        mean, conf = get_student_conf_interval(list(pivot_df['result'].dropna()))
+        pivot_df['result_0_3'] = pivot_df[3] - pivot_df[0]
+        pivot_df['result_0_10'] = pivot_df[10] - pivot_df[0]
+        mean3, conf3 = get_student_conf_interval(list(pivot_df['result_0_3'].dropna()))
+        mean10, conf10 = get_student_conf_interval(list(pivot_df['result_0_10'].dropna()))
         # Display the result
-        output += f"For {dataset.capitalize()} :\n    The mean score increase with few_shots between finetuning and without finetuning is \n     {mean} with confidence 95% student interval {conf}"
-        tables['dataset'] = pivot_df[['prompt_technique', 'nb_few_shots', 'result', True, False]]
+        output += f"""For {dataset.capitalize()} :
+    The mean score increase with 0 and  3 few_shots is \n     {mean3} with confidence 95% student interval {conf3}
+    The mean score increase with 0 and 10 few_shots is \n     {mean10} with confidence 95% student interval {conf10}\n"""
+        tables['dataset'] = pivot_df[['prompt_technique', 'result_0_3', 'result_0_10', 0,3,10]]
     return output, tables
