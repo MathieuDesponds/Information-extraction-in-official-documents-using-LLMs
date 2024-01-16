@@ -1,14 +1,13 @@
 import logging
 from flask import Flask, request
 from llm.LLMModel import MistralAI, NoLLM
-from llm.LlamaLoader import VLLM
 
 BASE_PATH = '/custom-nginx/my-app'
 
 app = Flask(__name__)
-# model = MistralAI(quantization="Q5_0")
-# model.add_grammar("doc_type")
-model = MistralAI(llm_loader=VLLM)
+
+# model = MistralAI(quantization="Q8_0")
+# model.add_grammar("json")
 
 @app.route(BASE_PATH+'/', methods=['GET'])
 def base():
