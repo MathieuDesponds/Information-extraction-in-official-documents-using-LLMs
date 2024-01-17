@@ -41,7 +41,7 @@ class PT_OutputList(PromptTechnique):
     def process_output(self, response : str, tag : str = None, tags = ["PER", "ORG", "LOC", 'MISC']):
         start_index, end_index = response.find('[['), response.find(']]') # Find the opening curly brace
         start_index =  response.find('[(') if start_index == -1 else start_index
-        end_index = response.find(')]') if end_index == -1 else end_index   # Find the closing curly brace
+        end_index = (response.find(') ]') if response.find(')]') == -1 else response.find(')]')) if end_index == -1 else end_index   # Find the closing curly brace
         
         if start_index != -1 and end_index != -1:
             response = response[start_index:end_index+2]
@@ -55,7 +55,7 @@ class PT_OutputList(PromptTechnique):
             named_entities = ast.literal_eval(response)
         except Exception as e:
             named_entities = []
-        named_entities = list(set([(ne_tag[0], ne_tag[1] ) for ne_tag in named_entities if ne_tag[1] in tags]))
+        named_entities = list(set([(ne_tag[0], ne_tag[1] ) for ne_tag in named_entities if len(ne_tag) == 2 and ne_tag[1] in tags]))
         return named_entities
     
     def get_gold(self, dataset : MyDataset, tag : str) -> list[str]:

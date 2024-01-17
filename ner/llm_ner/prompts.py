@@ -52,8 +52,16 @@ Output a json with the named entities as keys and the tag as values.
 {precisions}{few_shots}
 ### ASSISTANT : Ok now I understand I need to only output json with the named entities as keys and the tag as values. Can you now provide me the list of extracted entities and the sentence ? 
 ### USER : <start_input> {entities_sentence} <end_input>
-### ASSISTANT : <start_output> {{ """),
-
+### ASSISTANT : <start_output> {{ """), 
+"filing" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
+### USER : Your goal is to extract all the entities that have either tag person, organization, location or miscallaneous. 
+In order to do this, your task is to extract all the named entities in a json containing all the tags as values and a list of named entities that are of this type of tag as value..
+{precisions}{few_shots}
+### ASSISTANT : Ok now I understand I need to output a json with 'PER', 'ORG', 'LOC' or 'MISC' as key and the values that I found in the sentence as value. Can you now provide me the sentence ? 
+### USER : <start_input> {sentence} <end_input>
+### ASSISTANT : <start_output> """)
 }
 
 prompt_raw_conll = lambda plus_plus : {
@@ -242,6 +250,15 @@ prompt_template_ontonotes = lambda plus_plus : {
 ### ASSISTANT : I take the named entities previously extracted in the sentence and add to each named entity one of the 18 character corresponding to one of the tags. Now provide me the list of extracted entities and the sentence ? 
 ### USER : <start_input> "{entities_sentence}" <end_input>
 ### ASSISTANT : <start_output> {{ """),
+"filing" : PromptTemplate(
+        input_variables=['sentence', 'few_shots', 'precisions'],
+        template = """### SYSTEM : The task is to extract all the named entites in the following sentence.
+### USER : Your goal is to extract all the named entities in the text that could be tagged by one of the tag of the OntoNote5 dataset.
+In order to do this, your task is to extract all the named entities in a json containing all the tags as values and a list of named entities that are of this type of tag as value.
+{precisions}{few_shots}
+### ASSISTANT : Ok now I understand I need to output a json with the Ontonote5 tags as key and the values that I found in the sentence as value. Can you now provide me the sentence ? 
+### USER : <start_input> {sentence} <end_input>
+### ASSISTANT : <start_output> """)
 
 }
 

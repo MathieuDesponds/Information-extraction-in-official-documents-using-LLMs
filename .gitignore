@@ -3,6 +3,7 @@ __pycache__/
 ner/saves/datasets/old
 
 llm/models/*
+llm/models/ChatGPT
 
 ner/saves/results/conll2003_not_cleaned/*
 
