@@ -5,6 +5,7 @@ datasets
 nltk
 spacy>=2.2.0,<3.0.0
 flair
+openai
 https://github.com/amazon-science/ReFinED/archive/refs/tags/V1.zip #Refined
 langchain
 langchain-community

@@ -6,7 +6,7 @@ BASE_PATH = '/custom-nginx/my-app'
 
 app = Flask(__name__)
 
-# model = MistralAI(quantization="Q8_0")
+model = MistralAI(quantization="Q5_0")
 # model.add_grammar("json")
 
 @app.route(BASE_PATH+'/', methods=['GET'])

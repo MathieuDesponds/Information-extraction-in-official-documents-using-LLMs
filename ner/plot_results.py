@@ -163,7 +163,7 @@ def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         df_to_show['tech_name'] = df_to_show.apply(lambda row :f"With {' ' if row['nb_few_shots'] <10 else ''}{row['nb_few_shots']} few shots", axis = 1)
 
         df = df_to_show
-        print(df)
+        
         # Convert the f1_conf_inter column to a tuple of floats
         df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
 
