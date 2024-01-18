@@ -45,8 +45,8 @@ def check_label_value(group):
     else:
         return 0
     
-def get_LLM_performance(mongo_client : MyMongoClient, PREDICTION_DOCUMENT_FOLDER):
-    label_versions = mongo_client.get_labels_versions(PREDICTION_DOCUMENT_FOLDER)
+def get_LLM_performance(mongo_client : MyMongoClient, doc_folder, with_gold):
+    label_versions = mongo_client.get_labels_versions(doc_folder)
 
     # take only into consideration the label of the useer and of the llm
     label_versions = label_versions[(label_versions['model'] == 'user') | (label_versions['model'].str.contains('llm - openai azure'))]
@@ -59,6 +59,15 @@ def get_LLM_performance(mongo_client : MyMongoClient, PREDICTION_DOCUMENT_FOLDER
 
     # Apply the function to the DataFrame
     label_versions['label_value'] = label_versions.apply(format_date, axis=1)
+
+    if not with_gold :
+        gold = pd.read_csv("data/2024-01-18_16:15:33_df_gold_labels.csv")
+        doc_not_both1 = set(label_versions['doc_id'].tolist()).difference(set(gold['doc_id'].tolist()))
+        doc_not_both2 = set(gold['doc_id'].tolist()).difference(set(label_versions['doc_id'].tolist()))
+        
+        print(f"len label_versions {len(label_versions['doc_id'].tolist())}\ndoc not both {len(doc_not_both1)} {len(doc_not_both2)} : {doc_not_both1} { doc_not_both2}")
+        label_versions = pd.concat([label_versions, gold], ignore_index=True)
+        # return label_versions[label_versions['doc_id'].isin(doc_not_both1.union(doc_not_both2))]
 
     # Applying the function to each group
     result_df = label_versions.groupby(['doc_id', 'label_name']).apply(check_label_value).reset_index(name='output')
