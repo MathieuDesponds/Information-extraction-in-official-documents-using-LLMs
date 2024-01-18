@@ -60,7 +60,10 @@ class PromptTechnique(ABC):
                     continue
 
             reponse_text, response_all = llm(prompt, with_full_message =True)
+            #Remvoe \n
+            reponse_text = reponse_text.replace('\\n', '')
             processed_response = self.process_output(prefix + reponse_text, tag, tags = tags)
+            # print(f"To process {processed_response}")
             if verifier : 
                 processed_response = verifier.verify(sentence, processed_response, llm)
             if confidence_checker :
