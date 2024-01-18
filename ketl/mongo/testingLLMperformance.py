@@ -63,8 +63,9 @@ def get_LLM_performance(mongo_client : MyMongoClient, PREDICTION_DOCUMENT_FOLDER
     # Applying the function to each group
     result_df = label_versions.groupby(['doc_id', 'label_name']).apply(check_label_value).reset_index(name='output')
 
-    score_by_fields = result_df['output'].sum()/len(result_df)
-    score_by_documents = result_df.groupby('doc_id').agg({'output' : 'mean'})['output'].mean()
+    # score_by_fields = result_df['output'].sum()/len(result_df)
+    # score_by_documents = result_df.groupby('doc_id').agg({'output' : 'mean'})['output'].mean()
+    score_by_fields, score_by_documents = get_score_for_asked_fields(result_df)
     return score_by_fields,score_by_documents, result_df, label_versions
 
 def get_results_by_label_name(score_df) :
