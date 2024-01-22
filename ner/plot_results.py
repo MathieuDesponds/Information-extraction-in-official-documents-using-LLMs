@@ -36,17 +36,18 @@ def show_results(with_ft = False, datasets = ["ontonote5", "conll2003_cleaned"])
     fig, axs = plt.subplots(1,len(datasets),figsize = (15,8))
 
     # Set up jitter for x-axis positions
-    jitter = 0.1
+    jitter = 0.15
     for i, dataset in enumerate(datasets) :
         df = get_results(with_ft, dataset = dataset)
         df['tech_name'] = df.apply(lambda row :f"With {row['nb_few_shots']} few_shots {'and ++' if row['plus_plus']  else ''}", axis = 1)
         df = df.sort_values('tech_name')
         # Convert the f1_conf_inter column to a tuple of floats
         df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
+        df['f1_conf_inter_bar'] = df.apply(lambda row : (-(row['f1_conf_inter'][0]-row['f1_mean']), row['f1_conf_inter'][1]-row['f1_mean']),axis = 1)
         
         df = df[df['precision'] == '300']
         df = df[df['f1_mean'] != 0]
-        print(df)
+        # print(df)
         # Loop through unique tech_names
         for h, tech_name in enumerate(df['tech_name'].unique()):
             # Filter the DataFrame for the current tech_name
@@ -54,12 +55,17 @@ def show_results(with_ft = False, datasets = ["ontonote5", "conll2003_cleaned"])
             # Add jitter to x-axis positions
             x_positions = np.arange(len(tech_df['prompt_technique'])) + h * jitter
             # Plot the f1_mean values with jitter
-            axs[i].scatter(x_positions, tech_df['f1_mean'], label=tech_name)
+            axs[i].bar(x_positions, 
+                       tech_df['f1_mean'], 
+                       yerr=np.array(tech_df['f1_conf_inter_bar'].tolist()).T, 
+                       capsize=5, width = jitter-0.01,
+                        align='center', label=tech_name)
             
             # Plot the confidence intervals using error bars
-            for j, (_, row) in enumerate(tech_df.iterrows()):
-                low, high = row['f1_conf_inter']
-                axs[i].errorbar(x_positions[j], row['f1_mean'], yerr=[[row['f1_mean'] - low], [high - row['f1_mean']]], color='gray', capsize=5, capthick=2, fmt='none')
+            # axs[i].scatter(x_positions, tech_df['f1_mean'], label=tech_name)
+            # for j, (_, row) in enumerate(tech_df.iterrows()):
+            #     low, high = row['f1_conf_inter']
+            #     axs[i].errorbar(x_positions[j], row['f1_mean'], yerr=[[row['f1_mean'] - low], [high - row['f1_mean']]], color='gray', capsize=5, capthick=2, fmt='none')
 
         # Customize the plot
         axs[i].set_xticks(np.arange(len(df['prompt_technique'].unique())) + 0.5 * (len(df['tech_name'].unique()) - 1) * jitter)

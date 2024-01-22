@@ -58,6 +58,7 @@ class Llama_LlamaCpp(LlamaLoader) :
             self.grammar = LlamaGrammar.from_file("ner/grammars/discussion.gbnf")
         elif type_of_grammar == "json":
             self.grammar = LlamaGrammar.from_file("ner/grammars/json.gbnf")
+            self.stop=['}']
         elif type_of_grammar == "doc_type":
             self.grammar = LlamaGrammar.from_file("ner/grammars/doc_type.gbnf")
 
@@ -71,6 +72,9 @@ class Llama_LlamaCpp(LlamaLoader) :
             grammar = self.grammar
             # logprobs = 20
             )
+        #If the stop ward '}' was used then we add it back.
+        if self.stop == ['}'] and output['usage']['completion_tokens'] != self.max_tokens: 
+            output['choices'][0]['text'] = output['choices'][0]['text'] +'}'
         if with_full_message :
             return output['choices'][0]['text'], output 
         return output['choices'][0]['text']

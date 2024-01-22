@@ -29,8 +29,8 @@ class ResultInstance():
 
         self.cm, self.f1, self.precision, self.recall = None, None, None,None
         
-    def get_scores(self, with_y = False):
-        if not self.f1 :
+    def get_scores(self, with_y = False, force = False):
+        if not self.f1 or force:
             self.cm, self.f1, self.precision, self.recall, y_true, y_pred, nes = get_metrics_all(self.results, self.gold, self.tags)
         if with_y :
             return self.cm, self.f1, self.precision, self.recall, y_true, y_pred

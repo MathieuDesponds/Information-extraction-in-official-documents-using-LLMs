@@ -108,6 +108,7 @@ def get_metrics_all(results, gold, tags = ['LOC', 'PER', 'ORG', 'MISC'], average
         all_nes.extend(nes)
     y_true = [y if y else 'None' for y in y_true]
     y_pred = [y if y else 'None' for y in y_pred]
+    y_pred = ['ORG' if y == 'organisation' else y for y in y_pred]
     cm = None#confusion_matrix(y_true, y_pred, labels = tags + ['None'])
     precision, recall, f1, _= precision_recall_fscore_support(y_true, y_pred, average = average, zero_division=0)
     if with_y_conf :
