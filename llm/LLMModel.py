@@ -9,6 +9,7 @@ import pandas as pd
 import os
 import spacy
 import transformers
+from transformers import AutoTokenizer
 
 from ner.Datasets.Conll2003Dataset import get_test_cleaned_split as conll_get_test_cleaned_split
 from ner.Datasets.OntoNotes5Dataset import get_test_cleaned_split as ontonote_get_test_cleaned_split, ONTONOTE5_TAGS
@@ -79,7 +80,7 @@ class LLMModel(ABC):
     def __str__(self) -> str:
         return self.name
 
-    def __call__(self, prompt, with_full_message) -> Any:
+    def __call__(self, prompt, with_full_message = False) -> Any:
         return self.model(prompt, with_full_message)
         # return prompt
     
@@ -340,6 +341,21 @@ class MistralAI(LLMModel):
     @staticmethod
     def name():
         return "Mistral-7B-v0.1".lower()
+    
+class MistralAIInstruct(LLMModel):
+    def __init__(self, base_model_id = "mistralai/Mistral-7B-Instruct-v0.2", base_model_name = "Mistral-7B-Instruct-v0.2", quantization = 'Q8_0', llm_loader = None, without_model = False, lora_path = None) -> None:
+        super().__init__(base_model_id, base_model_name, quantization=quantization, llm_loader=llm_loader, without_model=without_model, lora_path = lora_path)
+        self.tokenizer =  AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
+
+    @staticmethod
+    def name():
+        return "Mistral-7B-Instruct-v0.2".lower()
+    
+    def __call__(self, prompt, with_full_message = False) -> Any:
+        if isinstance(prompt, list):
+            prompt = self.tokenizer.apply_chat_template(prompt, tokenize=False)
+            # print(prompt)
+        return self.model(prompt, with_full_message)
 
     
 class NoLLM(LLMModel):
