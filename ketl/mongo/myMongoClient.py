@@ -8,7 +8,7 @@ hash_object = hashlib.sha256()
 
 ONEDRIVE_STORAGE_HASH = "b!AexAOmJBX0GFrFCDPly37vK7ahDKKlBHgbMmpv0CDCXt3nRYonxISZkyQ12XYZPz"
 BANQUE_STORAGE_HASH = "b!sYa62uHHtUqTlMT05hXNNDimI6dJj1xDlCQOeoCbtQ2y7z_UU_D9QKTSaBBIB995"
-GOLD_DOCUMENT_FOLDER = [ONEDRIVE_STORAGE_HASH, "Banque documents", "Filed"]
+BANQUE_DOCUMENT_FOLDER = [ONEDRIVE_STORAGE_HASH, "Banque documents", "All documents"]
 PREDICTION_DOCUMENT_FOLDER = [BANQUE_STORAGE_HASH, "Clients"]
 
 class MyMongoClient :
@@ -22,6 +22,7 @@ class MyMongoClient :
         self.db = db
         self.mongo_client = MongoClient(f'mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}')
         self.all_docs = None
+        self.all_docs_content = None
 
     def get_all_field_of_documents(self):
         cursor = self.mongo_client[self.db]['documents']
@@ -79,6 +80,17 @@ class MyMongoClient :
             self.all_docs = list(cursor.find({}))
         return self.all_docs
     
+    def get_document_content(self, document) :
+        doc_stor_id = document['_id']
+        if not self.all_docs_content :
+            cursor = self.mongo_client[self.db]['contents']
+            self.all_docs_content = list(cursor.find({}))
+        doc_content = [content for content in self.all_docs_content if content['parent']['id'] == doc_stor_id]
+        if doc_content :
+            return doc_content[0]['content']
+        print("Problem while returning the content of a document")
+        return None
+
     def get_docs_labels(self, path_storage):
         all_docs = self.get_all_documents()
         filtered_data = []

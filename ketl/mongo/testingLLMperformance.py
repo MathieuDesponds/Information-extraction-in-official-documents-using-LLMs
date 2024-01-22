@@ -45,26 +45,37 @@ def check_label_value(group):
     else:
         return 0
     
-def get_LLM_performance(mongo_client : MyMongoClient, PREDICTION_DOCUMENT_FOLDER):
-    label_versions = mongo_client.get_labels_versions(PREDICTION_DOCUMENT_FOLDER)
+def get_LLM_performance(mongo_client : MyMongoClient, doc_folder, with_gold, with_label_version = False, label_versions = None):
+    if not with_label_version :
+        label_versions = mongo_client.get_labels_versions(doc_folder)
 
-    # take only into consideration the label of the useer and of the llm
-    label_versions = label_versions[(label_versions['model'] == 'user') | (label_versions['model'].str.contains('llm - openai azure'))]
+        # take only into consideration the label of the useer and of the llm
+        label_versions = label_versions[(label_versions['model'] == 'user') | (label_versions['model'].str.contains('llm - openai azure'))]
 
-    #Do not take into consideration the label with '-' and language 
-    label_versions = label_versions[(~label_versions['label_name'].str.contains('-')) & ~label_versions['label_name'].isin(['description document'])]
+        #Do not take into consideration the label with '-' and language 
+        label_versions = label_versions[(~label_versions['label_name'].str.contains('-')) & ~label_versions['label_name'].isin(['description document'])]
 
-    # Filter the matching rows where we keep only the maximum
-    label_versions = label_versions.groupby(['doc_id', 'label_name', 'model']).apply(filter_rows).reset_index(drop=True)
+        # Filter the matching rows where we keep only the maximum
+        label_versions = label_versions.groupby(['doc_id', 'label_name', 'model']).apply(filter_rows).reset_index(drop=True)
 
-    # Apply the function to the DataFrame
-    label_versions['label_value'] = label_versions.apply(format_date, axis=1)
+        # Apply the function to the DataFrame
+        label_versions['label_value'] = label_versions.apply(format_date, axis=1)
+
+    if not with_gold :
+        gold = pd.read_csv("data/2024-01-18_16:15:33_df_gold_labels.csv")
+        doc_not_both1 = set(label_versions['doc_id'].tolist()).difference(set(gold['doc_id'].tolist()))
+        doc_not_both2 = set(gold['doc_id'].tolist()).difference(set(label_versions['doc_id'].tolist()))
+        
+        print(f"len label_versions {len(label_versions['doc_id'].tolist())}\ndoc not both {len(doc_not_both1)} {len(doc_not_both2)} : {doc_not_both1} { doc_not_both2}")
+        label_versions = pd.concat([label_versions, gold], ignore_index=True)
+        # return label_versions[label_versions['doc_id'].isin(doc_not_both1.union(doc_not_both2))]
 
     # Applying the function to each group
     result_df = label_versions.groupby(['doc_id', 'label_name']).apply(check_label_value).reset_index(name='output')
 
-    score_by_fields = result_df['output'].sum()/len(result_df)
-    score_by_documents = result_df.groupby('doc_id').agg({'output' : 'mean'})['output'].mean()
+    # score_by_fields = result_df['output'].sum()/len(result_df)
+    # score_by_documents = result_df.groupby('doc_id').agg({'output' : 'mean'})['output'].mean()
+    score_by_fields, score_by_documents = get_score_for_asked_fields(result_df, no_compare_doc = doc_not_both1.union(doc_not_both2))
     return score_by_fields,score_by_documents, result_df, label_versions
 
 def get_results_by_label_name(score_df) :
@@ -84,9 +95,23 @@ def get_results_by_doc_type(label_versions) :
 def get_doc_hash_wrong_value(score_df, label_name):
     return score_df[(score_df['label_name'] == label_name) & (score_df['output'] == 0)]['doc_id'].tolist()
 
-def get_score_for_asked_fields(score_df):
-    doc_wrong_type = get_doc_hash_wrong_value(score_df, 'document type')
+def get_score_for_asked_fields(score_df, no_compare_doc):
+    doc_wrong_type = get_doc_hash_wrong_value(score_df, 'document type') + list(no_compare_doc)
     score_df2 = score_df[~(score_df['doc_id'].isin(doc_wrong_type) & (~score_df['label_name'].isin(['client', 'document type'])))]
     score_by_fields = score_df2['output'].sum()/len(score_df2)
     score_by_documents = score_df2.groupby('doc_id').agg({'output' : 'mean'})['output'].mean()
     return score_by_fields,score_by_documents
+
+
+import pickle 
+import os
+def dump(obj, file_path):
+    file_splitted = file_path.split('/')
+    directory_path = '/'.join(file_splitted[:-1])+'/'
+    file_name = file_splitted[-1]
+    # Ensure that the directory exists; create it if it doesn't
+    if not os.path.exists(directory_path):
+        os.makedirs(directory_path)
+
+    with open(file_path, 'wb') as f :
+        pickle.dump(obj, f) 

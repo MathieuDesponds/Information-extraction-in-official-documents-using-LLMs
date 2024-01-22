@@ -1,0 +1,801 @@
+doc_id,label_name,label_value,confidence,model,created_on
+1lAlEK+bwqsFS6yZSfAOtw==,document type,Facture,0.8,llm - openai azure,2024-01-18 14:57:45.321000
+1lAlEK+bwqsFS6yZSfAOtw==,fournisseur,"agence immobilière sa, Lancy",0.8,llm - openai azure,2024-01-18 14:58:35.195000
+1lAlEK+bwqsFS6yZSfAOtw==,period end,2014-12-31,0.8,llm - openai azure,2024-01-18 14:58:35.242000
+1lAlEK+bwqsFS6yZSfAOtw==,period start,2014-01-01,0.8,llm - openai azure,2024-01-18 14:58:35.234000
+1lAlEK+bwqsFS6yZSfAOtw==,relevant date,2015-01-07,0.8,llm - openai azure,2024-01-18 14:58:35.226000
+1lAlEK+bwqsFS6yZSfAOtw==,total ht,"5,558.20",0.8,llm - openai azure,2024-01-18 14:58:35.209000
+1lAlEK+bwqsFS6yZSfAOtw==,total ttc,"6,163.65",0.8,llm - openai azure,2024-01-18 14:58:35.203000
+1lAlEK+bwqsFS6yZSfAOtw==,total tva,605.45,0.8,llm - openai azure,2024-01-18 14:58:35.218000
+1wvAxFHIFhyTUDNzbM3QPw==,client,6512c03a06266e001d585bb9,0.5454545617103577,llm - openai azure entity + matching,2024-01-18 14:57:14.120000
+1wvAxFHIFhyTUDNzbM3QPw==,document type,Décompte de salaire,0.8,llm - openai azure,2024-01-18 14:57:13.225000
+29yradmnIewK1RIRbRSTrg==,canton,GE,0.8,llm - openai azure,2024-01-18 14:58:37.276000
+29yradmnIewK1RIRbRSTrg==,client,651440dc06266e001d585cd8,0.800000011920929,llm - openai azure entity + matching,2024-01-18 14:57:53.055000
+29yradmnIewK1RIRbRSTrg==,code declaration,12-966-243,0.8,llm - openai azure,2024-01-18 14:58:37.291000
+29yradmnIewK1RIRbRSTrg==,document type,Déclaration fiscale,0.8,llm - openai azure,2024-01-18 14:57:52.874000
+29yradmnIewK1RIRbRSTrg==,numero contribuable,614.49.3243-3,0.8,llm - openai azure,2024-01-18 14:58:37.285000
+29yradmnIewK1RIRbRSTrg==,year,31.12.2017,0.8,llm - openai azure,2024-01-18 14:58:37.267000
+3+h1BtgoAL0PhXWyK1+40g==,canton,VD,0.8,llm - openai azure,2024-01-18 14:58:24.344000
+3+h1BtgoAL0PhXWyK1+40g==,code declaration,10-560-105,0.8,llm - openai azure,2024-01-18 14:58:24.356000
+3+h1BtgoAL0PhXWyK1+40g==,document type,Déclaration fiscale,0.8,llm - openai azure,2024-01-18 14:57:04.661000
+3+h1BtgoAL0PhXWyK1+40g==,numero contribuable,321.65.1850-1,0.8,llm - openai azure,2024-01-18 14:58:24.349000
+3+h1BtgoAL0PhXWyK1+40g==,relevant date,2010-08-29,0.8,llm - openai azure,2024-01-18 14:58:24.328000
+3+h1BtgoAL0PhXWyK1+40g==,year,2010,0.8,llm - openai azure,2024-01-18 14:58:24.335000
+3520v2gfAFyiW53r271b6A==,document type,Extrait du registre des poursuites,0.8,llm - openai azure,2024-01-18 14:57:20.207000
+3520v2gfAFyiW53r271b6A==,relevant date,2017-07-13,0.8,llm - openai azure,2024-01-18 14:58:29.354000
+3KtqVeCizQwSQB1ZYP1XEQ==,client,651440dc06266e001d585cd8,0.800000011920929,llm - openai azure entity + matching,2024-01-18 14:57:55.740000
+4bS2yQ7aeIoqZx5skntEFA==,document type,Extrait du registre foncier,0.8,llm - openai azure,2024-01-18 14:58:14.098000
+4bS2yQ7aeIoqZx5skntEFA==,relevant date,1985-04-22,0.8,llm - openai azure,2024-01-18 14:58:40.625000
+5+ip+7sGl+kfXqh+5SwOyA==,acte type,Acte de donation,0.8,llm - openai azure,2024-01-18 14:56:37.864000
+5+ip+7sGl+kfXqh+5SwOyA==,acte type,Acte de donation,0.8,llm - openai azure,2024-01-18 14:56:37.864000
+5+ip+7sGl+kfXqh+5SwOyA==,client,6512c03a06266e001d585bb7,0.7037037014961243,llm - openai azure entity + matching,2024-01-18 14:56:37.738000
+5+ip+7sGl+kfXqh+5SwOyA==,document type,Acte,0.8,llm - openai azure,2024-01-18 14:56:37.843000
+5+ip+7sGl+kfXqh+5SwOyA==,document type,Acte,0.8,llm - openai azure,2024-01-18 14:56:37.843000
+5+ip+7sGl+kfXqh+5SwOyA==,num parcelle,298,0.8,llm - openai azure,2024-01-18 14:56:37.873000
+5+ip+7sGl+kfXqh+5SwOyA==,num parcelle,298,0.8,llm - openai azure,2024-01-18 14:56:37.873000
+5+ip+7sGl+kfXqh+5SwOyA==,relevant date,2021-10-15,0.8,llm - openai azure,2024-01-18 14:56:37.858000
+5+ip+7sGl+kfXqh+5SwOyA==,relevant date,2021-10-15,0.8,llm - openai azure,2024-01-18 14:56:37.858000
+62Ks33O7Qs/5VzmxHnLKKg==,document type,Certificat annuel de salaire,0.8,llm - openai azure,2024-01-18 14:58:19.994000
+62Ks33O7Qs/5VzmxHnLKKg==,num avs,88180,0.8,llm - openai azure,2024-01-18 14:58:43.057000
+62Ks33O7Qs/5VzmxHnLKKg==,relevant date,2011-03-01,0.8,llm - openai azure,2024-01-18 14:58:43.047000
+62Ks33O7Qs/5VzmxHnLKKg==,salaire net,10466.75,0.8,llm - openai azure,2024-01-18 14:58:43.066000
+63KSW0tjZ6CrwLEQoCfuUg==,canton,GE,0.8,llm - openai azure,2024-01-18 14:58:35.737000
+63KSW0tjZ6CrwLEQoCfuUg==,client,651440dc06266e001d585cd8,0.5714285969734192,llm - openai azure entity + matching,2024-01-18 14:57:48.608000
+63KSW0tjZ6CrwLEQoCfuUg==,code declaration,12-600-255,0.8,llm - openai azure,2024-01-18 14:58:35.750000
+63KSW0tjZ6CrwLEQoCfuUg==,document type,Déclaration fiscale,0.8,llm - openai azure,2024-01-18 14:57:48.076000
+63KSW0tjZ6CrwLEQoCfuUg==,fortune imposable icc,376811,0.8,llm - openai azure,2024-01-18 14:58:35.762000
+63KSW0tjZ6CrwLEQoCfuUg==,numero contribuable,614.49.3243-3,0.8,llm - openai azure,2024-01-18 14:58:35.744000
+63KSW0tjZ6CrwLEQoCfuUg==,relevant date,2017-06-18,0.8,llm - openai azure,2024-01-18 14:58:35.724000
+63KSW0tjZ6CrwLEQoCfuUg==,revenu imposable icc,145314,0.8,llm - openai azure,2024-01-18 14:58:35.757000
+63KSW0tjZ6CrwLEQoCfuUg==,revenu imposable ifd,135501,0.8,llm - openai azure,2024-01-18 14:58:35.769000
+63KSW0tjZ6CrwLEQoCfuUg==,year,31.12.2016,0.8,llm - openai azure,2024-01-18 14:58:35.732000
+7djccsF+/wgSM22nUQxzbg==,client,6512c03b06266e001d585bbc,0.7692307829856873,llm - openai azure entity + matching,2024-01-18 14:56:53.142000
+7djccsF+/wgSM22nUQxzbg==,document type,Relevé Annuel PEL,0.8,llm - openai azure,2024-01-18 14:56:52.979000
+7djccsF+/wgSM22nUQxzbg==,relevant date,2020-12-31,0.8,llm - openai azure,2024-01-18 14:57:45.864000
+7sksWKtw8kBPkNzuyGo98A==,client,651440c6ca9bd6001dd04369,0.5714285969734192,llm - openai azure entity + matching,2024-01-18 14:57:59.526000
+7sksWKtw8kBPkNzuyGo98A==,document type,Certificat annuel de salaire,0.8,llm - openai azure,2024-01-18 14:57:59.321000
+7sksWKtw8kBPkNzuyGo98A==,num avs,404.48.834.134,0.8,llm - openai azure,2024-01-18 14:58:38.457000
+7sksWKtw8kBPkNzuyGo98A==,relevant date,2017-01-01,0.8,llm - openai azure,2024-01-18 14:58:38.448000
+7sksWKtw8kBPkNzuyGo98A==,salaire net,20918,0.8,llm - openai azure,2024-01-18 14:58:38.467000
+7wKQEgxKSZEspILT7n7UqA==,canton,GE,0.8,llm - openai azure,2024-01-18 14:58:42.125000
+7wKQEgxKSZEspILT7n7UqA==,code declaration,10-386-243,0.8,llm - openai azure,2024-01-18 14:58:42.139000
+7wKQEgxKSZEspILT7n7UqA==,document type,Déclaration fiscale,0.8,llm - openai azure,2024-01-18 14:58:17.416000
+7wKQEgxKSZEspILT7n7UqA==,numero contribuable,398.24.1243-1,0.8,llm - openai azure,2024-01-18 14:58:42.133000
+7wKQEgxKSZEspILT7n7UqA==,relevant date,2011-03-27,0.8,llm - openai azure,2024-01-18 14:58:42.107000
+7wKQEgxKSZEspILT7n7UqA==,revenu imposable icc,118774.1,0.8,llm - openai azure,2024-01-18 14:58:42.146000
+7wKQEgxKSZEspILT7n7UqA==,revenu imposable ifd,22370.0,0.8,llm - openai azure,2024-01-18 14:58:42.151000
+7wKQEgxKSZEspILT7n7UqA==,year,2010,0.8,llm - openai azure,2024-01-18 14:58:42.116000
+9Ip3gurCDrs8bEJWfvy9ZA==,client,6512c03a06266e001d585bb9,0.5454545617103577,llm - openai azure entity + matching,2024-01-18 14:57:14.599000
+9Ip3gurCDrs8bEJWfvy9ZA==,document type,Décompte de salaire,0.8,llm - openai azure,2024-01-18 14:57:14.669000
+ANelIAm7DA7mZ3RLDoKssA==,document type,Plan,0.8,llm - openai azure,2024-01-18 14:57:34.319000
+ANelIAm7DA7mZ3RLDoKssA==,type plan,Plan de situation,0.8,llm - openai azure,2024-01-18 14:58:32.118000
+Aj9dOwwQhb1qyUUJu5dKiQ==,document type,Décompte de gestion,0.8,llm - openai azure,2024-01-18 14:57:35.621000
+Aj9dOwwQhb1qyUUJu5dKiQ==,relevant date,2017-12-31,0.8,llm - openai azure,2024-01-18 14:58:32.402000
+AkQLya7ACmOlLzzTSBl+7Q==,client,655e212e623126001d0326c4,0.800000011920929,llm - openai azure entity + matching,2024-01-18 14:57:25.746000
+AkQLya7ACmOlLzzTSBl+7Q==,document type,Extrait du registre foncier,0.8,llm - openai azure,2024-01-18 14:57:25.543000
+AkQLya7ACmOlLzzTSBl+7Q==,relevant date,2017-08-16,0.8,llm - openai azure,2024-01-18 14:58:30.364000
+ApKooPrik6NaZycouG1EuA==,contract type,Contrat de bail,0.8,llm - openai azure,2024-01-18 14:58:04.907000
+ApKooPrik6NaZycouG1EuA==,document type,Bail à loyer,0.8,llm - openai azure,2024-01-18 14:56:57.486000
+ApKooPrik6NaZycouG1EuA==,immeuble,42 Château-du-Crest-1254 Genève,0.8,llm - openai azure,2024-01-18 14:58:04.914000
+ApKooPrik6NaZycouG1EuA==,montant loyer,2700,0.8,llm - openai azure,2024-01-18 14:58:04.919000
+ApKooPrik6NaZycouG1EuA==,relevant date,2008-07-15,0.8,llm - openai azure,2024-01-18 14:58:04.901000
+CmprTKt2KAKxcpRjt+NWgg==,document type,Plan,0.8,llm - openai azure,2024-01-18 14:58:07.663000
+CmprTKt2KAKxcpRjt+NWgg==,type plan,Plan de répartition des locaux,0.8,llm - openai azure,2024-01-18 14:58:39.993000
+DQmxo4NmXgSjMB1cYnqDLQ==,acte type,Acte de vente,0.8,llm - openai azure,2024-01-18 14:56:50.599000
+DQmxo4NmXgSjMB1cYnqDLQ==,document type,Acte,0.8,llm - openai azure,2024-01-18 14:56:38.737000
+DQmxo4NmXgSjMB1cYnqDLQ==,relevant date,2021-10-15,0.8,llm - openai azure,2024-01-18 14:56:50.590000
+F/mhPfRtig0BtQ+7U0Rhww==,document type,Certificat annuel de salaire,0.8,llm - openai azure,2024-01-18 14:56:49.558000
+F/mhPfRtig0BtQ+7U0Rhww==,num avs,893.67.300.200300.200,0.8,llm - openai azure,2024-01-18 14:57:31.136000
+F/mhPfRtig0BtQ+7U0Rhww==,relevant date,2020-01-01,0.8,llm - openai azure,2024-01-18 14:57:31.129000
+F/mhPfRtig0BtQ+7U0Rhww==,salaire net,756.9042.9999.60,0.8,llm - openai azure,2024-01-18 14:57:31.145000
+F89GFqG7qDrPcFLsNvP78g==,client,655e212e623126001d0326c4,0.800000011920929,llm - openai azure entity + matching,2024-01-18 14:57:24.938000
+F89GFqG7qDrPcFLsNvP78g==,document type,Extrait du registre foncier,0.8,llm - openai azure,2024-01-18 14:57:24.267000
+F89GFqG7qDrPcFLsNvP78g==,relevant date,2017-08-16,0.8,llm - openai azure,2024-01-18 14:58:30.352000
+FM6/EwmcFZEz5oajnndzIQ==,document type,Certificat annuel de prévoyance / Versicherungsausweis,0.8,llm - openai azure,2024-01-18 14:58:19.193000
+FM6/EwmcFZEz5oajnndzIQ==,relevant date,2011-03-29,0.8,llm - openai azure,2024-01-18 14:58:42.493000
+FpB0RmEnQsAsagBFq0WE6Q==,document type,Police d'assurance,0.8,llm - openai azure,2024-01-18 14:56:53.981000
+GOl503tqZuhFffQCJxohQQ==,client,6512c03b06266e001d585bbc,0.7692307829856873,llm - openai azure entity + matching,2024-01-18 14:56:42.170000
+GOl503tqZuhFffQCJxohQQ==,document type,Certificat annuel de prévoyance / Versicherungsausweis,0.8,llm - openai azure,2024-01-18 14:56:41.587000
+GOl503tqZuhFffQCJxohQQ==,relevant date,2020-07-31,0.8,llm - openai azure,2024-01-18 14:57:01.655000
+JTo5jlzcVgrWKSO+dnoTuw==,client,6512c03906266e001d585bb5,0.8086124658584595,llm - openai azure entity + matching,2024-01-18 14:57:01.003000
+JTo5jlzcVgrWKSO+dnoTuw==,document type,Extrait du registre des poursuites,0.8,llm - openai azure,2024-01-18 14:57:01.548000
+JTo5jlzcVgrWKSO+dnoTuw==,relevant date,2017-12-05,0.8,llm - openai azure,2024-01-18 14:58:21.993000
+LR2Qjv37O4C7xuV3bQ0kfw==,client,651440c6ca9bd6001dd04369,0.5142857432365417,llm - openai azure entity + matching,2024-01-18 14:57:58.514000
+LR2Qjv37O4C7xuV3bQ0kfw==,document type,Attestation fiscale de rente de prévoyance,0.8,llm - openai azure,2024-01-18 14:57:57.663000
+LR2Qjv37O4C7xuV3bQ0kfw==,relevant date,2018-01-01,0.8,llm - openai azure,2024-01-18 14:58:37.733000
+LrbMyOW9+ohDSwkCB3juHw==,account number,CH2600788000E32152072,0.8,llm - openai azure,2024-01-18 14:57:16.263000
+LrbMyOW9+ohDSwkCB3juHw==,client,6512c03b06266e001d585bbc,0.9090909361839294,llm - openai azure entity + matching,2024-01-18 14:56:45.914000
+LrbMyOW9+ohDSwkCB3juHw==,document type,Bulletin de salaire,0.8,llm - openai azure,2024-01-18 14:56:45.531000
+LrbMyOW9+ohDSwkCB3juHw==,mois salaire,Mars,0.8,llm - openai azure,2024-01-18 14:57:16.254000
+LrbMyOW9+ohDSwkCB3juHw==,relevant date,2021-03-19,0.8,llm - openai azure,2024-01-18 14:57:16.224000
+MAgp8LOwZAWrSKMvfAEaJQ==,client,651440c6ca9bd6001dd04369,0.5142857432365417,llm - openai azure entity + matching,2024-01-18 14:57:57.137000
+MAgp8LOwZAWrSKMvfAEaJQ==,document type,Certificat annuel de salaire,0.8,llm - openai azure,2024-01-18 14:57:56.561000
+MAgp8LOwZAWrSKMvfAEaJQ==,num avs,756.7052:7424.43,0.8,llm - openai azure,2024-01-18 14:58:38.028000
+MAgp8LOwZAWrSKMvfAEaJQ==,relevant date,2017-01-01,0.8,llm - openai azure,2024-01-18 14:58:38.004000
+MAgp8LOwZAWrSKMvfAEaJQ==,salaire net,57612,0.8,llm - openai azure,2024-01-18 14:58:38.036000
+MMhOXx6xT8Y4MZEp9KKR8w==,document type,Décompte de gestion,0.8,llm - openai azure,2024-01-18 14:57:44.260000
+MMhOXx6xT8Y4MZEp9KKR8w==,relevant date,2014-12-31,0.8,llm - openai azure,2024-01-18 14:58:34.122000
+Mn49VBj1jCC5abiIF+KSYw==,document type,Police d'assurance,0.8,llm - openai azure,2024-01-18 14:56:42.810000
+Mu1LMY72DqTU4EcsKehlNQ==,document type,Plan,0.8,llm - openai azure,2024-01-18 14:57:29.967000
+Mu1LMY72DqTU4EcsKehlNQ==,type plan,Plan de répartition des locaux,0.8,llm - openai azure,2024-01-18 14:58:31.379000
+NP7dYhy+sWTjSoVq5wi4SQ==,document type,Fiche de salaire,0.8,llm - openai azure,2024-01-18 14:58:21.456000
+NpG1ncW32zldaK0/WnAswQ==,document type,Extrait du registre foncier,0.8,llm - openai azure,2024-01-18 14:57:39.141000
+NpG1ncW32zldaK0/WnAswQ==,relevant date,2007-04-19,0.8,llm - openai azure,2024-01-18 14:58:32.817000
+OIM5/UAeFdF/89qUnw6PYQ==,document type,Descriptif de construction,0.8,llm - openai azure,2024-01-18 14:58:07.107000
+OKF4dU6E0bKtRiWtntlN4Q==,document type,Dossier de mutation,0.8,llm - openai azure,2024-01-18 14:58:04.184000
+OKF4dU6E0bKtRiWtntlN4Q==,num dossier mutation,43 / 2023,0.8,llm - openai azure,2024-01-18 14:58:39.809000
+OKF4dU6E0bKtRiWtntlN4Q==,relevant date,2023-08-23,0.8,llm - openai azure,2024-01-18 14:58:39.798000
+ObvTKRLDTpm1DJtm/EJonA==,client,6512c03b06266e001d585bbf,0.800000011920929,llm - openai azure entity + matching,2024-01-18 14:58:18.639000
+ObvTKRLDTpm1DJtm/EJonA==,document type,Extrait du registre foncier,0.8,llm - openai azure,2024-01-18 14:58:17.936000
+OwMqwAxuV04hF8/CIMpmTw==,document type,Certificat annuel de salaire,0.8,llm - openai azure,2024-01-18 14:56:47.695000
+OwMqwAxuV04hF8/CIMpmTw==,num avs,893.67.300.200,0.8,llm - openai azure,2024-01-18 14:57:27.770000
+OwMqwAxuV04hF8/CIMpmTw==,relevant date,2020-01-01,0.8,llm - openai azure,2024-01-18 14:57:27.762000
+OwMqwAxuV04hF8/CIMpmTw==,salaire net,214968,0.8,llm - openai azure,2024-01-18 14:57:27.777000
+Pu0sLCtT589MSWTzJ0BzXw==,document type,Plan,0.8,llm - openai azure,2024-01-18 14:57:33.637000
+Pu0sLCtT589MSWTzJ0BzXw==,type plan,Plan de servitude,0.8,llm - openai azure,2024-01-18 14:58:32.005000
+Rqzgy9RTAQp0NOcAss4Jhg==,account number,CH80 0078 8001 071 1866 2,0.8,llm - openai azure,2024-01-18 14:58:28.963000
+Rqzgy9RTAQp0NOcAss4Jhg==,client,6512c03a06266e001d585bb9,0.5454545617103577,llm - openai azure entity + matching,2024-01-18 14:57:18.332000
+Rqzgy9RTAQp0NOcAss4Jhg==,document type,Décompte de salaire,0.8,llm - openai azure,2024-01-18 14:57:18.185000
+Rqzgy9RTAQp0NOcAss4Jhg==,mois salaire,Juin,0.8,llm - openai azure,2024-01-18 14:58:28.957000
+Rqzgy9RTAQp0NOcAss4Jhg==,relevant date,2017-06-29,0.8,llm - openai azure,2024-01-18 14:58:28.946000
+SgBS1xDIIGtFEGsCsXzBdQ==,document type,Plan,0.8,llm - openai azure,2024-01-18 14:57:27.866000
+SgBS1xDIIGtFEGsCsXzBdQ==,type plan,Plan de répartition des locaux,0.8,llm - openai azure,2024-01-18 14:58:30.928000
+TPC9ga0BcvDufyQG5rhJlA==,document type,Extrait du registre foncier,0.8,llm - openai azure,2024-01-18 14:57:38.103000
+TPC9ga0BcvDufyQG5rhJlA==,relevant date,1989-04-14,0.8,llm - openai azure,2024-01-18 14:58:33.199000
+TQIcgnW2uiqlK3nd7/EPVg==,client,6512c03a06266e001d585bb9,0.5454545617103577,llm - openai azure entity + matching,2024-01-18 14:57:19.672000
+TQIcgnW2uiqlK3nd7/EPVg==,document type,Jugement,0.8,llm - openai azure,2024-01-18 14:57:19.196000
+TQIcgnW2uiqlK3nd7/EPVg==,num avs,N/A,0.8,llm - openai azure,2024-01-18 14:58:29.074000
+TQIcgnW2uiqlK3nd7/EPVg==,relevant date,2017-06-22,0.8,llm - openai azure,2024-01-18 14:58:29.067000
+TQIcgnW2uiqlK3nd7/EPVg==,salaire net,N/A,0.8,llm - openai azure,2024-01-18 14:58:29.082000
+TTVwSNEEOtYyhsH76z1c2w==,client,6512c03a06266e001d585bb9,0.5454545617103577,llm - openai azure entity + matching,2024-01-18 14:57:06.600000
+TTVwSNEEOtYyhsH76z1c2w==,document type,Certificat annuel de prévoyance / Versicherungsausweis,0.8,llm - openai azure,2024-01-18 14:57:06.625000
+TTVwSNEEOtYyhsH76z1c2w==,relevant date,2017-03-31,0.8,llm - openai azure,2024-01-18 14:58:23.516000
+VO580j3/ILBAvlhfKY7hFQ==,canton,GE,0.8,llm - openai azure,2024-01-18 14:58:25.763000
+VO580j3/ILBAvlhfKY7hFQ==,code declaration,12-547-708,0.8,llm - openai azure,2024-01-18 14:58:25.777000
+VO580j3/ILBAvlhfKY7hFQ==,document type,Déclaration fiscale,0.8,llm - openai azure,2024-01-18 14:57:09.540000
+VO580j3/ILBAvlhfKY7hFQ==,fortune imposable icc,"135,406",0.8,llm - openai azure,2024-01-18 14:58:25.790000
+VO580j3/ILBAvlhfKY7hFQ==,numero contribuable,423.55.5645,0.8,llm - openai azure,2024-01-18 14:58:25.771000
+VO580j3/ILBAvlhfKY7hFQ==,relevant date,2017-06-28,0.8,llm - openai azure,2024-01-18 14:58:25.747000
+VO580j3/ILBAvlhfKY7hFQ==,revenu imposable icc,"96,278",0.8,llm - openai azure,2024-01-18 14:58:25.784000
+VO580j3/ILBAvlhfKY7hFQ==,revenu imposable ifd,"105,090",0.8,llm - openai azure,2024-01-18 14:58:25.798000
+VO580j3/ILBAvlhfKY7hFQ==,year,2016,0.8,llm - openai azure,2024-01-18 14:58:25.756000
+VWJePKrE1ZYa16X65vrMUw==,client,653692ad1761b6001d89c4fb,0.800000011920929,llm - openai azure entity + matching,2024-01-18 14:58:15.382000
+VWJePKrE1ZYa16X65vrMUw==,document type,Extrait du registre foncier,0.8,llm - openai azure,2024-01-18 14:58:15.902000
+VWJePKrE1ZYa16X65vrMUw==,relevant date,1985-04-03,0.8,llm - openai azure,2024-01-18 14:58:40.930000
+VblBUfdotuRXo6mkyE0zJA==,client,65368fe4127f4f001df8216d,0.6666666865348816,llm - openai azure entity + matching,2024-01-18 14:57:40.636000
+VblBUfdotuRXo6mkyE0zJA==,document type,Lettre,0.8,llm - openai azure,2024-01-18 14:57:40.173000
+VblBUfdotuRXo6mkyE0zJA==,invoice concern,Consorts LEFEBVRE,0.8,llm - openai azure,2024-01-18 14:58:33.507000
+VblBUfdotuRXo6mkyE0zJA==,owner,YVES DIAVIS,0.8,llm - openai azure,2024-01-18 14:58:33.516000
+VblBUfdotuRXo6mkyE0zJA==,relevant date,2020-06-28,0.8,llm - openai azure,2024-01-18 14:58:33.500000
+WtSnT+r3K41h5RVeHtNxcQ==,document type,Certificat annuel de salaire,0.8,llm - openai azure,2024-01-18 14:57:10.501000
+WtSnT+r3K41h5RVeHtNxcQ==,num avs,423.55.563.213,0.8,llm - openai azure,2024-01-18 14:58:25.068000
+WtSnT+r3K41h5RVeHtNxcQ==,relevant date,2016-01-01,0.8,llm - openai azure,2024-01-18 14:58:25.060000
+WtSnT+r3K41h5RVeHtNxcQ==,salaire net,7569.42,0.8,llm - openai azure,2024-01-18 14:58:25.077000
+WtXr1W06N5a/d1TSu3ys5Q==,client,653688801761b6001d89c4e7,0.5714285969734192,llm - openai azure entity + matching,2024-01-18 14:57:29.504000
+WtXr1W06N5a/d1TSu3ys5Q==,document type,Evaluation d'un bien immobilier,0.8,llm - openai azure,2024-01-18 14:57:28.397000
+WtXr1W06N5a/d1TSu3ys5Q==,relevant date,2018-10-19,0.8,llm - openai azure,2024-01-18 14:58:31.120000
+XYSfpQqF8S/WZACQB89aQg==,client,651440dc06266e001d585cd8,0.5714285969734192,llm - openai azure entity + matching,2024-01-18 14:58:03.665000
+XYSfpQqF8S/WZACQB89aQg==,contract type,Contrat de travail,0.8,llm - openai azure,2024-01-18 14:58:39.209000
+XYSfpQqF8S/WZACQB89aQg==,document type,Contrat,0.8,llm - openai azure,2024-01-18 14:58:02.971000
+aKzn+rOg4/jqM3pJnGinUg==,client,6512c03a06266e001d585bb9,0.5454545617103577,llm - openai azure entity + matching,2024-01-18 14:57:12.750000
+aKzn+rOg4/jqM3pJnGinUg==,document type,Décompte de salaire,0.8,llm - openai azure,2024-01-18 14:57:12.293000
+brnVjQ2jdMnnnva8HbtZvw==,acte type,Acte constitutif de cédule,0.8,llm - openai azure,2024-01-18 14:58:33.745000
+brnVjQ2jdMnnnva8HbtZvw==,document type,Acte,0.8,llm - openai azure,2024-01-18 14:57:41.328000
+fMTbsvqvNMxjqlsMXmd9Zg==,client,65368fe4127f4f001df8216d,0.523809552192688,llm - openai azure entity + matching,2024-01-18 14:57:47.330000
+fMTbsvqvNMxjqlsMXmd9Zg==,document type,Décompte de gérance,0.8,llm - openai azure,2024-01-18 14:57:46.945000
+fMTbsvqvNMxjqlsMXmd9Zg==,relevant date,2014-01-01,0.8,llm - openai azure,2024-01-18 14:58:34.495000
+fOQt+54tkeoMWlfgrt8JKw==,document type,Attestation,0.8,llm - openai azure,2024-01-18 14:57:23.683000
+fOQt+54tkeoMWlfgrt8JKw==,num avs,4123698,0.8,llm - openai azure,2024-01-18 14:58:29.989000
+fOQt+54tkeoMWlfgrt8JKw==,relevant date,2015-01-06,0.8,llm - openai azure,2024-01-18 14:58:29.981000
+fOQt+54tkeoMWlfgrt8JKw==,salaire net,1400.00,0.8,llm - openai azure,2024-01-18 14:58:29.997000
+h/W7gVfWe01KXc6M/dNNZA==,client,6512c03b06266e001d585bbc,0.9090909361839294,llm - openai azure entity + matching,2024-01-18 14:56:46.958000
+h/W7gVfWe01KXc6M/dNNZA==,document type,BULLETIN DE SALAIRE,0.8,llm - openai azure,2024-01-18 14:56:46.488000
+h/W7gVfWe01KXc6M/dNNZA==,mois salaire,Avril,0.8,llm - openai azure,2024-01-18 14:57:21.118000
+hwtoqeC8N4jRLm4VYGw2og==,bank,Crédit Agricole Des Savoie,0.8,llm - openai azure,2024-01-18 14:57:41.882000
+hwtoqeC8N4jRLm4VYGw2og==,client,6512c03b06266e001d585bbc,0.9090909361839294,llm - openai azure entity + matching,2024-01-18 14:56:52.357000
+hwtoqeC8N4jRLm4VYGw2og==,document type,Relevé bancaire,0.8,llm - openai azure,2024-01-18 14:56:51.371000
+hwtoqeC8N4jRLm4VYGw2og==,relevant date,2021-01-04,0.8,llm - openai azure,2024-01-18 14:57:41.869000
+iWajwR6y9k3U19MT7TSj7w==,client,6512c03906266e001d585bb5,0.8086124658584595,llm - openai azure entity + matching,2024-01-18 14:56:59.300000
+iWajwR6y9k3U19MT7TSj7w==,document type,Lettre,0.8,llm - openai azure,2024-01-18 14:56:59.071000
+iWajwR6y9k3U19MT7TSj7w==,invoice concern,Succession de Monsieur JEAN MARTIN,0.8,llm - openai azure,2024-01-18 14:58:11.123000
+iWajwR6y9k3U19MT7TSj7w==,relevant date,2017-08-30,0.8,llm - openai azure,2024-01-18 14:58:11.115000
+idCxKwlHBkX6RCkbNQcPew==,document type,Plan,0.8,llm - openai azure,2024-01-18 14:57:26.179000
+idCxKwlHBkX6RCkbNQcPew==,type plan,Plan de répartition des locaux,0.8,llm - openai azure,2024-01-18 14:58:30.764000
+jzhxVNvjWQW03mvlMcdfRA==,client,6512c03a06266e001d585bb9,0.5454545617103577,llm - openai azure entity + matching,2024-01-18 14:57:16.381000
+jzhxVNvjWQW03mvlMcdfRA==,document type,Décompte de salaire,0.8,llm - openai azure,2024-01-18 14:57:15.168000
+m6qKL95/JJDOosQKGhNMBg==,document type,Certificat annuel de salaire,0.8,llm - openai azure,2024-01-18 14:58:09.704000
+m6qKL95/JJDOosQKGhNMBg==,num avs,88180,0.8,llm - openai azure,2024-01-18 14:58:40.649000
+m6qKL95/JJDOosQKGhNMBg==,relevant date,2011-04-01,0.8,llm - openai azure,2024-01-18 14:58:40.643000
+m6qKL95/JJDOosQKGhNMBg==,salaire net,10466.75,0.8,llm - openai azure,2024-01-18 14:58:40.659000
+mHK8QQTTOTp0sx+85PF1qw==,canton,GE,0.8,llm - openai azure,2024-01-18 14:58:00.474000
+mHK8QQTTOTp0sx+85PF1qw==,code declaration,11-345-508,0.8,llm - openai azure,2024-01-18 14:58:00.487000
+mHK8QQTTOTp0sx+85PF1qw==,document type,Déclaration fiscale,0.8,llm - openai azure,2024-01-18 14:56:56.250000
+mHK8QQTTOTp0sx+85PF1qw==,numero contribuable,111.22.3330-6,0.8,llm - openai azure,2024-01-18 14:58:00.480000
+mHK8QQTTOTp0sx+85PF1qw==,relevant date,2017-03-01,0.8,llm - openai azure,2024-01-18 14:58:00.459000
+mHK8QQTTOTp0sx+85PF1qw==,year,2016,0.8,llm - openai azure,2024-01-18 14:58:00.466000
+mNRM8tzu4St8z1vOPEEQkg==,client,651440c6ca9bd6001dd04369,0.5142857432365417,llm - openai azure entity + matching,2024-01-18 14:57:54.649000
+mNRM8tzu4St8z1vOPEEQkg==,document type,Certificat annuel de salaire,0.8,llm - openai azure,2024-01-18 14:57:54.443000
+mNRM8tzu4St8z1vOPEEQkg==,num avs,404.47.383.24,0.8,llm - openai azure,2024-01-18 14:58:37.130000
+mNRM8tzu4St8z1vOPEEQkg==,relevant date,2017-01-07,0.8,llm - openai azure,2024-01-18 14:58:37.119000
+mNRM8tzu4St8z1vOPEEQkg==,salaire net,"8,316",0.8,llm - openai azure,2024-01-18 14:58:37.139000
+nJkYWbzpRjEIRIR26CCl3g==,document type,Certificat annuel de salaire,0.8,llm - openai azure,2024-01-18 14:57:07.536000
+nJkYWbzpRjEIRIR26CCl3g==,num avs,423.55.562.214,0.8,llm - openai azure,2024-01-18 14:58:24.131000
+nJkYWbzpRjEIRIR26CCl3g==,relevant date,2016-01-01,0.8,llm - openai azure,2024-01-18 14:58:24.124000
+nJkYWbzpRjEIRIR26CCl3g==,salaire net,114166.00,0.8,llm - openai azure,2024-01-18 14:58:24.141000
+ncPazdxjEDilkxtaJ3opvQ==,document type,Plan,0.8,llm - openai azure,2024-01-18 14:57:30.459000
+ncPazdxjEDilkxtaJ3opvQ==,type plan,Plan de répartition des locaux,0.8,llm - openai azure,2024-01-18 14:58:31.574000
+p2BrtzVU4jIl5+XZLQ92sQ==,client,6536934f127f4f001df8217c,0.5,llm - openai azure entity + matching,2024-01-18 14:57:03.725000
+pvUUOTn630gEO20e6P1rFQ==,client,6536934f127f4f001df8217c,0.5714285969734192,llm - openai azure entity + matching,2024-01-18 14:57:03.305000
+pzUoTkjP5jewZllKi9SYFg==,client,653688801761b6001d89c4e7,0.5714285969734192,llm - openai azure entity + matching,2024-01-18 14:57:43.302000
+pzUoTkjP5jewZllKi9SYFg==,document type,Evaluation d'un bien immobilier,0.8,llm - openai azure,2024-01-18 14:57:42.489000
+pzUoTkjP5jewZllKi9SYFg==,relevant date,2018-10-19,0.8,llm - openai azure,2024-01-18 14:58:33.855000
+qDx3ca5KQq1tPNpeTenADg==,document type,Extrait du registre foncier,0.8,llm - openai azure,2024-01-18 14:57:37.202000
+qDx3ca5KQq1tPNpeTenADg==,relevant date,1947-07-01,0.8,llm - openai azure,2024-01-18 14:58:32.451000
+t6OZa3i1wjaTiuJ73YUI5Q==,client,6512c03a06266e001d585bb8,0.5497075915336609,llm - openai azure entity + matching,2024-01-18 14:57:22.974000
+t6OZa3i1wjaTiuJ73YUI5Q==,contract type,Contrat de bail,0.8,llm - openai azure,2024-01-18 14:58:29.854000
+t6OZa3i1wjaTiuJ73YUI5Q==,document type,Bail à loyer,0.8,llm - openai azure,2024-01-18 14:57:21.887000
+t6OZa3i1wjaTiuJ73YUI5Q==,immeuble,"35, Rue du Grand-Chêne 430 – 1204 GENÈVE",0.8,llm - openai azure,2024-01-18 14:58:29.861000
+t6OZa3i1wjaTiuJ73YUI5Q==,montant loyer,16.800,0.8,llm - openai azure,2024-01-18 14:58:29.869000
+t6OZa3i1wjaTiuJ73YUI5Q==,relevant date,1996-11-01,0.8,llm - openai azure,2024-01-18 14:58:29.845000
+tBsqDkcVuL9jRLfsW4XPcg==,correspondance type,Annonce de bonus,0.8,llm - openai azure,2024-01-18 14:58:22.354000
+tBsqDkcVuL9jRLfsW4XPcg==,document type,Lettre,0.8,llm - openai azure,2024-01-18 14:57:01.287000
+tBsqDkcVuL9jRLfsW4XPcg==,invoice concern,succession de Monsieur JEAN MARTIN,0.8,llm - openai azure,2024-01-18 14:58:22.359000
+tBsqDkcVuL9jRLfsW4XPcg==,owner,Justice de Paix,0.8,llm - openai azure,2024-01-18 14:58:22.365000
+tBsqDkcVuL9jRLfsW4XPcg==,relevant date,2017-08-24,0.8,llm - openai azure,2024-01-18 14:58:22.347000
+tRbvMAS7xrpDyIqJ03SsgQ==,document type,Evaluation d'un bien immobilier,0.8,llm - openai azure,2024-01-18 14:57:51.153000
+tRbvMAS7xrpDyIqJ03SsgQ==,relevant date,2018-10-19,0.8,llm - openai azure,2024-01-18 14:58:36.135000
+tvFDh+QKoBmAS4Y+DcrbFQ==,document type,Tableau de répartition des locaux,0.8,llm - openai azure,2024-01-18 14:57:33.164000
+uWBnTaAdFY82lM++s6MHeg==,client,651440c6ca9bd6001dd04369,0.5714285969734192,llm - openai azure entity + matching,2024-01-18 14:58:01.729000
+uWBnTaAdFY82lM++s6MHeg==,document type,Attestation fiscale de rente de prévoyance,0.8,llm - openai azure,2024-01-18 14:58:01.048000
+uWBnTaAdFY82lM++s6MHeg==,relevant date,2018-01-01,0.8,llm - openai azure,2024-01-18 14:58:38.649000
+vcfhlBm0kSQeDonuu1Yetg==,client,651440c6ca9bd6001dd04369,0.5913621187210083,llm - openai azure entity + matching,2024-01-18 14:58:02.515000
+vcfhlBm0kSQeDonuu1Yetg==,document type,Notification de solde,0.8,llm - openai azure,2024-01-18 14:58:02.214000
+vcfhlBm0kSQeDonuu1Yetg==,num avs,00043,0.8,llm - openai azure,2024-01-18 14:58:39.245000
+vcfhlBm0kSQeDonuu1Yetg==,relevant date,2018-10-08,0.8,llm - openai azure,2024-01-18 14:58:39.238000
+vcfhlBm0kSQeDonuu1Yetg==,salaire net,"3,298.50",0.8,llm - openai azure,2024-01-18 14:58:39.253000
+vd8/fPQbK8cO6Yex0OGjAA==,client,6512c03906266e001d585bb5,0.5358851552009583,llm - openai azure entity + matching,2024-01-18 14:56:55.295000
+vd8/fPQbK8cO6Yex0OGjAA==,contract type,Contrat de bail,0.8,llm - openai azure,2024-01-18 14:57:53.625000
+vd8/fPQbK8cO6Yex0OGjAA==,document type,Bail à loyer,0.8,llm - openai azure,2024-01-18 14:56:55.130000
+vd8/fPQbK8cO6Yex0OGjAA==,immeuble,42 Château-du-Crest-1254 Genève,0.8,llm - openai azure,2024-01-18 14:57:53.635000
+vd8/fPQbK8cO6Yex0OGjAA==,montant loyer,"3,000.00",0.8,llm - openai azure,2024-01-18 14:57:53.651000
+vd8/fPQbK8cO6Yex0OGjAA==,relevant date,2012-08-01,0.8,llm - openai azure,2024-01-18 14:57:53.617000
+wGacV5pId685rZfkjP5OKQ==,client,6512c03a06266e001d585bb9,0.5454545617103577,llm - openai azure entity + matching,2024-01-18 14:57:17.724000
+wGacV5pId685rZfkjP5OKQ==,document type,Décompte de salaire,0.8,llm - openai azure,2024-01-18 14:57:16.935000
+wq6Y67C/qJ4XNTPoPF1U/A==,account number,CH2600788000E32152072,0.8,llm - openai azure,2024-01-18 14:57:11.840000
+wq6Y67C/qJ4XNTPoPF1U/A==,client,6512c03b06266e001d585bbc,0.7692307829856873,llm - openai azure entity + matching,2024-01-18 14:56:44.669000
+wq6Y67C/qJ4XNTPoPF1U/A==,document type,Fiche de salaire,0.8,llm - openai azure,2024-01-18 14:56:44.481000
+wq6Y67C/qJ4XNTPoPF1U/A==,mois salaire,Février,0.8,llm - openai azure,2024-01-18 14:57:11.825000
+wq6Y67C/qJ4XNTPoPF1U/A==,profession employé,MEDECIN ADJOINT.E AGREGE.E,0.8,llm - openai azure,2024-01-18 14:57:11.848000
+wq6Y67C/qJ4XNTPoPF1U/A==,relevant date,2021-02-19,0.8,llm - openai azure,2024-01-18 14:57:11.814000
+wq6Y67C/qJ4XNTPoPF1U/A==,salaire net,9169.25,0.8,llm - openai azure,2024-01-18 14:57:11.833000
+xbv5g+6M8anyCzcHvk/aAw==,correspondance type,Annonce de bonus,0.8,llm - openai azure,2024-01-18 14:56:58.174000
+xbv5g+6M8anyCzcHvk/aAw==,document type,Lettre,0.8,llm - openai azure,2024-01-18 14:56:40.060000
+xbv5g+6M8anyCzcHvk/aAw==,owner,Paul Wagner,0.8,llm - openai azure,2024-01-18 14:56:58.182000
+xbv5g+6M8anyCzcHvk/aAw==,relevant date,2021-01-28,0.8,llm - openai azure,2024-01-18 14:56:58.169000
+xxNhWcwgPiDRM7jSX5dBvA==,document type,Plan,0.8,llm - openai azure,2024-01-18 14:58:08.558000
+xxNhWcwgPiDRM7jSX5dBvA==,type plan,Plan de répartition des locaux,0.8,llm - openai azure,2024-01-18 14:58:40.244000
+yEpfWSZXTPQZ84K+aj1drQ==,canton,GE,0.8,llm - openai azure,2024-01-18 14:58:36.522000
+yEpfWSZXTPQZ84K+aj1drQ==,client,651440dc06266e001d585cd8,0.800000011920929,llm - openai azure entity + matching,2024-01-18 14:57:49.522000
+yEpfWSZXTPQZ84K+aj1drQ==,code declaration,12-378-243,0.8,llm - openai azure,2024-01-18 14:58:36.537000
+yEpfWSZXTPQZ84K+aj1drQ==,document type,Déclaration fiscale,0.8,llm - openai azure,2024-01-18 14:57:49.465000
+yEpfWSZXTPQZ84K+aj1drQ==,numero contribuable,614.49.3243-3,0.8,llm - openai azure,2024-01-18 14:58:36.530000
+yEpfWSZXTPQZ84K+aj1drQ==,relevant date,2016-12-31,0.8,llm - openai azure,2024-01-18 14:58:36.508000
+yEpfWSZXTPQZ84K+aj1drQ==,revenu imposable icc,"11,095.00",0.8,llm - openai azure,2024-01-18 14:58:36.545000
+yEpfWSZXTPQZ84K+aj1drQ==,year,2016,0.8,llm - openai azure,2024-01-18 14:58:36.516000
+zhYvkkB8QuAJtXZjMVNHDg==,bank,Crédit Agricole,0.8,llm - openai azure,2024-01-18 14:57:36.251000
+zhYvkkB8QuAJtXZjMVNHDg==,client,6512c03b06266e001d585bbc,0.9090909361839294,llm - openai azure entity + matching,2024-01-18 14:56:50.831000
+zhYvkkB8QuAJtXZjMVNHDg==,document type,Relevé bancaire,0.8,llm - openai azure,2024-01-18 14:56:50.074000
+zhYvkkB8QuAJtXZjMVNHDg==,relevant date,2021-01-04,0.8,llm - openai azure,2024-01-18 14:57:36.240000
+mHK8QQTTOTp0sx+85PF1qw==,canton,GE,1.0,user,2024-01-12 14:33:50.439
+mHK8QQTTOTp0sx+85PF1qw==,client,6512c03906266e001d585bb5,1.0,user,2024-01-12 14:33:50.393
+mHK8QQTTOTp0sx+85PF1qw==,code declaration,11-345-508,1.0,user,2024-01-12 14:33:50.457
+mHK8QQTTOTp0sx+85PF1qw==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:33:50.409
+mHK8QQTTOTp0sx+85PF1qw==,document type,Déclaration fiscale,1.0,user,2024-01-12 14:33:50.403
+mHK8QQTTOTp0sx+85PF1qw==,numero contribuable,111.22.3330-6,1.0,user,2024-01-12 14:33:50.448
+mHK8QQTTOTp0sx+85PF1qw==,relevant date,2017-03-01,1.0,user,2024-01-12 14:33:50.418
+mHK8QQTTOTp0sx+85PF1qw==,year,2016,1.0,user,2024-01-12 14:33:50.428
+0TV5HBHlRmKfrAWmOeB+sA==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:18:27.924
+0TV5HBHlRmKfrAWmOeB+sA==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:18:27.938
+0TV5HBHlRmKfrAWmOeB+sA==,document type,Facture travaux,1.0,user,2024-01-12 14:18:27.934
+0TV5HBHlRmKfrAWmOeB+sA==,relevant date,2024-01-12,1.0,user,2024-01-12 14:18:27.947
+1wvAxFHIFhyTUDNzbM3QPw==,account number,CH80 0078 8001 071 1866 2,1.0,user,2024-01-12 14:40:29.738
+1wvAxFHIFhyTUDNzbM3QPw==,annee salaire,2017,1.0,user,2024-01-12 14:40:29.705
+1wvAxFHIFhyTUDNzbM3QPw==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 14:40:29.678
+1wvAxFHIFhyTUDNzbM3QPw==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:40:29.691
+1wvAxFHIFhyTUDNzbM3QPw==,document type,Fiche de salaire,1.0,user,2024-01-12 14:40:29.686
+1wvAxFHIFhyTUDNzbM3QPw==,mois salaire,Février,1.0,user,2024-01-12 14:40:29.714
+1wvAxFHIFhyTUDNzbM3QPw==,profession employé,Maîtresse d'enseignement professionnel ,1.0,user,2024-01-12 14:40:29.746
+1wvAxFHIFhyTUDNzbM3QPw==,relevant date,2017-02-27,1.0,user,2024-01-12 14:40:29.700
+1wvAxFHIFhyTUDNzbM3QPw==,salaire brut,9153.2,1.0,user,2024-01-12 14:40:29.730
+1wvAxFHIFhyTUDNzbM3QPw==,salaire net,7763.1,1.0,user,2024-01-12 14:40:29.722
+7wKQEgxKSZEspILT7n7UqA==,canton,GE,1.0,user,2024-01-12 14:10:40.992
+7wKQEgxKSZEspILT7n7UqA==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 14:10:40.946
+7wKQEgxKSZEspILT7n7UqA==,code declaration,10-386-243,1.0,user,2024-01-12 14:10:41.011
+7wKQEgxKSZEspILT7n7UqA==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:10:40.962
+7wKQEgxKSZEspILT7n7UqA==,document type,Déclaration fiscale,1.0,user,2024-01-12 14:10:40.957
+7wKQEgxKSZEspILT7n7UqA==,numero contribuable,398.24.1243-1,1.0,user,2024-01-12 14:10:41.001
+7wKQEgxKSZEspILT7n7UqA==,relevant date,2011-03-27,1.0,user,2024-01-12 14:10:40.974
+7wKQEgxKSZEspILT7n7UqA==,revenu imposable icc,118774,1.0,user,2024-01-12 14:10:41.021
+7wKQEgxKSZEspILT7n7UqA==,revenu imposable ifd,122370,1.0,user,2024-01-12 14:10:41.030
+7wKQEgxKSZEspILT7n7UqA==,year,2010,1.0,user,2024-01-12 14:10:40.983
+3520v2gfAFyiW53r271b6A==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 14:23:13.787
+3520v2gfAFyiW53r271b6A==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:23:13.802
+3520v2gfAFyiW53r271b6A==,document type,Extrait du registre des poursuites,1.0,user,2024-01-12 14:23:13.797
+3520v2gfAFyiW53r271b6A==,relevant date,2017-07-13,1.0,user,2024-01-12 14:23:13.811
+3KtqVeCizQwSQB1ZYP1XEQ==,client,651440dc06266e001d585cd8,1.0,user,2024-01-12 14:50:24.384
+3KtqVeCizQwSQB1ZYP1XEQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:50:24.402
+3KtqVeCizQwSQB1ZYP1XEQ==,document type,Convention pour travaux,1.0,user,2024-01-12 14:50:24.396
+3KtqVeCizQwSQB1ZYP1XEQ==,relevant date,2018-10-02,1.0,user,2024-01-12 14:50:24.419
+4bS2yQ7aeIoqZx5skntEFA==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:11:45.456
+4bS2yQ7aeIoqZx5skntEFA==,description document,Descriptif de l'immeuble,1.0,user,2024-01-12 14:11:45.469
+4bS2yQ7aeIoqZx5skntEFA==,document type,Extrait du registre foncier,1.0,user,2024-01-12 14:11:45.466
+4bS2yQ7aeIoqZx5skntEFA==,relevant date,2024-01-12,1.0,user,2024-01-12 14:11:45.478
+3+h1BtgoAL0PhXWyK1+40g==,canton,VD,1.0,user,2024-01-12 14:41:45.633
+3+h1BtgoAL0PhXWyK1+40g==,client,6512c03906266e001d585bb6,1.0,user,2024-01-12 14:41:45.589
+3+h1BtgoAL0PhXWyK1+40g==,code declaration,10-560-105,1.0,user,2024-01-12 14:41:45.651
+3+h1BtgoAL0PhXWyK1+40g==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:41:45.605
+3+h1BtgoAL0PhXWyK1+40g==,document type,Déclaration fiscale,1.0,user,2024-01-12 14:41:45.600
+3+h1BtgoAL0PhXWyK1+40g==,fortune imposable icc,6698845,1.0,user,2024-01-12 14:41:45.670
+3+h1BtgoAL0PhXWyK1+40g==,numero contribuable,321.65.1850-1,1.0,user,2024-01-12 14:41:45.642
+3+h1BtgoAL0PhXWyK1+40g==,relevant date,2011-08-29,1.0,user,2024-01-12 14:41:45.613
+3+h1BtgoAL0PhXWyK1+40g==,revenu imposable icc,117551,1.0,user,2024-01-12 14:41:45.661
+3+h1BtgoAL0PhXWyK1+40g==,revenu imposable ifd,126739,1.0,user,2024-01-12 14:41:45.681
+3+h1BtgoAL0PhXWyK1+40g==,year,2010,1.0,user,2024-01-12 14:41:45.623
+5+ip+7sGl+kfXqh+5SwOyA==,acte type,Acte de donation,1.0,user,2024-01-12 15:41:46.467
+5+ip+7sGl+kfXqh+5SwOyA==,client,6512c03a06266e001d585bb7,1.0,user,2024-01-12 15:41:46.430
+5+ip+7sGl+kfXqh+5SwOyA==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:41:46.446
+5+ip+7sGl+kfXqh+5SwOyA==,document type,Acte,1.0,user,2024-01-12 15:41:46.441
+5+ip+7sGl+kfXqh+5SwOyA==,num parcelle,298,1.0,user,2024-01-12 15:41:46.476
+5+ip+7sGl+kfXqh+5SwOyA==,relevant date,2021-10-15,1.0,user,2024-01-12 15:41:46.457
+5h6GNEvj0GuGXZw0QV8bkg==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:19:35.428
+5h6GNEvj0GuGXZw0QV8bkg==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:19:35.446
+5h6GNEvj0GuGXZw0QV8bkg==,document type,Plan,1.0,user,2024-01-12 14:19:35.440
+5h6GNEvj0GuGXZw0QV8bkg==,relevant date,2024-01-15,1.0,user,2024-01-12 14:19:35.455
+5h6GNEvj0GuGXZw0QV8bkg==,type plan,Plan de répartition des locaux,1.0,user,2024-01-12 14:19:35.466
+62Ks33O7Qs/5VzmxHnLKKg==,account number,2433420000,1.0,user,2024-01-12 15:33:40.220
+62Ks33O7Qs/5VzmxHnLKKg==,annee salaire,2011,1.0,user,2024-01-12 15:33:40.185
+62Ks33O7Qs/5VzmxHnLKKg==,client,6512c03b06266e001d585bbf,1.0,user,2024-01-12 15:33:40.157
+62Ks33O7Qs/5VzmxHnLKKg==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:33:40.173
+62Ks33O7Qs/5VzmxHnLKKg==,document type,Fiche de salaire,1.0,user,2024-01-12 15:33:40.168
+62Ks33O7Qs/5VzmxHnLKKg==,mois salaire,Mars,1.0,user,2024-01-12 15:33:40.195
+62Ks33O7Qs/5VzmxHnLKKg==,relevant date,2011-03-01,1.0,user,2024-01-12 15:33:40.181
+62Ks33O7Qs/5VzmxHnLKKg==,salaire brut,1'885.00,1.0,user,2024-01-12 15:33:40.212
+62Ks33O7Qs/5VzmxHnLKKg==,salaire net,10'466.75,1.0,user,2024-01-12 15:33:40.203
+7djccsF+/wgSM22nUQxzbg==,bank,CREDIT AGRICOLE DES SAVOIE,1.0,user,2024-01-12 14:34:50.629
+7djccsF+/wgSM22nUQxzbg==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:34:50.594
+7djccsF+/wgSM22nUQxzbg==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:34:50.607
+7djccsF+/wgSM22nUQxzbg==,document type,Relevé bancaire,1.0,user,2024-01-12 14:34:50.603
+7djccsF+/wgSM22nUQxzbg==,relevant date,2021-02-23,1.0,user,2024-01-12 14:34:50.618
+7sksWKtw8kBPkNzuyGo98A==,annee salaire,2017,1.0,user,2024-01-12 14:07:56.963
+7sksWKtw8kBPkNzuyGo98A==,client,651440c6ca9bd6001dd04369,1.0,user,2024-01-12 14:07:56.909
+7sksWKtw8kBPkNzuyGo98A==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:07:56.924
+7sksWKtw8kBPkNzuyGo98A==,document type,Certificat annuel de salaire,1.0,user,2024-01-12 14:07:56.920
+7sksWKtw8kBPkNzuyGo98A==,num avs,404.48.834.134,1.0,user,2024-01-12 14:07:56.948
+7sksWKtw8kBPkNzuyGo98A==,relevant date,2017-01-01,1.0,user,2024-01-12 14:07:56.936
+7sksWKtw8kBPkNzuyGo98A==,salaire net,20918,1.0,user,2024-01-12 14:07:56.958
+9Ip3gurCDrs8bEJWfvy9ZA==,account number,CH80 0078 8001 071 1866 2,1.0,user,2024-01-12 14:33:12.043
+9Ip3gurCDrs8bEJWfvy9ZA==,annee salaire,2017,1.0,user,2024-01-12 14:33:12.011
+9Ip3gurCDrs8bEJWfvy9ZA==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 14:33:11.976
+9Ip3gurCDrs8bEJWfvy9ZA==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:33:11.997
+9Ip3gurCDrs8bEJWfvy9ZA==,document type,Fiche de salaire,1.0,user,2024-01-12 14:33:11.991
+9Ip3gurCDrs8bEJWfvy9ZA==,mois salaire,Mars,1.0,user,2024-01-12 14:33:12.020
+9Ip3gurCDrs8bEJWfvy9ZA==,profession employé,Maîtresse d'enseignement professionnel ,1.0,user,2024-01-12 14:33:12.053
+9Ip3gurCDrs8bEJWfvy9ZA==,relevant date,2017-03-29,1.0,user,2024-01-12 14:33:12.007
+9Ip3gurCDrs8bEJWfvy9ZA==,salaire brut,9543.201,1.0,user,2024-01-12 14:33:12.036
+9Ip3gurCDrs8bEJWfvy9ZA==,salaire net,8095.2,1.0,user,2024-01-12 14:33:12.028
+ANelIAm7DA7mZ3RLDoKssA==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:18:50.321
+ANelIAm7DA7mZ3RLDoKssA==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:18:50.335
+ANelIAm7DA7mZ3RLDoKssA==,document type,Plan,1.0,user,2024-01-12 14:18:50.330
+ANelIAm7DA7mZ3RLDoKssA==,relevant date,2024-01-14,1.0,user,2024-01-12 14:18:50.343
+ANelIAm7DA7mZ3RLDoKssA==,type plan,Plan de situation,1.0,user,2024-01-12 14:18:50.351
+Aj9dOwwQhb1qyUUJu5dKiQ==,client,65368fe4127f4f001df8216d,1.0,user,2024-01-12 15:38:07.311
+Aj9dOwwQhb1qyUUJu5dKiQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:38:07.324
+Aj9dOwwQhb1qyUUJu5dKiQ==,document type,Décompte de gestion,1.0,user,2024-01-12 15:38:07.320
+Aj9dOwwQhb1qyUUJu5dKiQ==,relevant date,2018-01-23,1.0,user,2024-01-12 15:38:07.332
+AkQLya7ACmOlLzzTSBl+7Q==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:21:26.707
+AkQLya7ACmOlLzzTSBl+7Q==,description document,"Description du type de document. A custom value but prefer a value from the following list (a description of the value may be given in parenthesis): 'Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.','E-mails: le body d'un email, sans les métadonnées.'",1.0,user,2024-01-12 14:21:26.722
+AkQLya7ACmOlLzzTSBl+7Q==,document type,Extrait du registre foncier,1.0,user,2024-01-12 14:21:26.716
+AkQLya7ACmOlLzzTSBl+7Q==,relevant date,2017-08-16,1.0,user,2024-01-12 14:21:26.730
+ApKooPrik6NaZycouG1EuA==,client,6536934f127f4f001df8217c,1.0,user,2024-01-12 14:45:46.709
+ApKooPrik6NaZycouG1EuA==,contract type,Contrat de bail,1.0,user,2024-01-12 14:45:46.747
+ApKooPrik6NaZycouG1EuA==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:45:46.726
+ApKooPrik6NaZycouG1EuA==,document type,Bail à loyer,1.0,user,2024-01-12 14:45:46.720
+ApKooPrik6NaZycouG1EuA==,immeuble,42 Château-du-Crest-1254 Genève,1.0,user,2024-01-12 14:45:46.757
+ApKooPrik6NaZycouG1EuA==,montant loyer,2700,1.0,user,2024-01-12 14:45:46.765
+ApKooPrik6NaZycouG1EuA==,relevant date,2008-07-15,1.0,user,2024-01-12 14:45:46.735
+CmprTKt2KAKxcpRjt+NWgg==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:12:52.122
+CmprTKt2KAKxcpRjt+NWgg==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:12:52.135
+CmprTKt2KAKxcpRjt+NWgg==,document type,Plan,1.0,user,2024-01-12 14:12:52.130
+CmprTKt2KAKxcpRjt+NWgg==,relevant date,2024-01-13,1.0,user,2024-01-12 14:12:52.143
+CmprTKt2KAKxcpRjt+NWgg==,type plan,Plan de répartition des locaux,1.0,user,2024-01-12 14:12:52.154
+DQmxo4NmXgSjMB1cYnqDLQ==,acte type,Acte de vente,1.0,user,2024-01-12 15:41:35.606
+DQmxo4NmXgSjMB1cYnqDLQ==,client,6512c03b06266e001d585bbd,1.0,user,2024-01-12 15:41:35.568
+DQmxo4NmXgSjMB1cYnqDLQ==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:41:35.586
+DQmxo4NmXgSjMB1cYnqDLQ==,document type,Acte,1.0,user,2024-01-12 15:41:35.580
+DQmxo4NmXgSjMB1cYnqDLQ==,num parcelle,298,1.0,user,2024-01-12 15:41:35.618
+DQmxo4NmXgSjMB1cYnqDLQ==,relevant date,2021-10-15,1.0,user,2024-01-12 15:41:35.596
+F/mhPfRtig0BtQ+7U0Rhww==,annee salaire,2020,1.0,user,2024-01-12 14:36:37.114
+F/mhPfRtig0BtQ+7U0Rhww==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:36:37.069
+F/mhPfRtig0BtQ+7U0Rhww==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:36:37.086
+F/mhPfRtig0BtQ+7U0Rhww==,document type,Certificat annuel de salaire,1.0,user,2024-01-12 14:36:37.080
+F/mhPfRtig0BtQ+7U0Rhww==,num avs,893.67.300.200,1.0,user,2024-01-12 14:36:37.109
+F/mhPfRtig0BtQ+7U0Rhww==,relevant date,2020-12-15,1.0,user,2024-01-12 14:36:37.098
+F89GFqG7qDrPcFLsNvP78g==,client,655e212e623126001d0326c4,1.0,user,2024-01-12 14:21:32.561
+F89GFqG7qDrPcFLsNvP78g==,description document,"Descriptif de l'immeuble, propriétaires, mentions, servitudes, charges foncières, annotations, droits de gage immobilier",1.0,user,2024-01-12 14:21:32.574
+F89GFqG7qDrPcFLsNvP78g==,document type,Extrait du registre foncier,1.0,user,2024-01-12 14:21:32.570
+F89GFqG7qDrPcFLsNvP78g==,relevant date,2017-08-16,1.0,user,2024-01-12 14:21:32.584
+FM6/EwmcFZEz5oajnndzIQ==,client,6512c03b06266e001d585bbf,1.0,user,2024-01-12 14:08:40.380
+FM6/EwmcFZEz5oajnndzIQ==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:08:40.394
+FM6/EwmcFZEz5oajnndzIQ==,document type,Certificat annuel de prévoyance / Versicherungsausweis,1.0,user,2024-01-12 14:08:40.390
+FM6/EwmcFZEz5oajnndzIQ==,relevant date,2011-03-01,1.0,user,2024-01-12 14:08:40.402
+FpB0RmEnQsAsagBFq0WE6Q==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:35:32.705
+FpB0RmEnQsAsagBFq0WE6Q==,debut assurance,2020-10-07T00:00:00+00:00,1.0,user,2024-01-12 14:35:32.767
+FpB0RmEnQsAsagBFq0WE6Q==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:35:32.722
+FpB0RmEnQsAsagBFq0WE6Q==,document type,Police d'assurance,1.0,user,2024-01-12 14:35:32.715
+FpB0RmEnQsAsagBFq0WE6Q==,fin contrat,2040-10-07T00:00:00+00:00,1.0,user,2024-01-12 14:35:32.778
+FpB0RmEnQsAsagBFq0WE6Q==,insurance name,Swiss Life,1.0,user,2024-01-12 14:35:32.744
+FpB0RmEnQsAsagBFq0WE6Q==,police number,105.123.456,1.0,user,2024-01-12 14:35:32.756
+FpB0RmEnQsAsagBFq0WE6Q==,prime annuelle,4000.00,1.0,user,2024-01-12 14:35:32.789
+FpB0RmEnQsAsagBFq0WE6Q==,relevant date,2020-09-16,1.0,user,2024-01-12 14:35:32.733
+FpB0RmEnQsAsagBFq0WE6Q==,versement minimum garanti,68469.00,1.0,user,2024-01-12 14:35:32.799
+GOl503tqZuhFffQCJxohQQ==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:59:44.170
+GOl503tqZuhFffQCJxohQQ==,description document,"A custom value but prefer a value from the following list (a description of the value may be given in parenthesis): 'Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.'",1.0,user,2024-01-12 14:59:44.184
+GOl503tqZuhFffQCJxohQQ==,document type,Certificat annuel de prévoyance / Versicherungsausweis,1.0,user,2024-01-12 14:59:44.179
+GOl503tqZuhFffQCJxohQQ==,relevant date,2020-07-31,1.0,user,2024-01-12 14:59:44.192
+VO580j3/ILBAvlhfKY7hFQ==,canton,GE,1.0,user,2024-01-12 14:59:28.191
+VO580j3/ILBAvlhfKY7hFQ==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:59:28.148
+VO580j3/ILBAvlhfKY7hFQ==,code declaration,12-547-708,1.0,user,2024-01-12 14:59:28.215
+VO580j3/ILBAvlhfKY7hFQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:59:28.164
+VO580j3/ILBAvlhfKY7hFQ==,document type,Déclaration fiscale,1.0,user,2024-01-12 14:59:28.159
+VO580j3/ILBAvlhfKY7hFQ==,fortune imposable icc,"135,406",1.0,user,2024-01-12 14:59:28.236
+VO580j3/ILBAvlhfKY7hFQ==,numero contribuable,423.55.5645,1.0,user,2024-01-12 14:59:28.203
+VO580j3/ILBAvlhfKY7hFQ==,relevant date,2017-06-28,1.0,user,2024-01-12 14:59:28.173
+VO580j3/ILBAvlhfKY7hFQ==,revenu imposable icc,"96,278",1.0,user,2024-01-12 14:59:28.226
+VO580j3/ILBAvlhfKY7hFQ==,revenu imposable ifd,"105,090",1.0,user,2024-01-12 14:59:28.244
+VO580j3/ILBAvlhfKY7hFQ==,year,2016,1.0,user,2024-01-12 14:59:28.181
+yEpfWSZXTPQZ84K+aj1drQ==,canton,GE,1.0,user,2024-01-12 14:53:08.062
+yEpfWSZXTPQZ84K+aj1drQ==,client,651440dc06266e001d585cd8,1.0,user,2024-01-12 14:53:08.021
+yEpfWSZXTPQZ84K+aj1drQ==,code declaration,12-378-243,1.0,user,2024-01-12 14:53:08.079
+yEpfWSZXTPQZ84K+aj1drQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:53:08.034
+yEpfWSZXTPQZ84K+aj1drQ==,document type,Déclaration fiscale,1.0,user,2024-01-12 14:53:08.030
+yEpfWSZXTPQZ84K+aj1drQ==,numero contribuable,614.49.3243-3,1.0,user,2024-01-12 14:53:08.071
+yEpfWSZXTPQZ84K+aj1drQ==,relevant date,2017-09-27,1.0,user,2024-01-12 14:53:08.043
+yEpfWSZXTPQZ84K+aj1drQ==,year,2016,1.0,user,2024-01-12 14:53:08.053
+JTo5jlzcVgrWKSO+dnoTuw==,client,6536934f127f4f001df8217c,1.0,user,2024-01-12 14:42:36.419
+JTo5jlzcVgrWKSO+dnoTuw==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:42:36.434
+JTo5jlzcVgrWKSO+dnoTuw==,document type,Extrait du registre des poursuites,1.0,user,2024-01-12 14:42:36.429
+JTo5jlzcVgrWKSO+dnoTuw==,relevant date,2017-12-05,1.0,user,2024-01-12 14:42:36.443
+LR2Qjv37O4C7xuV3bQ0kfw==,client,6512c03a06266e001d585bba,1.0,user,2024-01-12 14:08:16.177
+LR2Qjv37O4C7xuV3bQ0kfw==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:08:16.192
+LR2Qjv37O4C7xuV3bQ0kfw==,document type,Attestation fiscale de rente de prévoyance,1.0,user,2024-01-12 14:08:16.187
+LR2Qjv37O4C7xuV3bQ0kfw==,relevant date,2018-01-01,1.0,user,2024-01-12 14:08:16.202
+LrbMyOW9+ohDSwkCB3juHw==,account number,CH2600788000E32152072,1.0,user,2024-01-12 14:38:24.485
+LrbMyOW9+ohDSwkCB3juHw==,annee salaire,2021,1.0,user,2024-01-12 14:38:24.423
+LrbMyOW9+ohDSwkCB3juHw==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:38:24.387
+LrbMyOW9+ohDSwkCB3juHw==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:38:24.403
+LrbMyOW9+ohDSwkCB3juHw==,document type,Fiche de salaire,1.0,user,2024-01-12 14:38:24.397
+LrbMyOW9+ohDSwkCB3juHw==,mois salaire,Mars,1.0,user,2024-01-12 14:38:24.443
+LrbMyOW9+ohDSwkCB3juHw==,profession employé,MEDECIN ADJOINT.E AGREGE.E,1.0,user,2024-01-12 14:38:24.501
+LrbMyOW9+ohDSwkCB3juHw==,relevant date,2021-03-19,1.0,user,2024-01-12 14:38:24.418
+LrbMyOW9+ohDSwkCB3juHw==,salaire brut,14331.85,1.0,user,2024-01-12 14:38:24.474
+LrbMyOW9+ohDSwkCB3juHw==,salaire net,8179.75,1.0,user,2024-01-12 14:38:24.462
+MAgp8LOwZAWrSKMvfAEaJQ==,annee salaire,2017,1.0,user,2024-01-12 15:34:15.423
+MAgp8LOwZAWrSKMvfAEaJQ==,client,6512c03a06266e001d585bba,1.0,user,2024-01-12 15:34:15.377
+MAgp8LOwZAWrSKMvfAEaJQ==,description document,Certificat annuel de salaire: Document qui atteste des revenus annuels d'un employé.,1.0,user,2024-01-12 15:34:15.390
+MAgp8LOwZAWrSKMvfAEaJQ==,document type,Certificat annuel de salaire,1.0,user,2024-01-12 15:34:15.385
+MAgp8LOwZAWrSKMvfAEaJQ==,num avs,756.7052:7424.43 ,1.0,user,2024-01-12 15:34:15.410
+MAgp8LOwZAWrSKMvfAEaJQ==,relevant date,2017-01-01,1.0,user,2024-01-12 15:34:15.401
+MAgp8LOwZAWrSKMvfAEaJQ==,salaire net,57612,1.0,user,2024-01-12 15:34:15.419
+MMhOXx6xT8Y4MZEp9KKR8w==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 15:37:30.651
+MMhOXx6xT8Y4MZEp9KKR8w==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:37:30.674
+MMhOXx6xT8Y4MZEp9KKR8w==,document type,Décompte de gestion,1.0,user,2024-01-12 15:37:30.666
+MMhOXx6xT8Y4MZEp9KKR8w==,relevant date,2014-12-31,1.0,user,2024-01-12 15:37:30.683
+Mn49VBj1jCC5abiIF+KSYw==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:38:55.232
+Mn49VBj1jCC5abiIF+KSYw==,debut assurance,2020-10-07T00:00:00+00:00,1.0,user,2024-01-12 14:38:55.288
+Mn49VBj1jCC5abiIF+KSYw==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:38:55.248
+Mn49VBj1jCC5abiIF+KSYw==,document type,Police d'assurance,1.0,user,2024-01-12 14:38:55.243
+Mn49VBj1jCC5abiIF+KSYw==,fin contrat,2035-10-07T00:00:00+00:00,1.0,user,2024-01-12 14:38:55.299
+Mn49VBj1jCC5abiIF+KSYw==,insurance name,Swiss Life SA,1.0,user,2024-01-12 14:38:55.267
+Mn49VBj1jCC5abiIF+KSYw==,police number,105.123.457,1.0,user,2024-01-12 14:38:55.277
+Mn49VBj1jCC5abiIF+KSYw==,prime annuelle,5208.00,1.0,user,2024-01-12 14:38:55.313
+Mn49VBj1jCC5abiIF+KSYw==,relevant date,2021-01-28,1.0,user,2024-01-12 14:38:55.258
+Mn49VBj1jCC5abiIF+KSYw==,versement minimum garanti,71110.00,1.0,user,2024-01-12 14:38:55.324
+Mu1LMY72DqTU4EcsKehlNQ==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:20:01.583
+Mu1LMY72DqTU4EcsKehlNQ==,description document,Descriptif de la répartition des locaux dans un bâtiment,1.0,user,2024-01-12 14:20:01.598
+Mu1LMY72DqTU4EcsKehlNQ==,document type,Plan,1.0,user,2024-01-12 14:20:01.593
+Mu1LMY72DqTU4EcsKehlNQ==,relevant date,2024-01-17,1.0,user,2024-01-12 14:20:01.607
+Mu1LMY72DqTU4EcsKehlNQ==,type plan,Plan de répartition des locaux,1.0,user,2024-01-12 14:20:01.615
+NP7dYhy+sWTjSoVq5wi4SQ==,account number,2433420000,1.0,user,2024-01-12 15:33:32.686
+NP7dYhy+sWTjSoVq5wi4SQ==,annee salaire,2011,1.0,user,2024-01-12 15:33:32.648
+NP7dYhy+sWTjSoVq5wi4SQ==,client,6512c03b06266e001d585bbf,1.0,user,2024-01-12 15:33:32.616
+NP7dYhy+sWTjSoVq5wi4SQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:33:32.632
+NP7dYhy+sWTjSoVq5wi4SQ==,document type,Fiche de salaire,1.0,user,2024-01-12 15:33:32.627
+NP7dYhy+sWTjSoVq5wi4SQ==,mois salaire,Février,1.0,user,2024-01-12 15:33:32.657
+NP7dYhy+sWTjSoVq5wi4SQ==,relevant date,2011-01-01,1.0,user,2024-01-12 15:33:32.642
+NP7dYhy+sWTjSoVq5wi4SQ==,salaire brut,11'424.00,1.0,user,2024-01-12 15:33:32.674
+NP7dYhy+sWTjSoVq5wi4SQ==,salaire net,10'059.50,1.0,user,2024-01-12 15:33:32.665
+NpG1ncW32zldaK0/WnAswQ==,client,65368fe4127f4f001df8216d,1.0,user,2024-01-12 15:01:12.442
+NpG1ncW32zldaK0/WnAswQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:01:12.460
+NpG1ncW32zldaK0/WnAswQ==,document type,Extrait du registre foncier,1.0,user,2024-01-12 15:01:12.453
+NpG1ncW32zldaK0/WnAswQ==,relevant date,2007-04-19,1.0,user,2024-01-12 15:01:12.469
+OIM5/UAeFdF/89qUnw6PYQ==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:16:18.281
+OIM5/UAeFdF/89qUnw6PYQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:16:18.296
+OIM5/UAeFdF/89qUnw6PYQ==,document type,Descriptif de construction,1.0,user,2024-01-12 14:16:18.291
+OIM5/UAeFdF/89qUnw6PYQ==,relevant date,2024-01-12,1.0,user,2024-01-12 14:16:18.306
+OKF4dU6E0bKtRiWtntlN4Q==,client,65a146c898de2e002196d2bb,1.0,user,2024-01-12 14:04:03.093
+OKF4dU6E0bKtRiWtntlN4Q==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:04:03.106
+OKF4dU6E0bKtRiWtntlN4Q==,document type,Dossier de mutation,1.0,user,2024-01-12 14:04:03.103
+OKF4dU6E0bKtRiWtntlN4Q==,num dossier mutation,43 / 2023,1.0,user,2024-01-12 14:04:03.126
+OKF4dU6E0bKtRiWtntlN4Q==,relevant date,2023-08-23,1.0,user,2024-01-12 14:04:03.117
+ObvTKRLDTpm1DJtm/EJonA==,client,6512c03b06266e001d585bbf,1.0,user,2024-01-12 14:09:08.009
+ObvTKRLDTpm1DJtm/EJonA==,description document,Extrait du registre foncier: Document officiel contenant des informations sur la propriété d'un bien immobilier.,1.0,user,2024-01-12 14:09:08.025
+ObvTKRLDTpm1DJtm/EJonA==,document type,Extrait du registre foncier,1.0,user,2024-01-12 14:09:08.020
+ObvTKRLDTpm1DJtm/EJonA==,relevant date,2011-03-01,1.0,user,2024-01-12 14:09:08.036
+OwMqwAxuV04hF8/CIMpmTw==,annee salaire,2020,1.0,user,2024-01-12 14:37:50.817
+OwMqwAxuV04hF8/CIMpmTw==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:37:50.755
+OwMqwAxuV04hF8/CIMpmTw==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:37:50.784
+OwMqwAxuV04hF8/CIMpmTw==,document type,Certificat annuel de salaire,1.0,user,2024-01-12 14:37:50.779
+OwMqwAxuV04hF8/CIMpmTw==,num avs,893.67.300.200,1.0,user,2024-01-12 14:37:50.804
+OwMqwAxuV04hF8/CIMpmTw==,relevant date,2020-01-01,1.0,user,2024-01-12 14:37:50.794
+OwMqwAxuV04hF8/CIMpmTw==,salaire net,182398,1.0,user,2024-01-12 14:37:50.813
+Pu0sLCtT589MSWTzJ0BzXw==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:19:02.609
+Pu0sLCtT589MSWTzJ0BzXw==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:19:02.621
+Pu0sLCtT589MSWTzJ0BzXw==,document type,Plan,1.0,user,2024-01-12 14:19:02.617
+Pu0sLCtT589MSWTzJ0BzXw==,relevant date,2024-01-12,1.0,user,2024-01-12 14:19:02.629
+Pu0sLCtT589MSWTzJ0BzXw==,type plan,Plan de servitude,1.0,user,2024-01-12 14:19:02.638
+Rqzgy9RTAQp0NOcAss4Jhg==,account number,CH80 0078 8001 071 1866 2,1.0,user,2024-01-12 14:27:36.515
+Rqzgy9RTAQp0NOcAss4Jhg==,annee salaire,2017,1.0,user,2024-01-12 14:27:36.476
+Rqzgy9RTAQp0NOcAss4Jhg==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 14:27:36.443
+Rqzgy9RTAQp0NOcAss4Jhg==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:27:36.460
+Rqzgy9RTAQp0NOcAss4Jhg==,document type,Fiche de salaire,1.0,user,2024-01-12 14:27:36.453
+Rqzgy9RTAQp0NOcAss4Jhg==,mois salaire,Juin,1.0,user,2024-01-12 14:27:36.487
+Rqzgy9RTAQp0NOcAss4Jhg==,profession employé,Maîtresse d'enseignement professionnel ,1.0,user,2024-01-12 14:27:36.525
+Rqzgy9RTAQp0NOcAss4Jhg==,relevant date,2017-06-01,1.0,user,2024-01-12 14:27:36.471
+Rqzgy9RTAQp0NOcAss4Jhg==,salaire brut,13566.801,1.0,user,2024-01-12 14:27:36.505
+Rqzgy9RTAQp0NOcAss4Jhg==,salaire net,11844.2,1.0,user,2024-01-12 14:27:36.497
+SgBS1xDIIGtFEGsCsXzBdQ==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:20:55.731
+SgBS1xDIIGtFEGsCsXzBdQ==,description document,Descriptif de construction,1.0,user,2024-01-12 14:20:55.745
+SgBS1xDIIGtFEGsCsXzBdQ==,document type,Plan,1.0,user,2024-01-12 14:20:55.741
+SgBS1xDIIGtFEGsCsXzBdQ==,relevant date,2024-01-18,1.0,user,2024-01-12 14:20:55.756
+SgBS1xDIIGtFEGsCsXzBdQ==,type plan,Plan de répartition des locaux,1.0,user,2024-01-12 14:20:55.764
+TPC9ga0BcvDufyQG5rhJlA==,client,65368fe4127f4f001df8216d,1.0,user,2024-01-12 15:02:00.795
+TPC9ga0BcvDufyQG5rhJlA==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:02:00.810
+TPC9ga0BcvDufyQG5rhJlA==,document type,Extrait du registre foncier,1.0,user,2024-01-12 15:02:00.805
+TPC9ga0BcvDufyQG5rhJlA==,relevant date,2012-08-08,1.0,user,2024-01-12 15:02:00.818
+TQIcgnW2uiqlK3nd7/EPVg==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 14:24:57.051
+TQIcgnW2uiqlK3nd7/EPVg==,description document,"Jugement: Document officiel émis par un tribunal ou une autorité judiciaire, contenant une décision ou un jugement rendu dans une affaire.",1.0,user,2024-01-12 14:24:57.065
+TQIcgnW2uiqlK3nd7/EPVg==,document type,Procès-verbal,1.0,user,2024-01-12 14:24:57.060
+TQIcgnW2uiqlK3nd7/EPVg==,relevant date,2017-06-23,1.0,user,2024-01-12 14:24:57.073
+TTVwSNEEOtYyhsH76z1c2w==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 15:16:18.089
+TTVwSNEEOtYyhsH76z1c2w==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:16:18.111
+TTVwSNEEOtYyhsH76z1c2w==,document type,Certificat annuel de prévoyance / Versicherungsausweis,1.0,user,2024-01-12 15:16:18.104
+TTVwSNEEOtYyhsH76z1c2w==,relevant date,2017-03-31,1.0,user,2024-01-12 15:16:18.121
+VWJePKrE1ZYa16X65vrMUw==,client,653692ad1761b6001d89c4fb,1.0,user,2024-01-12 14:11:03.572
+VWJePKrE1ZYa16X65vrMUw==,description document,Extrait du registre foncier: Document officiel extrait du registre foncier contenant des informations sur la propriété d'un bien immobilier.,1.0,user,2024-01-12 14:11:03.585
+VWJePKrE1ZYa16X65vrMUw==,document type,Extrait du registre foncier,1.0,user,2024-01-12 14:11:03.582
+VWJePKrE1ZYa16X65vrMUw==,relevant date,2024-01-12,1.0,user,2024-01-12 14:11:03.594
+VblBUfdotuRXo6mkyE0zJA==,client,65a1535698de2e002196d343,1.0,user,2024-01-12 15:00:43.080
+VblBUfdotuRXo6mkyE0zJA==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:00:43.096
+VblBUfdotuRXo6mkyE0zJA==,direction,Entrant,1.0,user,2024-01-12 15:00:43.128
+VblBUfdotuRXo6mkyE0zJA==,document type,Lettre,1.0,user,2024-01-12 15:00:43.090
+VblBUfdotuRXo6mkyE0zJA==,invoice concern,Consorts LEFEBVRE,1.0,user,2024-01-12 15:00:43.114
+VblBUfdotuRXo6mkyE0zJA==,owner,YVES DIAVIS,1.0,user,2024-01-12 15:00:43.124
+VblBUfdotuRXo6mkyE0zJA==,relevant date,2020-06-28,1.0,user,2024-01-12 15:00:43.105
+VblBUfdotuRXo6mkyE0zJA==,sender,Yves Diavis,1.0,user,2024-01-12 15:00:43.132
+WtSnT+r3K41h5RVeHtNxcQ==,annee salaire,2016,1.0,user,2024-01-12 15:15:05.048
+WtSnT+r3K41h5RVeHtNxcQ==,client,6512c03906266e001d585bb6,1.0,user,2024-01-12 15:15:05.002
+WtSnT+r3K41h5RVeHtNxcQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:15:05.017
+WtSnT+r3K41h5RVeHtNxcQ==,document type,Certificat annuel de salaire,1.0,user,2024-01-12 15:15:05.013
+WtSnT+r3K41h5RVeHtNxcQ==,num avs,423.55.563.213,1.0,user,2024-01-12 15:15:05.035
+WtSnT+r3K41h5RVeHtNxcQ==,relevant date,2016-01-01,1.0,user,2024-01-12 15:15:05.027
+WtSnT+r3K41h5RVeHtNxcQ==,salaire net,8815,1.0,user,2024-01-12 15:15:05.043
+XYSfpQqF8S/WZACQB89aQg==,client,651440dc06266e001d585cd8,1.0,user,2024-01-12 14:06:19.378
+XYSfpQqF8S/WZACQB89aQg==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:06:19.392
+XYSfpQqF8S/WZACQB89aQg==,document type,Relevé crédit ou dette,1.0,user,2024-01-12 14:06:19.388
+XYSfpQqF8S/WZACQB89aQg==,relevant date,2018-10-16,1.0,user,2024-01-12 14:06:19.402
+aKzn+rOg4/jqM3pJnGinUg==,account number,CH80 0078 8001 071 1866 2,1.0,user,2024-01-12 15:13:40.815
+aKzn+rOg4/jqM3pJnGinUg==,annee salaire,2017,1.0,user,2024-01-12 15:13:40.774
+aKzn+rOg4/jqM3pJnGinUg==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 15:13:40.745
+aKzn+rOg4/jqM3pJnGinUg==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:13:40.759
+aKzn+rOg4/jqM3pJnGinUg==,document type,Fiche de salaire,1.0,user,2024-01-12 15:13:40.755
+aKzn+rOg4/jqM3pJnGinUg==,mois salaire,Janvier,1.0,user,2024-01-12 15:13:40.784
+aKzn+rOg4/jqM3pJnGinUg==,profession employé,Maîtresse d'enseignement professionnel ,1.0,user,2024-01-12 15:13:40.828
+aKzn+rOg4/jqM3pJnGinUg==,relevant date,2017-01-27,1.0,user,2024-01-12 15:13:40.769
+aKzn+rOg4/jqM3pJnGinUg==,salaire brut,9163.201,1.0,user,2024-01-12 15:13:40.802
+aKzn+rOg4/jqM3pJnGinUg==,salaire net,7763.1,1.0,user,2024-01-12 15:13:40.792
+brnVjQ2jdMnnnva8HbtZvw==,acte type,Acte constitutif de cédule,1.0,user,2024-01-12 14:56:49.692
+brnVjQ2jdMnnnva8HbtZvw==,client,65368fe4127f4f001df8216d,1.0,user,2024-01-12 14:56:49.659
+brnVjQ2jdMnnnva8HbtZvw==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:56:49.675
+brnVjQ2jdMnnnva8HbtZvw==,document type,Acte,1.0,user,2024-01-12 14:56:49.669
+brnVjQ2jdMnnnva8HbtZvw==,relevant date,2024-01-12,1.0,user,2024-01-12 14:56:49.683
+fMTbsvqvNMxjqlsMXmd9Zg==,client,65368fe4127f4f001df8216d,1.0,user,2024-01-12 15:37:14.088
+fMTbsvqvNMxjqlsMXmd9Zg==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:37:14.105
+fMTbsvqvNMxjqlsMXmd9Zg==,document type,Décompte de gérance,1.0,user,2024-01-12 15:37:14.099
+fMTbsvqvNMxjqlsMXmd9Zg==,relevant date,2014-12-31,1.0,user,2024-01-12 15:37:14.114
+fOQt+54tkeoMWlfgrt8JKw==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 14:22:26.893
+fOQt+54tkeoMWlfgrt8JKw==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:22:26.909
+fOQt+54tkeoMWlfgrt8JKw==,document type,Attestation de loyer de régie,1.0,user,2024-01-12 14:22:26.902
+fOQt+54tkeoMWlfgrt8JKw==,relevant date,2015-01-06,1.0,user,2024-01-12 14:22:26.918
+29yradmnIewK1RIRbRSTrg==,canton,GE,1.0,user,2024-01-12 14:51:17.067
+29yradmnIewK1RIRbRSTrg==,client,651440dc06266e001d585cd8,1.0,user,2024-01-12 14:51:17.015
+29yradmnIewK1RIRbRSTrg==,code declaration,12-966-243,1.0,user,2024-01-12 14:51:17.085
+29yradmnIewK1RIRbRSTrg==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:51:17.032
+29yradmnIewK1RIRbRSTrg==,document type,Déclaration fiscale,1.0,user,2024-01-12 14:51:17.027
+29yradmnIewK1RIRbRSTrg==,numero contribuable,614.49.3243-3,1.0,user,2024-01-12 14:51:17.076
+29yradmnIewK1RIRbRSTrg==,relevant date,2018-10-02,1.0,user,2024-01-12 14:51:17.044
+29yradmnIewK1RIRbRSTrg==,year,2017,1.0,user,2024-01-12 14:51:17.056
+gLlabF3e/KCHLFEch79CyA==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 13:52:27.372
+gLlabF3e/KCHLFEch79CyA==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 13:52:27.393
+gLlabF3e/KCHLFEch79CyA==,document type,Plan,1.0,user,2024-01-12 13:52:27.385
+gLlabF3e/KCHLFEch79CyA==,relevant date,2024-01-12,1.0,user,2024-01-12 13:52:27.407
+gLlabF3e/KCHLFEch79CyA==,type plan,Plan de situation,1.0,user,2024-01-12 13:52:27.426
+h/W7gVfWe01KXc6M/dNNZA==,account number,CH2600788000E32152072,1.0,user,2024-01-12 14:38:06.182
+h/W7gVfWe01KXc6M/dNNZA==,annee salaire,2021,1.0,user,2024-01-12 14:38:06.141
+h/W7gVfWe01KXc6M/dNNZA==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:38:06.107
+h/W7gVfWe01KXc6M/dNNZA==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:38:06.125
+h/W7gVfWe01KXc6M/dNNZA==,document type,Fiche de salaire,1.0,user,2024-01-12 14:38:06.120
+h/W7gVfWe01KXc6M/dNNZA==,mois salaire,Avril,1.0,user,2024-01-12 14:38:06.153
+h/W7gVfWe01KXc6M/dNNZA==,profession employé,MEDECIN ADJOINT.E AGREGE.E,1.0,user,2024-01-12 14:38:06.199
+h/W7gVfWe01KXc6M/dNNZA==,relevant date,2021-04-20,1.0,user,2024-01-12 14:38:06.136
+h/W7gVfWe01KXc6M/dNNZA==,salaire brut,14217.95,1.0,user,2024-01-12 14:38:06.173
+h/W7gVfWe01KXc6M/dNNZA==,salaire net,11317.50,1.0,user,2024-01-12 14:38:06.164
+63KSW0tjZ6CrwLEQoCfuUg==,canton,GE,1.0,user,2024-01-12 14:51:27.044
+63KSW0tjZ6CrwLEQoCfuUg==,client,651440dc06266e001d585cd8,1.0,user,2024-01-12 14:51:27.005
+63KSW0tjZ6CrwLEQoCfuUg==,code declaration,12-600-255,1.0,user,2024-01-12 14:51:27.064
+63KSW0tjZ6CrwLEQoCfuUg==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:51:27.019
+63KSW0tjZ6CrwLEQoCfuUg==,document type,Déclaration fiscale,1.0,user,2024-01-12 14:51:27.014
+63KSW0tjZ6CrwLEQoCfuUg==,fortune imposable icc,376'811,1.0,user,2024-01-12 14:51:27.087
+63KSW0tjZ6CrwLEQoCfuUg==,numero contribuable,614.49.3243-3,1.0,user,2024-01-12 14:51:27.055
+63KSW0tjZ6CrwLEQoCfuUg==,relevant date,2024-01-12,1.0,user,2024-01-12 14:51:27.028
+63KSW0tjZ6CrwLEQoCfuUg==,revenu imposable icc,145'314,1.0,user,2024-01-12 14:51:27.077
+63KSW0tjZ6CrwLEQoCfuUg==,revenu imposable ifd,135'501,1.0,user,2024-01-12 14:51:27.098
+63KSW0tjZ6CrwLEQoCfuUg==,year,2016,1.0,user,2024-01-12 14:51:27.036
+hwtoqeC8N4jRLm4VYGw2og==,bank,Crédit Agricole Des Savoie,1.0,user,2024-01-12 14:35:36.416
+hwtoqeC8N4jRLm4VYGw2og==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:35:36.380
+hwtoqeC8N4jRLm4VYGw2og==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:35:36.396
+hwtoqeC8N4jRLm4VYGw2og==,document type,Relevé bancaire,1.0,user,2024-01-12 14:35:36.390
+hwtoqeC8N4jRLm4VYGw2og==,relevant date,2021-01-04,1.0,user,2024-01-12 14:35:36.406
+iWajwR6y9k3U19MT7TSj7w==,client,6512c03906266e001d585bb5,1.0,user,2024-01-12 14:45:13.181
+iWajwR6y9k3U19MT7TSj7w==,correspondance type,Succession,1.0,user,2024-01-12 14:45:13.213
+iWajwR6y9k3U19MT7TSj7w==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:45:13.194
+iWajwR6y9k3U19MT7TSj7w==,direction,Sortant,1.0,user,2024-01-12 14:45:13.234
+iWajwR6y9k3U19MT7TSj7w==,document type,Lettre,1.0,user,2024-01-12 14:45:13.190
+iWajwR6y9k3U19MT7TSj7w==,invoice concern,Succession de Monsieur JEAN MARTIN,1.0,user,2024-01-12 14:45:13.221
+iWajwR6y9k3U19MT7TSj7w==,owner,Sabine Martin et Louis Martin,1.0,user,2024-01-12 14:45:13.229
+iWajwR6y9k3U19MT7TSj7w==,receiver,Martin Jeanne,1.0,user,2024-01-12 14:45:13.249
+iWajwR6y9k3U19MT7TSj7w==,relevant date,2017-08-30,1.0,user,2024-01-12 14:45:13.203
+iWajwR6y9k3U19MT7TSj7w==,sender,Justice de Paix,1.0,user,2024-01-12 14:45:13.238
+idCxKwlHBkX6RCkbNQcPew==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:21:06.922
+idCxKwlHBkX6RCkbNQcPew==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:21:06.936
+idCxKwlHBkX6RCkbNQcPew==,document type,Plan,1.0,user,2024-01-12 14:21:06.932
+idCxKwlHBkX6RCkbNQcPew==,relevant date,2024-01-19,1.0,user,2024-01-12 14:21:06.944
+idCxKwlHBkX6RCkbNQcPew==,type plan,Plan de répartition des locaux,1.0,user,2024-01-12 14:21:06.953
+jzhxVNvjWQW03mvlMcdfRA==,account number,CH80 0078 8001 E71 1866 2,1.0,user,2024-01-12 14:32:17.660
+jzhxVNvjWQW03mvlMcdfRA==,annee salaire,2017,1.0,user,2024-01-12 14:32:17.623
+jzhxVNvjWQW03mvlMcdfRA==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 14:32:17.591
+jzhxVNvjWQW03mvlMcdfRA==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:32:17.610
+jzhxVNvjWQW03mvlMcdfRA==,document type,Fiche de salaire,1.0,user,2024-01-12 14:32:17.603
+jzhxVNvjWQW03mvlMcdfRA==,mois salaire,Avril,1.0,user,2024-01-12 14:32:17.633
+jzhxVNvjWQW03mvlMcdfRA==,profession employé, Maitresse d'enseignement professionnel ,1.0,user,2024-01-12 14:32:17.671
+jzhxVNvjWQW03mvlMcdfRA==,relevant date,2017-04-27,1.0,user,2024-01-12 14:32:17.619
+jzhxVNvjWQW03mvlMcdfRA==,salaire brut,9233.201,1.0,user,2024-01-12 14:32:17.652
+jzhxVNvjWQW03mvlMcdfRA==,salaire net,7837.25,1.0,user,2024-01-12 14:32:17.642
+m6qKL95/JJDOosQKGhNMBg==,account number,2433420000,1.0,user,2024-01-12 14:12:27.291
+m6qKL95/JJDOosQKGhNMBg==,annee salaire,2011,1.0,user,2024-01-12 14:12:27.255
+m6qKL95/JJDOosQKGhNMBg==,client,6512c03b06266e001d585bbf,1.0,user,2024-01-12 14:12:27.227
+m6qKL95/JJDOosQKGhNMBg==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:12:27.242
+m6qKL95/JJDOosQKGhNMBg==,document type,Fiche de salaire,1.0,user,2024-01-12 14:12:27.237
+m6qKL95/JJDOosQKGhNMBg==,mois salaire,Avril,1.0,user,2024-01-12 14:12:27.264
+m6qKL95/JJDOosQKGhNMBg==,relevant date,2011-04-01,1.0,user,2024-01-12 14:12:27.251
+m6qKL95/JJDOosQKGhNMBg==,salaire brut,1'885.00,1.0,user,2024-01-12 14:12:27.282
+m6qKL95/JJDOosQKGhNMBg==,salaire net,10'466.75,1.0,user,2024-01-12 14:12:27.273
+mNRM8tzu4St8z1vOPEEQkg==,annee salaire,2017,1.0,user,2024-01-12 14:49:09.827
+mNRM8tzu4St8z1vOPEEQkg==,client,6512c03a06266e001d585bba,1.0,user,2024-01-12 14:49:09.773
+mNRM8tzu4St8z1vOPEEQkg==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:49:09.791
+mNRM8tzu4St8z1vOPEEQkg==,document type,Certificat annuel de salaire,1.0,user,2024-01-12 14:49:09.786
+mNRM8tzu4St8z1vOPEEQkg==,num avs,404.47.383.24.3,1.0,user,2024-01-12 14:49:09.810
+mNRM8tzu4St8z1vOPEEQkg==,relevant date,2017-01-07,1.0,user,2024-01-12 14:49:09.801
+mNRM8tzu4St8z1vOPEEQkg==,salaire net,8'316,1.0,user,2024-01-12 14:49:09.821
+nJkYWbzpRjEIRIR26CCl3g==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 15:16:08.890
+nJkYWbzpRjEIRIR26CCl3g==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:16:08.904
+nJkYWbzpRjEIRIR26CCl3g==,document type,Certificat annuel de salaire,1.0,user,2024-01-12 15:16:08.899
+nJkYWbzpRjEIRIR26CCl3g==,num avs,423.55.562.214,1.0,user,2024-01-12 15:16:08.923
+nJkYWbzpRjEIRIR26CCl3g==,relevant date,2017-01-24,1.0,user,2024-01-12 15:16:08.914
+nJkYWbzpRjEIRIR26CCl3g==,salaire net,105430,1.0,user,2024-01-12 15:16:08.933
+ncPazdxjEDilkxtaJ3opvQ==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:19:50.175
+ncPazdxjEDilkxtaJ3opvQ==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:19:50.187
+ncPazdxjEDilkxtaJ3opvQ==,document type,Plan,1.0,user,2024-01-12 14:19:50.183
+ncPazdxjEDilkxtaJ3opvQ==,relevant date,2024-01-16,1.0,user,2024-01-12 14:19:50.195
+ncPazdxjEDilkxtaJ3opvQ==,type plan,Plan de répartition des locaux,1.0,user,2024-01-12 14:19:50.202
+p2BrtzVU4jIl5+XZLQ92sQ==,client,6512c03906266e001d585bb5,1.0,user,2024-01-12 14:42:03.104
+p2BrtzVU4jIl5+XZLQ92sQ==,document type,Resultat recherche ZEK,1.0,user,2024-01-12 14:42:03.112
+p2BrtzVU4jIl5+XZLQ92sQ==,relevant date,2024-01-12,1.0,user,2024-01-12 14:42:03.121
+pvUUOTn630gEO20e6P1rFQ==,client,6536934f127f4f001df8217c,1.0,user,2024-01-12 14:42:15.094
+pvUUOTn630gEO20e6P1rFQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:42:15.147
+pvUUOTn630gEO20e6P1rFQ==,document type,Resultat recherche ZEK,1.0,user,2024-01-12 14:42:15.129
+pvUUOTn630gEO20e6P1rFQ==,relevant date,2024-01-12,1.0,user,2024-01-12 14:42:15.176
+pzUoTkjP5jewZllKi9SYFg==,client,653688801761b6001d89c4e7,1.0,user,2024-01-12 15:37:55.361
+pzUoTkjP5jewZllKi9SYFg==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:37:55.378
+pzUoTkjP5jewZllKi9SYFg==,document type,Evaluation d'un bien immobilier,1.0,user,2024-01-12 15:37:55.372
+pzUoTkjP5jewZllKi9SYFg==,relevant date,2018-10-19,1.0,user,2024-01-12 15:37:55.387
+qDx3ca5KQq1tPNpeTenADg==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 15:02:24.204
+qDx3ca5KQq1tPNpeTenADg==,description document,Descriptif détaillé d'un bien immobilier enregistré au registre foncier,1.0,user,2024-01-12 15:02:24.217
+qDx3ca5KQq1tPNpeTenADg==,document type,Extrait du registre foncier,1.0,user,2024-01-12 15:02:24.213
+qDx3ca5KQq1tPNpeTenADg==,relevant date,2024-01-13,1.0,user,2024-01-12 15:02:24.227
+rPsoK4ZZuUr1s+wlLlZG6Q==,client,6512c03b06266e001d585bbf,1.0,user,2024-01-12 14:18:38.228
+rPsoK4ZZuUr1s+wlLlZG6Q==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:18:38.241
+rPsoK4ZZuUr1s+wlLlZG6Q==,document type,Resultat recherche ZEK,1.0,user,2024-01-12 14:18:38.237
+rPsoK4ZZuUr1s+wlLlZG6Q==,relevant date,2024-01-12,1.0,user,2024-01-12 14:18:38.251
+t6OZa3i1wjaTiuJ73YUI5Q==,client,6523e3e761ed9b001d28d4df,1.0,user,2024-01-12 14:22:59.557
+t6OZa3i1wjaTiuJ73YUI5Q==,contract type,Contrat de bail,1.0,user,2024-01-12 14:22:59.594
+t6OZa3i1wjaTiuJ73YUI5Q==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:22:59.572
+t6OZa3i1wjaTiuJ73YUI5Q==,document type,Bail à loyer,1.0,user,2024-01-12 14:22:59.567
+t6OZa3i1wjaTiuJ73YUI5Q==,immeuble,"35, Rue du Grand-Chêne 430 – 1204 GENÈVE",1.0,user,2024-01-12 14:22:59.610
+t6OZa3i1wjaTiuJ73YUI5Q==,montant loyer,16.800.--,1.0,user,2024-01-12 14:22:59.628
+t6OZa3i1wjaTiuJ73YUI5Q==,relevant date,1996-11-01,1.0,user,2024-01-12 14:22:59.582
+tBsqDkcVuL9jRLfsW4XPcg==,client,6512c03906266e001d585bb5,1.0,user,2024-01-12 14:44:10.146
+tBsqDkcVuL9jRLfsW4XPcg==,correspondance type,Succession,1.0,user,2024-01-12 14:44:10.177
+tBsqDkcVuL9jRLfsW4XPcg==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:44:10.159
+tBsqDkcVuL9jRLfsW4XPcg==,direction,Sortant,1.0,user,2024-01-12 14:44:10.197
+tBsqDkcVuL9jRLfsW4XPcg==,document type,Lettre,1.0,user,2024-01-12 14:44:10.154
+tBsqDkcVuL9jRLfsW4XPcg==,invoice concern,succession de Monsieur JEAN MARTIN,1.0,user,2024-01-12 14:44:10.185
+tBsqDkcVuL9jRLfsW4XPcg==,owner,Sabine Martin et Louis Martin,1.0,user,2024-01-12 14:44:10.193
+tBsqDkcVuL9jRLfsW4XPcg==,receiver,Justice de Paix,1.0,user,2024-01-12 14:44:10.207
+tBsqDkcVuL9jRLfsW4XPcg==,relevant date,2017-08-24,1.0,user,2024-01-12 14:44:10.168
+tRbvMAS7xrpDyIqJ03SsgQ==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 15:34:42.691
+tRbvMAS7xrpDyIqJ03SsgQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:34:42.721
+tRbvMAS7xrpDyIqJ03SsgQ==,document type,Evaluation d'un bien immobilier,1.0,user,2024-01-12 15:34:42.709
+tRbvMAS7xrpDyIqJ03SsgQ==,relevant date,2018-10-19,1.0,user,2024-01-12 15:34:42.765
+tvFDh+QKoBmAS4Y+DcrbFQ==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:19:14.242
+tvFDh+QKoBmAS4Y+DcrbFQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:19:14.255
+tvFDh+QKoBmAS4Y+DcrbFQ==,document type,Tableau de répartition des locaux,1.0,user,2024-01-12 14:19:14.251
+tvFDh+QKoBmAS4Y+DcrbFQ==,relevant date,2024-01-12,1.0,user,2024-01-12 14:19:14.263
+uWBnTaAdFY82lM++s6MHeg==,client,651440c6ca9bd6001dd04369,1.0,user,2024-01-12 14:07:13.079
+uWBnTaAdFY82lM++s6MHeg==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:07:13.094
+uWBnTaAdFY82lM++s6MHeg==,document type,Attestation fiscale de rente de prévoyance,1.0,user,2024-01-12 14:07:13.089
+uWBnTaAdFY82lM++s6MHeg==,relevant date,2018-01-01,1.0,user,2024-01-12 14:07:13.104
+vcfhlBm0kSQeDonuu1Yetg==,client,651440c6ca9bd6001dd04369,1.0,user,2024-01-12 14:07:03.975
+vcfhlBm0kSQeDonuu1Yetg==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:07:03.993
+vcfhlBm0kSQeDonuu1Yetg==,document type,Relevé crédit ou dette,1.0,user,2024-01-12 14:07:03.984
+vcfhlBm0kSQeDonuu1Yetg==,relevant date,2018-10-16,1.0,user,2024-01-12 14:07:04.003
+vd8/fPQbK8cO6Yex0OGjAA==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:46:01.620
+vd8/fPQbK8cO6Yex0OGjAA==,contract type,Contrat de bail,1.0,user,2024-01-12 14:46:01.660
+vd8/fPQbK8cO6Yex0OGjAA==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:46:01.637
+vd8/fPQbK8cO6Yex0OGjAA==,document type,Bail à loyer,1.0,user,2024-01-12 14:46:01.631
+vd8/fPQbK8cO6Yex0OGjAA==,immeuble,42 Château-du-Crest-1254 Genève,1.0,user,2024-01-12 14:46:01.669
+vd8/fPQbK8cO6Yex0OGjAA==,montant loyer,3000.00,1.0,user,2024-01-12 14:46:01.678
+vd8/fPQbK8cO6Yex0OGjAA==,relevant date,2012-08-01,1.0,user,2024-01-12 14:46:01.648
+wGacV5pId685rZfkjP5OKQ==,account number,CH80 0078 8001 071 1866 2,1.0,user,2024-01-12 14:30:47.036
+wGacV5pId685rZfkjP5OKQ==,annee salaire,2017,1.0,user,2024-01-12 14:30:47.000
+wGacV5pId685rZfkjP5OKQ==,client,6512c03a06266e001d585bb9,1.0,user,2024-01-12 14:30:46.971
+wGacV5pId685rZfkjP5OKQ==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:30:46.984
+wGacV5pId685rZfkjP5OKQ==,document type,Fiche de salaire,1.0,user,2024-01-12 14:30:46.980
+wGacV5pId685rZfkjP5OKQ==,mois salaire,Mai,1.0,user,2024-01-12 14:30:47.009
+wGacV5pId685rZfkjP5OKQ==,profession employé,Maîtresse d'enseignement professionnel ,1.0,user,2024-01-12 14:30:47.047
+wGacV5pId685rZfkjP5OKQ==,relevant date,2017-05-01,1.0,user,2024-01-12 14:30:46.994
+wGacV5pId685rZfkjP5OKQ==,salaire brut,9153.201,1.0,user,2024-01-12 14:30:47.027
+wGacV5pId685rZfkjP5OKQ==,salaire net,7763.1,1.0,user,2024-01-12 14:30:47.018
+wq6Y67C/qJ4XNTPoPF1U/A==,account number,CH2600788000E32152072,1.0,user,2024-01-12 14:38:47.652
+wq6Y67C/qJ4XNTPoPF1U/A==,annee salaire,2021,1.0,user,2024-01-12 14:38:47.616
+wq6Y67C/qJ4XNTPoPF1U/A==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 14:38:47.580
+wq6Y67C/qJ4XNTPoPF1U/A==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:38:47.599
+wq6Y67C/qJ4XNTPoPF1U/A==,document type,Fiche de salaire,1.0,user,2024-01-12 14:38:47.595
+wq6Y67C/qJ4XNTPoPF1U/A==,mois salaire,Février,1.0,user,2024-01-12 14:38:47.624
+wq6Y67C/qJ4XNTPoPF1U/A==,profession employé,MEDECIN ADJOINT.E AGREGE.E,1.0,user,2024-01-12 14:38:47.662
+wq6Y67C/qJ4XNTPoPF1U/A==,relevant date,2021-02-19,1.0,user,2024-01-12 14:38:47.611
+wq6Y67C/qJ4XNTPoPF1U/A==,salaire brut,15943.55,1.0,user,2024-01-12 14:38:47.642
+wq6Y67C/qJ4XNTPoPF1U/A==,salaire net,9169.25,1.0,user,2024-01-12 14:38:47.633
+xbv5g+6M8anyCzcHvk/aAw==,client,6512c03b06266e001d585bbc,1.0,user,2024-01-12 15:17:50.510
+xbv5g+6M8anyCzcHvk/aAw==,description document,"Lettre: contient généralement l'adresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 15:17:50.524
+xbv5g+6M8anyCzcHvk/aAw==,direction,Entrant,1.0,user,2024-01-12 15:17:50.565
+xbv5g+6M8anyCzcHvk/aAw==,document type,Lettre,1.0,user,2024-01-12 15:17:50.519
+xbv5g+6M8anyCzcHvk/aAw==,invoice concern,Paiement additionnel police n° 105.123.456,1.0,user,2024-01-12 15:17:50.549
+xbv5g+6M8anyCzcHvk/aAw==,owner,Swiss Life,1.0,user,2024-01-12 15:17:50.560
+xbv5g+6M8anyCzcHvk/aAw==,receiver,Nicolas Petit,1.0,user,2024-01-12 15:17:50.582
+xbv5g+6M8anyCzcHvk/aAw==,relevant date,2021-01-28,1.0,user,2024-01-12 15:17:50.536
+xbv5g+6M8anyCzcHvk/aAw==,sender,Swiss Life,1.0,user,2024-01-12 15:17:50.570
+xxNhWcwgPiDRM7jSX5dBvA==,client,6536892d127f4f001df8215e,1.0,user,2024-01-12 14:12:38.122
+xxNhWcwgPiDRM7jSX5dBvA==,description document,"Lettre: contient généralement l'addresse de l'émetteur et celle du destinataire, ainsi que des formules de politesse.",1.0,user,2024-01-12 14:12:38.137
+xxNhWcwgPiDRM7jSX5dBvA==,document type,Plan,1.0,user,2024-01-12 14:12:38.133
+xxNhWcwgPiDRM7jSX5dBvA==,relevant date,2024-01-12,1.0,user,2024-01-12 14:12:38.146
+xxNhWcwgPiDRM7jSX5dBvA==,type plan,Plan de répartition des locaux,1.0,user,2024-01-12 14:12:38.156
