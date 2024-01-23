@@ -53,7 +53,7 @@ def get_LLM_performance(mongo_client : MyMongoClient, doc_folder, with_gold, wit
         label_versions = label_versions[(label_versions['model'] == 'user') | (label_versions['model'].str.contains('llm - openai azure'))]
 
         #Do not take into consideration the label with '-' and language 
-        label_versions = label_versions[(~label_versions['label_name'].str.contains('-')) & ~label_versions['label_name'].isin(['description document'])]
+        # label_versions = label_versions[(~label_versions['label_name'].str.contains('-')) & ~label_versions['label_name'].isin(['language', 'description document'])]
 
         # Filter the matching rows where we keep only the maximum
         label_versions = label_versions.groupby(['doc_id', 'label_name', 'model']).apply(filter_rows).reset_index(drop=True)
@@ -62,12 +62,14 @@ def get_LLM_performance(mongo_client : MyMongoClient, doc_folder, with_gold, wit
         label_versions['label_value'] = label_versions.apply(format_date, axis=1)
 
     if not with_gold :
-        gold = pd.read_csv("data/2024-01-18_16:15:33_df_gold_labels.csv")
+        gold = pd.read_csv("labels_results/2024-01-18_16:15:33_df_gold_labels.csv")
         doc_not_both1 = set(label_versions['doc_id'].tolist()).difference(set(gold['doc_id'].tolist()))
         doc_not_both2 = set(gold['doc_id'].tolist()).difference(set(label_versions['doc_id'].tolist()))
         
         print(f"len label_versions {len(label_versions['doc_id'].tolist())}\ndoc not both {len(doc_not_both1)} {len(doc_not_both2)} : {doc_not_both1} { doc_not_both2}")
         label_versions = pd.concat([label_versions, gold], ignore_index=True)
+
+    label_versions = label_versions[(~label_versions['label_name'].str.contains('-')) & ~label_versions['label_name'].isin(['language', 'description document'])]
         # return label_versions[label_versions['doc_id'].isin(doc_not_both1.union(doc_not_both2))]
 
     # Applying the function to each group
@@ -87,6 +89,7 @@ def get_results_by_label_name(score_df) :
     return result_df
 
 def get_results_by_doc_type(label_versions) :
+    # return label_versions[label_versions['label_name'] == 'document type']
     doc_type_analysis = label_versions[label_versions['label_name'] == 'document type'].pivot(index=['doc_id'], columns='model', values='label_value').reset_index()
     doc_type_analysis['output'] = doc_type_analysis.apply(lambda row : row['llm - openai azure'] == row['user'], axis  = 1)
     doc_type_analysis.groupby('user').agg({'output' : ['mean', 'count']}).reset_index().sort_values([('output', 'count')], ascending = False)
@@ -102,16 +105,3 @@ def get_score_for_asked_fields(score_df, no_compare_doc):
     score_by_documents = score_df2.groupby('doc_id').agg({'output' : 'mean'})['output'].mean()
     return score_by_fields,score_by_documents
 
-
-import pickle 
-import os
-def dump(obj, file_path):
-    file_splitted = file_path.split('/')
-    directory_path = '/'.join(file_splitted[:-1])+'/'
-    file_name = file_splitted[-1]
-    # Ensure that the directory exists; create it if it doesn't
-    if not os.path.exists(directory_path):
-        os.makedirs(directory_path)
-
-    with open(file_path, 'wb') as f :
-        pickle.dump(obj, f) 
