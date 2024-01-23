@@ -313,8 +313,8 @@ class LLMModel(ABC):
         self.get_model(gguf_model_path =  model_out)
         return self.model
     
-    def add_grammar(self, type_of_grammar):
-        self.llm_loader.add_grammar(type_of_grammar)
+    def set_grammar(self, type_of_grammar):
+        self.llm_loader.set_grammar(type_of_grammar)
 
 class Llama13b(LLMModel):
     def __init__(self, base_model_id = "meta-llama/Llama-2-13b-hf", base_model_name = "Llama-2-13b", llm_loader = None, without_model = False) -> None:

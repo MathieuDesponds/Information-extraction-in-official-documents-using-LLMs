@@ -14,17 +14,17 @@ BASE_PROMPT_INSTRUCT = [{'role' : 'user', 'content' : BASE_PROMPT}]
 
 prompts = []
 
-doc_type_from_file_name = load("ketl/doc_type_from_file_name.pkl")
+doc_type_from_file_name = load("ketl/mongo/doc_type_from_file_name.pkl")
 
 def get_mistral_instruct_model():
     model = MistralAIInstruct(quantization="Q8_0", llm_loader =Llama_LlamaCpp)
-    model.add_grammar("json")
+    model.set_grammar("doc_type")
     print(model(BASE_PROMPT_INSTRUCT))
     return model
 
 def get_mistral_model():
     model = MistralAI(quantization="Q8_0", llm_loader =Llama_LlamaCpp)
-    model.add_grammar("json")
+    model.set_grammar("json")
     print(model(BASE_PROMPT))
     return model
 
@@ -51,7 +51,14 @@ def run_prompt():
     data = request.get_json()  # Assuming JSON payload, adjust as needed
     if 'messages' not in data:
         return 'Missing "prompt" in the POST request data.'
-    answer =  model(data['messages'])
+    messages = data['messages']
+    label = get_prompt_type_from_messages(messages)
+    if label == "Type de document" :
+        model.set_grammar('doc_type')
+    else :
+        model.set_grammar('json')
+
+    answer =  model(messages)
     print(answer)
     logging.debug(f"logging answer { answer}")
     return answer
@@ -61,8 +68,7 @@ def saving_prompt():
     data = request.get_json()  # Assuming JSON payload, adjust as needed
     if 'messages' not in data:
         return 'Missing "prompt" in the POST request data.'
-    messages_string = " ".join([m['content'] for m in messages])
-    label = "Type de document" if "Type de document"  in messages_string else ("Client" if "from the client" in messages_string else "Other")
+    label = get_prompt_type_from_messages(messages)
     prompts.append({
         "messages" : messages,
         "label" : label
@@ -84,5 +90,12 @@ def save_prompt():
     prompts = []
 
     return output
+
+
+def get_prompt_type_from_messages(messages):
+    messages_string = " ".join([m['content'] for m in messages])
+    label = "Type de document" if "Type de document"  in messages_string else ("Client" if "from the client" in messages_string else "Other")
+    return label
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=45505)

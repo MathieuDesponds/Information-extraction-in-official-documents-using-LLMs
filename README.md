@@ -48,9 +48,9 @@ We need to reload the dataset that were on the cache run `python setup.py`
 export PATH=/myhome/miniconda3/bin:$PATH
 pip install -r requirements.txt
 spacy download  en_core_web_sm
+CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
 git config --global user.email "mathieu.desponds@ketl.ch"
 git config --global user.name "Mathieu Desponds"
-CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
 cp /myhome/.ssh/id_rsa.pub /root/.ssh/id_rsa.pub
 cp /myhome/.ssh/id_rsa /root/.ssh/id_rsa
 python setup.py

@@ -53,7 +53,7 @@ class Llama_LlamaCpp(LlamaLoader) :
         self.model = llm
         return self
     
-    def add_grammar(self, type_of_grammar):
+    def set_grammar(self, type_of_grammar):
         if type_of_grammar == "discussion":
             self.grammar = LlamaGrammar.from_file("ner/grammars/discussion.gbnf")
         elif type_of_grammar == "json":
@@ -61,6 +61,7 @@ class Llama_LlamaCpp(LlamaLoader) :
             self.stop=['}']
         elif type_of_grammar == "doc_type":
             self.grammar = LlamaGrammar.from_file("ner/grammars/doc_type.gbnf")
+            self.stop=['}']
 
 
     def __call__(self, prompt, with_full_message = False):
