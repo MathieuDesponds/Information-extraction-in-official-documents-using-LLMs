@@ -8,6 +8,9 @@ hash_object = hashlib.sha256()
 
 ONEDRIVE_STORAGE_HASH = "b!AexAOmJBX0GFrFCDPly37vK7ahDKKlBHgbMmpv0CDCXt3nRYonxISZkyQ12XYZPz"
 BANQUE_STORAGE_HASH = "b!sYa62uHHtUqTlMT05hXNNDimI6dJj1xDlCQOeoCbtQ2y7z_UU_D9QKTSaBBIB995"
+LOCAL_STORAGE_HASH = "b!AexAOmJBX0GFrFCDPly37vK7ahDKKlBHgbMmpv0CDCXt3nRYonxISZkyQ12XYZPz"
+
+LOCAL_DOCUMENT_FOLDER = [LOCAL_STORAGE_HASH, "Banque documents", "All documents"]
 BANQUE_DOCUMENT_FOLDER = [ONEDRIVE_STORAGE_HASH, "Banque documents", "All documents"]
 PREDICTION_DOCUMENT_FOLDER = [BANQUE_STORAGE_HASH, "Clients"]
 
@@ -129,9 +132,9 @@ class MyMongoClient :
                     )
         return pd.DataFrame(labels, columns=['doc_id', 'label_name', 'label_value', 'confidence', 'model', 'created_on'])
     
-    def get_results(self):
+    def get_results(self, document_folder = PREDICTION_DOCUMENT_FOLDER):
         gold_docs_labels, gold_names = load_gold_labels()
-        pred_docs_labels, pred_names = self.get_docs_labels(PREDICTION_DOCUMENT_FOLDER)
+        pred_docs_labels, pred_names = self.get_docs_labels(document_folder)
         missing, wrong, right, total = 0,0,0,0
         acc_by_doc = {}
         # print(gold_names)
@@ -143,6 +146,8 @@ class MyMongoClient :
             if doc_labels not in pred_docs_labels:
                 print(f"{gold_names[i]} is not in prediction label")
                 continue
+            print("      ", doc_labels)
+
             doc_right, doc_total = 0,len(gold_docs_labels[doc_labels])
             for key in gold_docs_labels[doc_labels] :
                 if key in ['language', 'filename date'] or '-' in key:
@@ -189,3 +194,25 @@ def load_gold_labels():
     with open("./data/2023-11-01-gold_labels_filenames_clean", 'rb') as f :
         res = pickle.load(f)
     return res['labels'], res['file_names']
+
+
+import pickle 
+import os
+def dump(obj, file_path):
+    file_splitted = file_path.split('/')
+    directory_path = '/'.join(file_splitted[:-1])+'/'
+    file_name = file_splitted[-1]
+    # Ensure that the directory exists; create it if it doesn't
+    if not os.path.exists(directory_path):
+        os.makedirs(directory_path)
+
+    with open(file_path, 'wb') as f :
+        pickle.dump(obj, f) 
+
+
+class MyMongoClientLocal(MyMongoClient):
+    def __init__(self, db = "documents-100000", MONGO_HOST='localhost', MONGO_PORT=27017, MONGO_USER='ketl', MONGO_PASSWORD="ketl"):
+        super().__init__(db, MONGO_HOST, MONGO_PORT, MONGO_USER, MONGO_PASSWORD)
+
+    def get_results(self) :
+        return super().get_results(document_folder=LOCAL_DOCUMENT_FOLDER)
