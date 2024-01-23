@@ -94,7 +94,7 @@ def saving_prompt():
 @app.route(BASE_PATH+'/save_prompts', methods=['POST'])
 def save_prompts():
     global prompts
-    dump(prompts, f"ketl/prompts_{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.csv""")
+    dump(prompts, f"ketl/mongo/data/saved_prompts/prompts_{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.csv""")
     output = f"{len(prompts)} prompts saved" 
     prompts = []
     return output
@@ -110,6 +110,8 @@ def get_filename_from_messages(messages) :
     start_file_name = messages_string.find("pseudo_")
     if start_file_name == -1 :
         start_file_name = messages_string.find("Pseudo_")
+    if start_file_name == -1 :
+        start_file_name = messages_string.find("131338")
     end_file_name = messages_string.find(".pdf")
     file_name = messages_string[start_file_name: end_file_name+4]
     return file_name
