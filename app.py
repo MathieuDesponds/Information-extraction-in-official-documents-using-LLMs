@@ -72,8 +72,12 @@ def saving_prompt():
     messages = data['messages']
     label = get_prompt_type_from_messages(messages)
     file_name = get_filename_from_messages(messages)
+    print(f"filenname :{file_name}")
     
-    if label == 'Type de document' and file_name in doc_type_from_file_name: 
+    if file_name not in doc_type_from_file_name :
+        print(f"Filename not found for '{file_name}'")
+
+    if label == 'Type de document' and file_name in doc_type_from_file_name :
         output = "{" + f""" "Type de document" : "{doc_type_from_file_name[file_name]}" """ + '}'
     else : 
         output = "{}"
