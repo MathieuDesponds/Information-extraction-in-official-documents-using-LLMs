@@ -209,6 +209,14 @@ def dump(obj, file_path):
     with open(file_path, 'wb') as f :
         pickle.dump(obj, f) 
 
+def load(file_path):
+    try:
+        with open(file_path, 'rb') as f :
+            return pickle.load(f) 
+    except Exception as e:
+        # Handle any exceptions that may occur during loading
+        print(f"Error loading file {file_path}: {str(e)}")
+
 
 class MyMongoClientLocal(MyMongoClient):
     def __init__(self, db = "documents-100000", MONGO_HOST='localhost', MONGO_PORT=27017, MONGO_USER='ketl', MONGO_PASSWORD="ketl"):
