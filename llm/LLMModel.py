@@ -27,7 +27,7 @@ from ner.llm_ner.prompt_techniques.pt_multi_pt import PT_Multi_PT, PT_2Time_Tagg
 from ner.llm_ner.prompt_techniques.pt_tagger import PT_Tagger
 from ner.llm_ner.prompt_techniques.pt_get_entities import PT_GetEntities
 
-from ner.llm_ner.llm_finetune import load_model_tokenizer_for_inference, load_model_tokenizer_for_training, split_train_test, tokenize_prompt
+from llm.llm_finetune import load_model_tokenizer_for_inference, load_model_tokenizer_for_training, split_train_test, tokenize_prompt
 
 from ner.utils import run_command, latex_escape
 from ner.llm_ner.prompts import prompt_template, prompt_template_ontonotes

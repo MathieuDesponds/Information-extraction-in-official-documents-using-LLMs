@@ -30,7 +30,7 @@ def get_mistral_model():
 
 app = Flask(__name__)
 
-# model = get_mistral_instruct_model()
+model = get_mistral_instruct_model()
 
 
 @app.route(BASE_PATH+'/', methods=['GET'])

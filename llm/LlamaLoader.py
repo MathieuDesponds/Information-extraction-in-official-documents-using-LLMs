@@ -6,7 +6,7 @@ from langchain_community.llms import LlamaCpp
 from langchain.callbacks.manager import CallbackManager
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 import torch
-from ner.llm_ner.llm_finetune import load_model_tokenizer_for_inference
+from llm.llm_finetune import load_model_tokenizer_for_inference
 
 from llama_cpp import Llama, LlamaGrammar
 
