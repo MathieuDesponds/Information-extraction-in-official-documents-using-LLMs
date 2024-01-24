@@ -176,10 +176,13 @@ class MyMongoClient :
         }
         return general_accuracy, acc_by_doc, others 
     
-    def get_labels_from_doc_hash(self, doc_hash):
+    def get_labels_from_doc_hash(self, doc_hash, docs_path = PREDICTION_DOCUMENT_FOLDER):
         gold_docs_labels, gold_names = load_gold_labels()
-        pred_docs_labels, pred_names = self.get_docs_labels(PREDICTION_DOCUMENT_FOLDER)
-        return gold_docs_labels[doc_hash], pred_docs_labels[doc_hash]
+        pred_docs_labels, pred_names = self.get_docs_labels(docs_path)
+        
+        gold_labels = gold_docs_labels[doc_hash] if doc_hash in gold_docs_labels else None 
+        preds_labels = pred_docs_labels[doc_hash] if doc_hash in pred_docs_labels else None
+        return gold_labels, preds_labels
 
     def get_hash_of_doc(self, doc_id):
         hash_object = hashlib.sha256()
@@ -191,7 +194,7 @@ class MyMongoClient :
         return hash_object.hexdigest()
     
 def load_gold_labels():
-    with open("./data/2023-11-01-gold_labels_filenames_clean", 'rb') as f :
+    with open("./data/labels_results/2023-11-01-gold_labels_filenames_clean", 'rb') as f :
         res = pickle.load(f)
     return res['labels'], res['file_names']
 
@@ -222,5 +225,8 @@ class MyMongoClientLocal(MyMongoClient):
     def __init__(self, db = "documents-100000", MONGO_HOST='localhost', MONGO_PORT=27017, MONGO_USER='ketl', MONGO_PASSWORD="ketl"):
         super().__init__(db, MONGO_HOST, MONGO_PORT, MONGO_USER, MONGO_PASSWORD)
 
+    def get_labels_from_doc_hash(self, doc_hash, docs_path = LOCAL_DOCUMENT_FOLDER) :
+        return super().get_labels_from_doc_hash(doc_hash, docs_path = docs_path)
+    
     def get_results(self) :
         return super().get_results(document_folder=LOCAL_DOCUMENT_FOLDER)
