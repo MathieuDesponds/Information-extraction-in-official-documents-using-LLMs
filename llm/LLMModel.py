@@ -245,7 +245,7 @@ class LLMModel(ABC):
     def finetune(pt: PromptTechnique, dataset = None, base_model_id = "mistralai/Mistral-7B-v0.1", runs = 2000, cleaned = False, precision = None, checkpoint = None, testing = False):
         processed_dataset = pt.load_processed_dataset(runs, cleaned= cleaned, precision=precision, dataset = dataset)
         nb_samples = len(processed_dataset) 
-        output_dir = f"./llm/models/{base_model_id.split('/')[1].lower()}/{pt.__str__()}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
+        output_dir = f"./llm/models/{base_model_id.split('/')[-1].lower()}/{pt.__str__()}{f'-{precision}' if precision else ''}/finetuned-{nb_samples}"
         test_size = 50 if not testing else 2
         train_size = nb_samples-test_size if not testing else 2
         base_model, tokenizer = load_model_tokenizer_for_training(base_model_id)
@@ -335,7 +335,7 @@ class Llama7b(LLMModel):
 
 
 class MistralAI(LLMModel):
-    def __init__(self, base_model_id = "mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1", quantization = 'Q5_0', llm_loader = None, without_model = False, lora_path = None) -> None:
+    def __init__(self, base_model_id = "llm/mistralai/Mistral-7B-v0.1", base_model_name = "Mistral-7B-v0.1", quantization = 'Q5_0', llm_loader = None, without_model = False, lora_path = None) -> None:
         super().__init__(base_model_id, base_model_name, quantization=quantization, llm_loader=llm_loader, without_model=without_model, lora_path = lora_path)
     
     @staticmethod

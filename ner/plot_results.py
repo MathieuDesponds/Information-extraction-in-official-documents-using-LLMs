@@ -33,7 +33,7 @@ def get_results(with_ft, few_shots = [0,3], dataset = "ontonote5"):
 
 def show_results(with_ft = False, datasets = ["ontonote5", "conll2003_cleaned"]):
     # Set up the plot
-    fig, axs = plt.subplots(1,len(datasets),figsize = (15,8))
+    fig, axs = plt.subplots(1,len(datasets),figsize = (15,7))
 
     # Set up jitter for x-axis positions
     jitter = 0.15
@@ -150,7 +150,7 @@ def show_diff_ft(with_few_shots = False, datasets = ["ontonote5", "conll2003_cle
     return output, tables
 
 def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
-    fig, axs = plt.subplots(1, len(datasets), figsize=(15,10))
+    fig, axs = plt.subplots(1, len(datasets), figsize=(15,7))
     for idx, dataset in enumerate(datasets):
         df_results,results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
         df_results = df_results[(df_results['model'].str.contains('2000')) & (df_results['model'].str.contains('ft')) | ~df_results['model'].str.contains('ft')]
@@ -172,6 +172,8 @@ def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         
         # Convert the f1_conf_inter column to a tuple of floats
         df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
+        df['f1_conf_inter_bar'] = df.apply(lambda row : (-(row['f1_conf_inter'][0]-row['f1_mean']), row['f1_conf_inter'][1]-row['f1_mean']),axis = 1)
+        
 
         # Set up the plot
 
@@ -186,12 +188,14 @@ def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
             # Add jitter to x-axis positions
             x_positions = np.arange(len(tech_df['x_names'])) + i * jitter
             # Plot the f1_mean values with jitter
-            axs[idx].scatter(x_positions, tech_df['f1_mean'], label=tech_name)
+            axs[idx].bar(x_positions, tech_df['f1_mean'], yerr=np.array(tech_df['f1_conf_inter_bar'].tolist()).T, 
+                       capsize=5, width = jitter-0.01,
+                        align='center', label=tech_name)
             
             # Plot the confidence intervals using error bars
-            for j, (_, row) in enumerate(tech_df.iterrows()):
-                low, high = row['f1_conf_inter']
-                axs[idx].errorbar(x_positions[j], row['f1_mean'], yerr=[[row['f1_mean'] - low], [high - row['f1_mean']]], color='gray', capsize=5, capthick=2, fmt='none')
+            # for j, (_, row) in enumerate(tech_df.iterrows()):
+            #     low, high = row['f1_conf_inter']
+            #     axs[idx].errorbar(x_positions[j], row['f1_mean'], yerr=[[row['f1_mean'] - low], [high - row['f1_mean']]], color='gray', capsize=5, capthick=2, fmt='none')
 
         # Customize the plot
         axs[idx].set_xticks(np.arange(len(df['x_names'].unique())) + 0.5 * (len(df['tech_name'].unique()) - 1) * jitter)

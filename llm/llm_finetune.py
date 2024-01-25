@@ -56,7 +56,8 @@ def load_model_tokenizer_for_training(base_model_id : str):
     bnb_4bit_compute_dtype=torch.bfloat16
   )
 
-  model = AutoModelForCausalLM.from_pretrained(base_model_id, quantization_config=bnb_config)
+  model = AutoModelForCausalLM.from_pretrained(base_model_id, quantization_config=bnb_config,
+      trust_remote_code=True)
   model.gradient_checkpointing_enable()
   model = prepare_model_for_kbit_training(model)
 
