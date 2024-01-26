@@ -45,6 +45,7 @@ def show_results(with_ft = False, datasets = ["ontonote5", "conll2003_cleaned"])
         df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
         df['f1_conf_inter_bar'] = df.apply(lambda row : (-(row['f1_conf_inter'][0]-row['f1_mean']), row['f1_conf_inter'][1]-row['f1_mean']),axis = 1)
         
+        df = df[df['model'].str.contains('raw')]
         df = df[df['precision'] == '300']
         df = df[df['f1_mean'] != 0]
         # print(df)
@@ -174,7 +175,7 @@ def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
         df['f1_conf_inter_bar'] = df.apply(lambda row : (-(row['f1_conf_inter'][0]-row['f1_mean']), row['f1_conf_inter'][1]-row['f1_mean']),axis = 1)
         
-
+        df = df[~df['model'].str.contains('few')]
         # Set up the plot
 
         # Set up jitter for x-axis positions
@@ -225,7 +226,7 @@ def show_diff_ft_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         elif dataset == 'conll2003_cleaned':
             df_to_show = df_to_show[df_to_show['precision'] == '300']
             df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == 300]
-
+        df_to_show = df_to_show[df_to_show['model'].str.contains('raw')]
         # Pivot the DataFrame to have 'True' and 'False' types as columns
         pivot_df = df_to_show.pivot(index=['prompt_technique'], columns='nb_few_shots', values='f1_mean').reset_index()
 
