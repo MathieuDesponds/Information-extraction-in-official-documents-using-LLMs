@@ -1,9 +1,9 @@
-root ::= (reflection "Finally, here is the json with the type of document : " json)
+root ::= (reflection "Therefore, here is the json with the type of document : " json)
 
-reflection ::= ("I think the type of document is " string ". " isInArray)
+reflection ::= ("The document you sent is a document of type " string ". " isInArray)
 
-isInArray ::= ("It is in the possible document types array. " | (
-    "However, it is not in the possible document types array. Therefore, I should look in the array and I find that the closest type of document that is allowed is " string ". "))
+isInArray ::= ("This type of document is in the possible document types array. " | (
+    "his type of document is in the possible document types array. The type of ducment in the list that coreesponds the best to this type of document is " string ". "))
 
 json ::=  "{ \"Type de document\" : " string "}" 
 
