@@ -40,7 +40,7 @@ class PT_OutputList(PromptTechnique):
     
     def process_output(self, response : str, tag : str = None, tags = ["PER", "ORG", "LOC", 'MISC']):
         start_index, end_index = response.find('[['), response.find(']]') # Find the opening curly brace
-        start_index =  response.find('[(') if start_index == -1 else start_index
+        start_index =  (response.find('[ (') if response.find('[(')  == -1 else response.find('[(')) if start_index == -1 else start_index
         end_index = (response.find(') ]') if response.find(')]') == -1 else response.find(')]')) if end_index == -1 else end_index   # Find the closing curly brace
         
         if start_index != -1 and end_index != -1:
