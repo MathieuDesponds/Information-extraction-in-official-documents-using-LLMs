@@ -22,19 +22,16 @@ def get_all_prompts():
     label_name_to_class = load("label_name_to_classifaction_label.pkl")
     all_prompts['fields_key'] =  all_prompts['fields_name'].apply(lambda names : [label_name_to_class[name] if name in label_name_to_class else name for name in names]) 
     all_prompts = all_prompts.drop("fields_name_key", axis =1)
-    mongo_client = MyMongoClientLocal()
     all_prompts['fields_key_value'] = all_prompts.apply(lambda row : get_values_from_keys(row), axis = 1)
-    # all_prompts['output'] = all_prompts.apply(lambda row : 
-    #             '{\n' + ',\n'.join([f"{row['fields_key'][i]} : {row['fields_value'][i]}" for i in range(len(row['fields_key']))]) +'\n}', axis = 1)
     return all_prompts
 
 mongo_client = MyMongoClientLocal()
 def get_values_from_keys(row):
-    gold_labels = mongo_client.get_labels_from_doc_hash(row['doc_id'])[0]
+    gold_labels = mongo_client.get_labels_from_doc_hash(row['doc_id'], only_gold=True)
     if not gold_labels :
         return []
-    possible_keys = [key for key in row['fields_key'] if key in gold_labels]
-    return {key : gold_labels[key] for key in possible_keys}
+    possible_keys = [(key,name) for key,name in zip(row['fields_key'],row['fields_name']) if key in gold_labels]
+    return {(name if not '-' in name else '-'.join(name.split('-')[1:]).capitalize())  : gold_labels[key] for key,name in possible_keys}
 
 
 
