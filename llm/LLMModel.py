@@ -346,17 +346,48 @@ class MistralAIInstruct(LLMModel):
     def __init__(self, base_model_id = "mistralai/Mistral-7B-Instruct-v0.2", base_model_name = "Mistral-7B-Instruct-v0.2", quantization = 'Q8_0', llm_loader = None, without_model = False, lora_path = None) -> None:
         super().__init__(base_model_id, base_model_name, quantization=quantization, llm_loader=llm_loader, without_model=without_model, lora_path = lora_path)
         self.tokenizer =  AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
+        if "finetune" in self.base_model_id :
+            self.name = f"{self.base_model_name.lower()}-ft-discussion-2000-Q8_0"
 
     @staticmethod
     def name():
-        return "Mistral-7B-Instruct-v0.2".lower()
+        return "Mistral-7B-Instruct-v0.2".lower() +"" if "finetune" in self.base_model_id else "ft-2000"
     
     def __call__(self, prompt, with_full_message = False) -> Any:
-        if isinstance(prompt, list):
-            prompt = self.tokenizer.apply_chat_template(prompt, tokenize=False)
+        prompt = self.construct_prompt_for_mistralAIInstruct(prompt)
             # print(prompt)
         return self.model(prompt, with_full_message)
 
+    def construct_prompt_for_mistralAIInstruct(self, prompt):
+        prompt = prompt.replace("INPUT", "USER").replace("OUTPUT", "ASSISTANT")
+        if '### USER' in prompt :
+            prompt = self.from_mistral_to_mistralInstruct(prompt)
+
+        if isinstance(prompt, list):
+            prompt = self.tokenizer.apply_chat_template(prompt, tokenize=False)
+
+        return prompt
+
+    def from_mistral_to_mistralInstruct(self, prompt):
+        messages = [m for m in  prompt.split('### ') if m]
+        output = []
+        if messages[0].split()[0] == "SYSTEM" and messages[1].split()[0] == "USER": 
+            messages[1] = "USER : " +messages[0].split("SYSTEM : ")[-1] + messages[1].split("USER : ")[-1]
+            messages = messages[1:]
+
+        prev_role, prev_content = "",""
+        for mess in messages :
+            role = mess.split()[0]
+            content = mess.split(f"{role} : ")[-1]
+            if prev_role != role and prev_role:
+                output.append({'role' : prev_role.lower() , 'content' : prev_content})
+                prev_content = content
+            else : 
+                prev_content += content
+            prev_role = role
+        output.append({'role' : prev_role.lower() , 'content' : prev_content})
+        # print(output)
+        return output
     
 class NoLLM(LLMModel):
     def __init__(self, base_model_id = "None", base_model_name = "None", llm_loader = None, without_model = False) -> None:

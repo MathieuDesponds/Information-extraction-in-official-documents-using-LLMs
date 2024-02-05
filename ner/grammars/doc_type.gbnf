@@ -3,7 +3,7 @@ root ::= (reflection "Therefore, here is the json with the type of document : " 
 reflection ::= ("The document you sent is a document of type " string ". " isInArray)
 
 isInArray ::= ("This type of document is in the possible document types array. " | (
-    "his type of document is in the possible document types array. The type of ducment in the list that coreesponds the best to this type of document is " string ". "))
+    "This type of document is in the possible document types array. The type of document in the list that coresponds the most to this type of document is " string ". "))
 
 json ::=  "{ \"Type de document\" : " string "}" 
 
