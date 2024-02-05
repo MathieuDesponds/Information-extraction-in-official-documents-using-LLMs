@@ -27,6 +27,8 @@ def get_results(with_ft, few_shots = [0,3], dataset = "ontonote5"):
             df_res = df_res[~df_res['model'].str.contains('ft')]
         
         df_res = df_res[df_res['nb_few_shots'].isin(few_shots)]
+    
+    df_res['few_shot_tecnique'] = df_res['few_shot_tecnique'].replace('discussion', 'direct output') 
     return df_res[['model', 'f1_mean', 'f1_conf_inter', 'prompt_technique',
             'few_shot_tecnique', 'nb_few_shots', 'precision', 'plus_plus']]
 
@@ -39,15 +41,18 @@ def show_results(with_ft = False, datasets = ["ontonote5", "conll2003_cleaned"])
     jitter = 0.15
     for i, dataset in enumerate(datasets) :
         df = get_results(with_ft, dataset = dataset)
-        df['tech_name'] = df.apply(lambda row :f"With {row['nb_few_shots']} few_shots {'and ++' if row['plus_plus']  else ''}", axis = 1)
+
+        df['tech_name'] = df.apply(lambda row :f"With {row['nb_few_shots']} few_shots {'and definitions' if row['plus_plus']  else ''}", axis = 1)
         df = df.sort_values('tech_name')
         # Convert the f1_conf_inter column to a tuple of floats
         df['f1_conf_inter'] = df['f1_conf_inter'].apply(lambda x: ast.literal_eval(x))
         df['f1_conf_inter_bar'] = df.apply(lambda row : (-(row['f1_conf_inter'][0]-row['f1_mean']), row['f1_conf_inter'][1]-row['f1_mean']),axis = 1)
         
-        df = df[df['model'].str.contains('raw')]
+        if with_ft : 
+            df = df[df['model'].str.contains('raw')]
         df = df[df['precision'] == '300']
         df = df[df['f1_mean'] != 0]
+
         # print(df)
         # Loop through unique tech_names
         for h, tech_name in enumerate(df['tech_name'].unique()):
