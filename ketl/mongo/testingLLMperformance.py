@@ -4,6 +4,8 @@ from myMongoClient import *
 
 NONE_USER = '6536892d127f4f001df8215e'
 
+GOLD_LABEL_FILE = "data/labels_results/2024-01-12_16:42:23_df_gold_labels.csv"
+
 def filter_rows(group):
     model_name = group['model'].unique().item()
     if 'entity' in model_name:
@@ -62,7 +64,7 @@ def get_LLM_performance(mongo_client : MyMongoClient, doc_folder, with_gold, wit
         label_versions['label_value'] = label_versions.apply(format_date, axis=1)
 
     if not with_gold :
-        gold = pd.read_csv("labels_results/2024-01-18_16:15:33_df_gold_labels.csv")
+        gold = pd.read_csv(GOLD_LABEL_FILE)
         doc_not_both1 = set(label_versions['doc_id'].tolist()).difference(set(gold['doc_id'].tolist()))
         doc_not_both2 = set(gold['doc_id'].tolist()).difference(set(label_versions['doc_id'].tolist()))
         
