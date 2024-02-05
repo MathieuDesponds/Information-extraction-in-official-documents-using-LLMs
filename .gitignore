@@ -2,6 +2,7 @@ __pycache__/
 
 ner/saves/datasets/old
 
+llm/mistralai/*
 llm/models/*
 llm/ChatGPT.py
 
