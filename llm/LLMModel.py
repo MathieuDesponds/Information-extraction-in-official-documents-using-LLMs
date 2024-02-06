@@ -359,9 +359,9 @@ class MistralAIInstruct(LLMModel):
         return self.model(prompt, with_full_message)
 
     def construct_prompt_for_mistralAIInstruct(self, prompt):
-        prompt = prompt.replace("INPUT", "USER").replace("OUTPUT", "ASSISTANT")
         if '### USER' in prompt :
             prompt = self.from_mistral_to_mistralInstruct(prompt)
+            prompt = prompt.replace("INPUT", "USER").replace("OUTPUT", "ASSISTANT")
 
         if isinstance(prompt, list):
             prompt = self.tokenizer.apply_chat_template(prompt, tokenize=False)

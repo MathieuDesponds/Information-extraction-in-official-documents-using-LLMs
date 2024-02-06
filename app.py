@@ -1,4 +1,5 @@
 import logging
+import time
 from flask import Flask, request
 from llm.LLMModel import MistralAI, MistralAIInstruct, NoLLM
 from llm.LlamaLoader import Llama_Langchain, Llama_LlamaCpp
@@ -14,11 +15,13 @@ BASE_PROMPT_INSTRUCT = [{'role' : 'user', 'content' : BASE_PROMPT}]
 
 prompts = []
 
-doc_type_from_file_name = load("ketl/mongo/doc_type_from_file_name.pkl")
+doc_type_from_file_name = load("ketl/mongo/data/doc_type_from_file_name.pkl")
+
+model_available = True
 
 def get_mistral_instruct_model():
-    model = MistralAIInstruct(quantization="Q8_0", llm_loader =Llama_LlamaCpp)
-    model.set_grammar("doc_type")
+    model = MistralAIInstruct(base_model_id = "llm/mistralai/Mistral-7B-Instruct-v0.2ketl_training/130-2024-02-02_14:56:14_mistral-instruct_ft-data/merged_ggml_q8_0.bin", quantization="Q8_0", llm_loader = Llama_LlamaCpp)
+    model.set_grammar("json")
     print(model(BASE_PROMPT_INSTRUCT))
     return model
 
@@ -31,7 +34,6 @@ def get_mistral_model():
 app = Flask(__name__)
 
 model = get_mistral_instruct_model()
-
 
 @app.route(BASE_PATH+'/', methods=['GET'])
 def base():
@@ -48,17 +50,23 @@ def hello():
 
 @app.route(BASE_PATH+'/run_prompt', methods=['POST'])
 def run_prompt():
+    global model_available
     data = request.get_json()  # Assuming JSON payload, adjust as needed
     if 'messages' not in data:
         return 'Missing "prompt" in the POST request data.'
     messages = data['messages']
     label = get_prompt_type_from_messages(messages)
-    if label == "Type de document" :
-        model.set_grammar('doc_type')
-    else :
-        model.set_grammar('json')
+    # if label == "Type de document" :
+    #     model.set_grammar('doc_type')
+    # else :
+    #     model.set_grammar('json')
 
+
+    while(not model_available):
+        time.sleep(1)
+    model_available = False
     answer =  model(messages)
+    model_available =True
     print(answer)
     logging.debug(f"logging answer { answer}")
     return answer
