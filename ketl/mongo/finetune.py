@@ -4,6 +4,7 @@ import random
 import torch
 from typing import Any
 
+from datasets import load_dataset, Dataset, concatenate_datasets
 import transformers
 from transformers import AutoTokenizer
 from myMongoClient import load, dump
@@ -19,19 +20,22 @@ from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model, Pe
 tokenizer =  AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
 tokenizer.pad_token = tokenizer.eos_token
 
-def finetune(dataset_path, model_path = "mistralai/Mistral-7B-Instruct-v0.2", precision = "", checkpoint = None, testing = False):
+def finetune(dataset_path, model_path = "mistralai/Mistral-7B-Instruct-v0.2", precision = "quora|alpaca|ketl", checkpoint = None, testing = False):
     processed_dataset = load(dataset_path)
     tokenized_dataset = processed_dataset.copy()
     for doc_id, values in tokenized_dataset.items():
         tokenized_dataset[doc_id] = [tokenize_prompt(prompt, tokenizer) for prompt in values]
     samples, doc_names, sets = split_train_test(tokenized_dataset)
-    
     print(doc_names)
     training_samples, eval_samples, testing_samples = samples
+    quora = quora_dataset(nb_samples= len(training_samples))
+    alpaca = alpaca_dataset(nb_samples= len(training_samples))
+    training_samples = Dataset.from_list(training_samples)
+    training_samples = concatenate_datasets([training_samples, quora, alpaca]).shuffle(seed = 42)
+
     output_dir = model_path+f"ketl_training/{len(training_samples)}-{dataset_path.split('/')[-1]}-{precision}"
 
     base_model = load_model_for_training(model_path)
-
 
     trainer = transformers.Trainer(
         model=base_model,
@@ -137,3 +141,29 @@ def load_model_for_training(base_model_id : str):
         model.is_parallelizable = True
         model.model_parallel = True
     return model
+tokenizer =  AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
+def quora_dataset(nb_samples = 200):
+    quora = load_dataset("toughdata/quora-question-answer-dataset", split='train[:1%]')
+    quora = quora.map(lambda row : {'messages' : [{'role': 'user', 'content': row['question']} , {'role' : 'assistant', 'content' : row['answer']}]})
+    quora = quora.map(lambda row : {'text' : tokenizer.apply_chat_template(row['messages'], tokenize=False)})
+    quora = quora.map(lambda row : tokenize_prompt(row, tokenizer))
+    quora = quora.remove_columns(['question', 'answer', 'text', 'messages'])
+    return quora.select(range(nb_samples))
+
+import json
+def alpaca_dataset(nb_samples = 200) :
+    dataset = []
+    # Open the JSON file
+    with open('data/chatalpaca-10k.json', 'r') as file:
+        for line in file :
+            line = json.loads(line)
+            dataset.append(line['conversations'])
+    mapping = {'gpt' : 'assistant', 'human' : 'user'}
+
+    alpaca = [{'messages' : [{'role' : mapping[message['from']] , 'content' : message['value'] }for message in data]} for data in dataset]
+    alpaca = Dataset.from_list(alpaca)
+    alpaca = alpaca.select(range(nb_samples))
+    alpaca = alpaca.map(lambda row : {'text' : tokenizer.apply_chat_template(row['messages'], tokenize=False)})
+    alpaca = alpaca.map(lambda row : tokenize_prompt(row, tokenizer))
+    alpaca = alpaca.remove_columns(['text', 'messages'])
+    return alpaca
