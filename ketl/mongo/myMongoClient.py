@@ -79,14 +79,21 @@ class MyMongoClient :
         entities = cursor.find({})
         return entities
     
-    def get_all_documents(self) :
+    def get_all_documents(self, path_storage= []) :
         if not self.all_docs :
             cursor = self.mongo_client[self.db]['documents']
             self.all_docs = list(cursor.find({}))
-        return self.all_docs
+        
+        filtered_documents = []
+        for item in self.all_docs :
+            for file in item.get("files", [{}]) :
+                if file.get("fullPath")[:len(path_storage)] == path_storage:
+                    filtered_documents.append(item)
+        return filtered_documents
     
-    def get_document_content(self, document) :
-        doc_stor_id = document['_id']
+    def get_document_content(self, document = None, document_id = None) :
+        doc_stor_id = document['_id'] if not document_id else document_id 
+
         if not self.all_docs_content :
             cursor = self.mongo_client[self.db]['contents']
             self.all_docs_content = list(cursor.find({}))
