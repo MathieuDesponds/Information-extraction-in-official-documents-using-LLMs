@@ -26,7 +26,7 @@ def get_all_prompts():
     all_prompts['fields_key'] =  all_prompts['fields_name'].apply(lambda names : [label_name_to_class[name] if name in label_name_to_class else name for name in names]) 
     all_prompts = all_prompts.drop("fields_name_key", axis =1)
     all_prompts['fields_key_value'] = all_prompts.apply(lambda row : get_values_from_keys(row), axis = 1)
-    all_prompts['text'] = all_prompts.apply(lambda row : get_text_for_ft(row), axis = 1)
+    all_prompts['text'] = all_prompts.apply(lambda row : get_text_for_ft_cot(row), axis = 1)
     return all_prompts
 
 def get_dataset_for_ft(with_save = False):
@@ -46,6 +46,36 @@ def get_text_for_ft(row):
         'role' : "assistant",
         'content' : str(row['fields_key_value'])
     })
+    return tokenizer.apply_chat_template(row['messages'], tokenize=False)
+
+def get_text_for_ft_cot(row): 
+    answer = dict(row['fields_key_value'])
+    if "Type de docuemnt" in answer : 
+        right_type = answer['Type de document']
+        wrong_type = possible_docs_match[right_type] if right_type in possible_docs_match else right_type
+        output = f"The document you sent is a document of type {wrong_type}. "
+        if  right_type == wrong_type:
+            output += "This type of document is in the possible document types array. "
+        else : 
+            output += f"This type of document is not in the possible document types array. The type of document in the list that coresponds the most to this type of document is {right_type}. "
+
+        output += f"Therefore, here is the json with the type of document : {answer}"
+    elif row['label'] == 'client' :
+        if 'Nom' in answer and 'sa' in answer['Nom'].lower(): 
+            new_dict = {'Type' : 'Entreprise'}
+            new_dict.update(answer)
+        else :
+            new_dict = {'Type' : 'Personne'}
+            new_dict.update(answer)
+        output = f"I have read the document and after thinking a little bit I think I have found the client and the information related to him/her. Here is a json with all the informations :\n{new_dict}"
+    else :
+        output = f"I have read the document and after thinking a little bit I think I have found the information you wanted. Here is a json with all the informations : {answer}"
+
+    row['messages'].append({
+        'role' : "assistant",
+        'content' : output
+    })
+
     return tokenizer.apply_chat_template(row['messages'], tokenize=False)
 
 
@@ -112,3 +142,71 @@ def map_doc_type_from_file_name():
     # file_nam_value, len(file_nam_value)
 
     dump(file_nam_value, "doc_type_from_file_name.pkl")
+
+
+
+
+possible_docs_match = {
+ 'Déclaration fiscale' : "Déclaration impôts",
+ 'Certificat annuel de salaire' : 'Certificat annuel',
+ 'Fiche de salaire' : "Décompte de salaire",
+ 'Procès-verbal' : "PV",
+ 'Plan' : 'Plan de situation',
+ 'Division et réunion de parcelles' : 'Division de parcelles',
+ "Police d'assurance" : "Assurance vie",
+ 'Relevé crédit ou dette' : 'Relevé crédit',
+}
+possible_doc_types = ['Facture',
+ 'Pitch Deck',
+ 'Lettre',
+ 'E-mails',
+ 'Contrat',
+ 'Bail à loyer',
+ 'Procuration',
+ 'Acte',
+ 'Dossier de mutation',
+ 'Déclaration fiscale',
+ "Avis d'imposition",
+ 'Attestation forfait fiscal',
+ 'Attestation de loyer de régie',
+ 'Bordereau de taxation',
+ 'Certificat annuel de salaire',
+ 'Certificat annuel de prévoyance / Versicherungsausweis',
+ 'Fiche de salaire',
+ 'Justification bonus',
+ 'Relevé bancaire',
+ 'Relevé de porte-feuille',
+ 'Relevé LPP',
+ 'Simulation après retrait',
+ 'Règlement LPP',
+ 'Attestation retrait prévoyance',
+ 'Procès-verbal',
+ 'Attestation de valeur de rachat',
+ 'Plaquette de vente',
+ 'Extrait du registre foncier',
+ 'Règlement PPE',
+ 'Cahier PPE',
+ 'Plan',
+ 'Tableau de répartition des locaux',
+ 'Descriptif de construction',
+ 'Convention pour travaux',
+ 'Décision d’autorisation de construire',
+ 'Division et réunion de parcelles',
+ 'Titre de propriété',
+ "Police d'assurance",
+ 'CGA',
+ 'Devis travaux',
+ 'Facture travaux',
+ 'Extrait du registre des poursuites',
+ 'Extrait du casier judiciaire',
+ 'Rapport rating ZEK',
+ 'Autorisation consultation ZEK',
+ 'Resultat recherche ZEK',
+ 'Bilan & PP',
+ 'Attestation de donation familiale',
+ "Pièce d'identité",
+ 'Rapport / Pré-avis',
+ 'Formulaire nouvel employé',
+ 'Relevé crédit ou dette',
+ 'Attestation fiscale de rente de prévoyance',
+ 'Décompte prestation prévoyance']
