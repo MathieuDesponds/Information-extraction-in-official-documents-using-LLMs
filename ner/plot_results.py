@@ -14,12 +14,14 @@ def get_results(with_ft, few_shots = [0,3], dataset = "ontonote5"):
             df_to_show = df_results[df_results['model'].str.contains('ft') & df_results['model'].str.contains('2000')]
         else : 
             df_to_show = df_results[~df_results['model'].str.contains('ft')]
+            
         df_res = df_to_show[df_to_show['precision'] == '300']
         df_res = df_res[df_res['nb_few_shots'].isin(few_shots)]
         df_res = df_res[df_res['prompt_technique'] != 'multi_prompt-get-entities-tagger']
     elif dataset == "conll2003_cleaned" :
         df_results, results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
         df_results['nb_samples'] = df_results['nb_test_run'] * df_results['len_data_test']
+        df_results = df_results[~df_results['model'].str.contains('instruct')]
         df_res = df_results[df_results['nb_samples'] == 300]
         if with_ft:
             df_res = df_res[df_res['model'].str.contains('ft')]
@@ -28,7 +30,7 @@ def get_results(with_ft, few_shots = [0,3], dataset = "ontonote5"):
         
         df_res = df_res[df_res['nb_few_shots'].isin(few_shots)]
     
-    df_res['few_shot_tecnique'] = df_res['few_shot_tecnique'].replace('discussion', 'direct output') 
+    df_res['prompt_technique'] = df_res['prompt_technique'].replace('discussion', 'direct output') 
     return df_res[['model', 'f1_mean', 'f1_conf_inter', 'prompt_technique',
             'few_shot_tecnique', 'nb_few_shots', 'precision', 'plus_plus']]
 
@@ -84,6 +86,7 @@ def show_results(with_ft = False, datasets = ["ontonote5", "conll2003_cleaned"])
         axs[i].legend()
     plt.savefig('ner/saves/results/ontonote5/graph_results.png', dpi=300, bbox_inches='tight')
     plt.show()
+    return df
 
 def show_diff_plus_plus(with_ft = False, datasets = ["ontonote5"]):
     output = ""
@@ -161,6 +164,8 @@ def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         df_results,results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
         df_results = df_results[(df_results['model'].str.contains('2000')) & (df_results['model'].str.contains('ft')) | ~df_results['model'].str.contains('ft')]
         df_results['ft'] = df_results['model'].str.contains('ft') & df_results['model'].str.contains('2000')
+        df_results['prompt_technique'] = df_results['prompt_technique'].replace('discussion', 'direct output') 
+        df_results = df_results[~df_results['model'].str.contains('instruct')]
         df_to_show = df_results[['model', 'f1_mean', 'f1_conf_inter', 'prompt_technique',
             'few_shot_tecnique', 'nb_few_shots', 'precision', 'plus_plus', 'ft']]
         df_to_show = df_to_show[df_to_show['plus_plus'] == True]
@@ -169,7 +174,7 @@ def show_results_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         elif dataset == 'conll2003_cleaned' :
             df_to_show = df_to_show[df_results['nb_test_run'] * df_results['len_data_test'] == 300]
             df_to_show = df_to_show[df_to_show['precision'].isin(['300', 300])]
-        df_to_show = df_to_show[df_to_show['prompt_technique'].isin(['wrapper', 'discussion'])]
+        df_to_show = df_to_show[df_to_show['prompt_technique'].isin(['wrapper', 'direct output'])]
 
         df_to_show['x_names']= df_to_show.apply(lambda row :f"{row['prompt_technique']} | {'With' if row['ft'] else 'Without'} finetuning", axis = 1)
         df_to_show['tech_name'] = df_to_show.apply(lambda row :f"With {' ' if row['nb_few_shots'] <10 else ''}{row['nb_few_shots']} few shots", axis = 1)
@@ -223,6 +228,8 @@ def show_diff_ft_few_shots(datasets = ["ontonote5", "conll2003_cleaned"]):
         df_results,results = load_all_results(root_directory = f"ner/saves/results/{dataset}/")
         df_results = df_results[df_results['model'].str.contains('2000-') & df_results['model'].str.contains('ft') | ~df_results['model'].str.contains('ft')]
         df_results['ft'] = df_results['model'].str.contains('ft') & df_results['model'].str.contains('2000')
+        df_results['prompt_technique'] = df_results['prompt_technique'].replace('discussion', 'direct output') 
+        df_results = df_results[~df_results['model'].str.contains('instruct')]
         df_to_show = df_results[['model', 'f1_mean', 'f1_conf_inter', 'prompt_technique',
             'few_shot_tecnique', 'nb_few_shots', 'precision', 'plus_plus', 'ft']]
         df_to_show = df_to_show[df_to_show['plus_plus'] & ~df_to_show['ft']]
