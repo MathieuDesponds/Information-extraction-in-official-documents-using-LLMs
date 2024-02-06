@@ -56,10 +56,10 @@ def run_prompt():
         return 'Missing "prompt" in the POST request data.'
     messages = data['messages']
     label = get_prompt_type_from_messages(messages)
-    # if label == "Type de document" :
-    #     model.set_grammar('doc_type')
-    # else :
-    #     model.set_grammar('json')
+    if label == "Type de document" :
+        model.set_grammar('doc_type')
+    else :
+        model.set_grammar('string_json')
 
 
     while(not model_available):

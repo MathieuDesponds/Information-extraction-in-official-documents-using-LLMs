@@ -62,6 +62,9 @@ class Llama_LlamaCpp(LlamaLoader) :
         elif type_of_grammar == "doc_type":
             self.grammar = LlamaGrammar.from_file("ner/grammars/doc_type.gbnf")
             self.stop=['}']
+        elif type_of_grammar == "string_json":
+            self.grammar = LlamaGrammar.from_file("ner/grammars/string_json.gbnf")
+            self.stop=['}']
 
 
     def __call__(self, prompt, with_full_message = False):
