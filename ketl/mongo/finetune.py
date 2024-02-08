@@ -141,7 +141,8 @@ def load_model_for_training(base_model_id : str):
         model.is_parallelizable = True
         model.model_parallel = True
     return model
-tokenizer =  AutoTokenizer.from_pretrained("mistralai/Mistral-7B-Instruct-v0.2")
+
+
 def quora_dataset(nb_samples = 200):
     quora = load_dataset("toughdata/quora-question-answer-dataset", split='train[:1%]')
     quora = quora.map(lambda row : {'messages' : [{'role': 'user', 'content': row['question']} , {'role' : 'assistant', 'content' : row['answer']}]})
