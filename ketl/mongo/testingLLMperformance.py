@@ -62,7 +62,8 @@ def get_LLM_performance(mongo_client : MyMongoClient, doc_folder, with_gold, wit
 
         # Apply the function to the DataFrame
         label_versions['label_value'] = label_versions.apply(format_date, axis=1)
-
+    else :
+        label_versions = label_versions[label_versions['doc_id'].isin(label_versions[label_versions['model'].str.contains('llm - openai azure')]['doc_id'])]
     if not with_gold :
         gold = pd.read_csv(GOLD_LABEL_FILE)
         doc_not_both1 = set(label_versions['doc_id'].tolist()).difference(set(gold['doc_id'].tolist()))
@@ -79,8 +80,8 @@ def get_LLM_performance(mongo_client : MyMongoClient, doc_folder, with_gold, wit
 
     # score_by_fields = result_df['output'].sum()/len(result_df)
     # score_by_documents = result_df.groupby('doc_id').agg({'output' : 'mean'})['output'].mean()
-    score_by_fields, score_by_documents = get_score_for_asked_fields(result_df, no_compare_doc = doc_not_both1.union(doc_not_both2))
-    return score_by_fields,score_by_documents, result_df, label_versions
+    score_by_fields, score_by_documents, nb_fields = get_score_for_asked_fields(result_df, no_compare_doc = doc_not_both1.union(doc_not_both2))
+    return score_by_fields,score_by_documents, result_df, label_versions, nb_fields
 
 def get_results_by_label_name(score_df) :
     result_df = score_df.groupby('label_name')['output'].agg(['mean', 'count']).reset_index()
@@ -101,9 +102,12 @@ def get_doc_hash_wrong_value(score_df, label_name):
     return score_df[(score_df['label_name'] == label_name) & (score_df['output'] == 0)]['doc_id'].tolist()
 
 def get_score_for_asked_fields(score_df, no_compare_doc):
-    doc_wrong_type = get_doc_hash_wrong_value(score_df, 'document type') + list(no_compare_doc)
-    score_df2 = score_df[~(score_df['doc_id'].isin(doc_wrong_type) & (~score_df['label_name'].isin(['client', 'document type'])))]
+    doc_wrong_type = get_doc_hash_wrong_value(score_df, 'document type')
+    #Remove doc not compared
+    score_df2 = score_df[~score_df['doc_id'].isin(list(no_compare_doc))]
+    # Remove fields not asked by LLM when document type failed
+    score_df2 = score_df2[~(score_df['doc_id'].isin(doc_wrong_type) & (~score_df2['label_name'].isin(['client', 'document type'])))]
     score_by_fields = score_df2['output'].sum()/len(score_df2)
     score_by_documents = score_df2.groupby('doc_id').agg({'output' : 'mean'})['output'].mean()
-    return score_by_fields,score_by_documents
+    return score_by_fields, score_by_documents, len(score_df2)
 
