@@ -20,7 +20,7 @@ doc_type_from_file_name = load("ketl/mongo/data/doc_type_from_file_name.pkl")
 model_available = True
 
 def get_mistral_instruct_model():
-    model = MistralAIInstruct(base_model_id = "llm/mistralai/Mistral-7B-Instruct-v0.2ketl_training/130-2024-02-02_14:56:14_mistral-instruct_ft-data/merged_ggml_q8_0.bin", quantization="Q8_0", llm_loader = Llama_LlamaCpp)
+    model = MistralAIInstruct(base_model_id = "llm/mistralai/Mistral-7B-Instruct-v0.2ketl_training/2024-02-06_14:35:37_mistral-instruct_ft-data-quora-alpaca-ketl/merged_ggml_q8_0.bin", quantization="Q8_0", llm_loader = Llama_LlamaCpp)
     model.set_grammar("json")
     print(model(BASE_PROMPT_INSTRUCT))
     return model
