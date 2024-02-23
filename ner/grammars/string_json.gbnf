@@ -1,4 +1,4 @@
-root   ::= (string object)
+root   ::= "I have read the document and after thinking a little bit I think I have found the information you wanted. Here is a json with all the informations : " object
 value  ::= object | array | string | number | ("true" | "false" | "null") ws
 
 object ::=
