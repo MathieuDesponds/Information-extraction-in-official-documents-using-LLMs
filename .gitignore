@@ -4,7 +4,6 @@ ner/saves/datasets/old
 
 llm/mistralai/*
 llm/models/*
-llm/ChatGPT.py
 
 ner/saves/results/conll2003_not_cleaned/*
 

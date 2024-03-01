@@ -14,6 +14,11 @@ Key findings reveal that, in the traditional NER task, while ChatGPT ini- tially
 
 Furthermore, a study on LLM confidence assessment proposes training logistic regression on model logits before token generation for the desired output. Given the rapid advancement in the domain of LLM and the associated tools, the poten- tial for integrating LLM models into Ketl’s operations and ease the life of many secretary that need to classify documents manually is real.
 
+
+## Main results 
+
+You can run the `results.ipynb` to show the main results on the NER part of the thesis.
+
 ## Installation 
 
 ### To use it on the SDSC machines
