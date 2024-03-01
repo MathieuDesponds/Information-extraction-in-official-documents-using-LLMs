@@ -44,13 +44,13 @@ def extract_entities_spacy(text):
 #     return entities
 
 
-# tokenizer = AutoTokenizer.from_pretrained("Babelscape/wikineural-multilingual-ner")
-# model = AutoModelForTokenClassification.from_pretrained("Babelscape/wikineural-multilingual-ner")
-# nlp = pipeline("ner", model=model, tokenizer=tokenizer, grouped_entities=True)
-# def extract_entities_babelspace(text):
-#     ner_results = nlp(text)
-#     entities = [(entity['word'], entity['entity_group']) for entity in ner_results]
-#     return entities
+tokenizer = AutoTokenizer.from_pretrained("Babelscape/wikineural-multilingual-ner")
+model = AutoModelForTokenClassification.from_pretrained("Babelscape/wikineural-multilingual-ner")
+nlp = pipeline("ner", model=model, tokenizer=tokenizer, grouped_entities=True)
+def extract_entities_babelspace(text):
+    ner_results = nlp(text)
+    entities = [(entity['word'], entity['entity_group']) for entity in ner_results]
+    return entities
 
 # from refined.inference.processor import Refined
 
@@ -92,8 +92,8 @@ def get_results(dataset, with_save = False, path_to_save= lambda dataset : f'./n
     for i in tqdm(range(len(dataset))):
         true_labels.append(dataset[i]['spans'])
 
-        spacy_entities = extract_entities_spacy(dataset[i]['text'])
-        spacy_pred_labels.append(spacy_entities)
+        # spacy_entities = extract_entities_spacy(dataset[i]['text'])
+        # spacy_pred_labels.append(spacy_entities)
 
         # flair_entities = extract_entities_flair(dataset[i]['text'], tagger_flair)
         # flair_pred_labels.append(flair_entities)
@@ -107,8 +107,8 @@ def get_results(dataset, with_save = False, path_to_save= lambda dataset : f'./n
         # flair_ontonote_large_entities = extract_entities_flair(dataset[i]['text'], tagger_flair_ontonote_large)
         # flair_ontonote_large.append(flair_ontonote_large_entities)
 
-        # babelsapce_entities = extract_entities_babelspace(dataset[i]['text'])
-        # babelspace_pred_labels.append(babelsapce_entities)
+        babelsapce_entities = extract_entities_babelspace(dataset[i]['text'])
+        babelspace_pred_labels.append(babelsapce_entities)
 
         # refined_entities = extract_entities_refined(dataset[i]['text'])
         # refined_pred_labels.append(refined_entities)
@@ -122,9 +122,9 @@ def get_results(dataset, with_save = False, path_to_save= lambda dataset : f'./n
 
     results = {
         "true_labels" : true_labels,
-        "spacy" : spacy_pred_labels,
+        # "spacy" : spacy_pred_labels,
         # "flair" : flair_pred_labels,
-        # "babelspace" : babelspace_pred_labels,
+        "babelspace" : babelspace_pred_labels,
         # "refined" : refined_pred_labels,
         # "flair_ontonote_base" : flair_ontonote_base,
         # "flair_ontonote_large" : flair_ontonote_large
