@@ -1,49 +1,26 @@
 # Master-thesis
 
+This is the repository of my Master Thesis. The final report can be found in the folder under `Master-Thesis.pdf`.
+
+## Abstract
+
+Ketl is an AI-driven company specializing in the automatic extraction of in- formation from official documents to facilitate efficient document retrieval using filters. However, the company encounters the challenge of maintaining client doc- ument privacy, prohibiting document sharing between clients while needing data to train their models.
+
+Traditionally, clients classified manually documents that was then used for training a classification and a named entity classification models. With the emer- gence of Large Language Models (LLM), new possibilities arose. LLMs demon- strate impressive document understanding, enabling effective retrieval of critical information without the need for training. However, Ketl refrains from sending client documents to external APIs like OpenAI. Hence, one objective of this study is to assess the feasibility of deploying a smaller, on-premise model.
+
+This thesis investigates LLM usage for named entity retrieval, exploring various prompt techniques, few-shot selection methods, output restriction strategies, and fine-tuning techniques. Due to the absence of labeled official document data, initial focus is directed towards traditional NER tasks, later extending these findings to evaluate LLM performance for Ketl. The models evaluated include deep-learning models like Flair, SpaCy and Wikineural-multinlingual-ner for comparison with the LLMs like ChatGPT and MistralAI. 
+
+Key findings reveal that, in the traditional NER task, while ChatGPT ini- tially outperformed the raw Mistral-7B model, fine-tuning enhanced Mistral-7B’s performance above those of ChatGPT. In comparison with deep-learning mod- els, Flair and SpaCy consistently surpasses LLMs. However, for official document named entity extraction, ChatGPT yields superior results, followed by a fine-tuned MistralAI-7B-Instruct-v0.2 model, and deep-learning models exhibiting only lim- ited capabilities.
+
+Furthermore, a study on LLM confidence assessment proposes training logistic regression on model logits before token generation for the desired output. Given the rapid advancement in the domain of LLM and the associated tools, the poten- tial for integrating LLM models into Ketl’s operations and ease the life of many secretary that need to classify documents manually is real.
 
 ## Installation 
-Add the path of the right python version
-```bash
-export PATH=/myhome/miniconda3/bin:$PATH
-```
 
-If it does not work, add `export PATH=/myhome/miniconda3/bin:$PATH` in `~/.bashrc` with `vim` and run `source ~/.bashrc`
-Install `vim` with `apt-get install vim`
-And restart your terminal and verify with `python -V` the version of python that you have. 
+### To use it on the SDSC machines
 
-If you ahve problem with `apt-get` run 
+First, download miniconda and set it under `/myhome/`
 
-```bash
-apt-get clean
-rm -rf /var/lib/apt/lists/*
-apt-get clean
-apt-get update 
-apt-get upgrade
-```
-
-### Install the requirements
-```bash
-pip install -r requirements.txt
-spacy download  en_core_web_sm
-CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
-```
-
-### Setup git 
-```bash 
-cp /myhome/.ssh/id_rsa.pub /root/.ssh/id_rsa.pub
-cp /myhome/.ssh/id_rsa /root/.ssh/id_rsa
-git config --global user.email "mathieu.desponds@ketl.ch"
-git config --global user.name "Mathieu Desponds"
-```
-
-### Add jupyter extension on vscode
-Add the jupyter notebook extension on vscode
-
-### Run the set up script
-
-We need to reload the dataset that were on the cache run `python setup.py`
-
-### Direct run of everything
+Then run the following :
 ```bash
 export PATH=/myhome/miniconda3/bin:$PATH
 pip install -r requirements.txt
@@ -55,7 +32,7 @@ cp /myhome/.ssh/id_rsa.pub /root/.ssh/id_rsa.pub
 cp /myhome/.ssh/id_rsa /root/.ssh/id_rsa
 python setup.py
 ```
-Then, restart the VM so that the changes are added 
+Add the jupyter notebook extension on vscode
 
 ### To use the application from the servers 
 ```bash
@@ -68,26 +45,7 @@ cd /myhome/Master-thesis/
 python app.py
 ```
 
-
-
-#### Explenations
-
-You want to setup the nginx server and override `/etc/nginx/conf.d/default.conf` then make `nginx -s reload`
-Install sqlite3 `apt-get install sqlite3`
-You can copy form `myhome/` with `cp /myhome/default.conf /etc/nginx/conf.d/default.conf`
-
-```bash
-apt-get clean
-rm -rf /var/lib/apt/lists/*
-apt-get clean
-apt-get update -y
-apt-get upgrade -y
-apt-get install sqlite3 -y
-cp /myhome/default.conf /etc/nginx/conf.d/default.conf
-nginx -s reload
-CMAKE_ARGS="-DLLAMA_CUBLAS=on" FORCE_CMAKE=1 pip install --upgrade --force-reinstall llama-cpp-python --no-cache-dir
-```
-
+The default config should be changed so that we have a proxy
 
 ```bash 
 server {
@@ -105,44 +63,3 @@ server {
     }
 }
 ```
-
-apt update
-apt upgrade
-add-apt-repository ppa:ubuntu-toolchain-r/test
-apt update
-apt install gcc-11 g++-11
-
-apt-get install aptitude
-aptitude update && sudo aptitude safe-upgrade
-
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.0-1_all.deb
-dpkg -i cuda-keyring_1.0-1_all.deb
-apt-get update
-apt-get -y install cuda
-
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-ubuntu2204.pin
-mv cuda-ubuntu2204.pin /etc/apt/preferences.d/cuda-repository-pin-600
-wget https://developer.download.nvidia.com/compute/cuda/12.3.1/local_installers/cuda-repo-ubuntu2204-12-3-local_12.3.1-545.23.08-1_amd64.deb
-dpkg -i cuda-repo-ubuntu2204-12-3-local_12.3.1-545.23.08-1_amd64.deb
-cp /var/cuda-repo-ubuntu2204-12-3-local/cuda-*-keyring.gpg /usr/share/keyrings/
-apt-get update
-apt-get -y install cuda-toolkit-12-3
-```
-
-
-
-cd llama.cpp
-export CUDA_HOME=/usr/local/lib/python3.10/dist-packages/triton/third_party/cuda
-export PATH=${CUDA_HOME}/bin:$PATH
-export LLAMA_CUBLAS=on
-make clean
-make libllama.so
-
-export LLAMA_CPP_LIB=~/miniconda3/lib/python3.11/site-packages/llama_cpp/libllama.so
-export LLAMA_CPP_LIB=/usr/local/lib/python3.10/dist-packages/llama_cpp/libllama.so
-CMAKE_ARGS="-DLLAMA_OPENBLAS=on" FORCE_CMAKE=1 pip install llama-cpp-python==0.1.48
-
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
-dpkg -i cuda-keyring_1.1-1_all.deb
-apt-get update
-apt-get -y install cuda
